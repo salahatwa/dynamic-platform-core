@@ -1,0 +1,12 @@
+# Node / Angular
+node_modules/
+dist/
+
+# Maven / Spring Boot
+target/
+
+# Env & IDE
+.env
+.vscode/
+.idea/
+.DS_Store
