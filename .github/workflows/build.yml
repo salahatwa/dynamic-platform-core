@@ -1,0 +1,44 @@
+  name: build and deploy dynamic-platform-api
+  on:
+    push:
+      branches:
+        - main
+
+  jobs:
+    build-deploy:
+      name: build and deploy dynamic-platform spring-api
+      runs-on: ubuntu-latest
+      steps:
+        - name: checkout code
+          uses: actions/checkout@v3
+
+        - name: setup jdk 21
+          uses: actions/setup-java@v3
+          with:
+            distribution: 'temurin'
+            java-version: 21
+
+        - name: build the app
+          run: |
+            mvn clean install 
+        - name: build the docker image
+          uses: docker/build-push-action@v4
+          with:
+            context: .
+            dockerfile: Dockerfile
+            push: false
+            tags: ${{ secrets.DOCKER_HUB_USERNAME }}/dynamic-platform-api:latest
+
+        - name: login to docker hub
+          uses: docker/login-action@v1
+          with:
+            username: ${{ secrets.DOCKER_HUB_USERNAME }}
+            password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+        - name: push the docker image to docker hub
+          uses: docker/build-push-action@v4
+          with:
+            context: .
+            dockerfile: Dockerfile
+            push: true
+            tags: ${{ secrets.DOCKER_HUB_USERNAME }}/dynamic-platform-api:latest
