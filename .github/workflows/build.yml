@@ -1,4 +1,4 @@
-name: build and deploy dynamic-platform-api
+name: Build & Push dynamic-platform-api
 
 on:
   push:
@@ -7,11 +7,10 @@ on:
 
 jobs:
   build-deploy:
-    name: Build & Push Docker Image (per commit)
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Set up JDK 21
@@ -20,7 +19,7 @@ jobs:
           distribution: temurin
           java-version: 21
 
-      - name: Build Spring Boot app
+      - name: Build Spring Boot application
         run: mvn clean package -DskipTests
 
       - name: Log in to Docker Hub
@@ -29,7 +28,7 @@ jobs:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
-      - name: Build & Push Docker image (per commit)
+      - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
           context: .
@@ -38,11 +37,3 @@ jobs:
           tags: |
             ${{ secrets.DOCKER_HUB_USERNAME }}/dynamic-platform-api:${{ github.sha }}
             ${{ secrets.DOCKER_HUB_USERNAME }}/dynamic-platform-api:latest
-
-        - name: push the docker image to docker hub
-          uses: docker/build-push-action@v4
-          with:
-            context: .
-            dockerfile: Dockerfile
-            push: true
-            tags: ${{ secrets.DOCKER_HUB_USERNAME }}/dynamic-platform-api:latest
