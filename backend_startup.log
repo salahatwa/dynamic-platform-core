@@ -1,0 +1,1022 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] -------------------< com.platform:dynamic-platform >--------------------
+[INFO] Building Dynamic Platform 1.0.0
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] >>> spring-boot:3.2.0:run (default-cli) > test-compile @ dynamic-platform >>>
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ dynamic-platform ---
+[INFO] Copying 4 resources from src\main\resources to target\classes
+[INFO] Copying 8 resources from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.11.0:compile (default-compile) @ dynamic-platform ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ dynamic-platform ---
+[INFO] skip non existing resourceDirectory E:\itways\git\new-project\backend\src\test\resources
+[INFO] 
+[INFO] --- compiler:3.11.0:testCompile (default-testCompile) @ dynamic-platform ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] <<< spring-boot:3.2.0:run (default-cli) < test-compile @ dynamic-platform <<<
+[INFO] 
+[INFO] 
+[INFO] --- spring-boot:3.2.0:run (default-cli) @ dynamic-platform ---
+[INFO] Attaching agents: []
+Standard Commons Logging discovery in action with spring-jcl: please remove commons-logging.jar from classpath in order to avoid potential conflicts
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.0)
+
+2025-12-15T13:08:47.808+02:00  INFO 19580 --- [dynamic-platform] [           main] c.platform.DynamicPlatformApplication    : Starting DynamicPlatformApplication using Java 21.0.2 with PID 19580 (E:\itways\git\new-project\backend\target\classes started by SSATWA in E:\itways\git\new-project\backend)
+2025-12-15T13:08:47.811+02:00 DEBUG 19580 --- [dynamic-platform] [           main] c.platform.DynamicPlatformApplication    : Running with Spring Boot v3.2.0, Spring v6.1.1
+2025-12-15T13:08:47.812+02:00  INFO 19580 --- [dynamic-platform] [           main] c.platform.DynamicPlatformApplication    : The following 1 profile is active: "dev"
+2025-12-15T13:08:49.154+02:00  INFO 19580 --- [dynamic-platform] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-12-15T13:08:49.381+02:00  INFO 19580 --- [dynamic-platform] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 213 ms. Found 36 JPA repository interfaces.
+2025-12-15T13:08:50.556+02:00  INFO 19580 --- [dynamic-platform] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8081 (http)
+2025-12-15T13:08:50.571+02:00  INFO 19580 --- [dynamic-platform] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-12-15T13:08:50.572+02:00  INFO 19580 --- [dynamic-platform] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.16]
+2025-12-15T13:08:50.706+02:00  INFO 19580 --- [dynamic-platform] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-12-15T13:08:50.706+02:00  INFO 19580 --- [dynamic-platform] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2829 ms
+Standard Commons Logging discovery in action with spring-jcl: please remove commons-logging.jar from classpath in order to avoid potential conflicts
+2025-12-15T13:08:50.940+02:00  INFO 19580 --- [dynamic-platform] [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-12-15T13:08:51.023+02:00  INFO 19580 --- [dynamic-platform] [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.3.1.Final
+2025-12-15T13:08:51.055+02:00  INFO 19580 --- [dynamic-platform] [           main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-12-15T13:08:51.326+02:00  INFO 19580 --- [dynamic-platform] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-12-15T13:08:51.356+02:00  INFO 19580 --- [dynamic-platform] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-12-15T13:08:51.597+02:00  INFO 19580 --- [dynamic-platform] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@3ff26c9
+2025-12-15T13:08:51.599+02:00  INFO 19580 --- [dynamic-platform] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-12-15T13:08:51.639+02:00  WARN 19580 --- [dynamic-platform] [           main] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-12-15T13:08:53.808+02:00  INFO 19580 --- [dynamic-platform] [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-12-15T13:08:54.485+02:00  INFO 19580 --- [dynamic-platform] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-12-15T13:08:55.026+02:00  INFO 19580 --- [dynamic-platform] [           main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-12-15T13:08:55.709+02:00 DEBUG 19580 --- [dynamic-platform] [           main] c.p.security.JwtAuthenticationFilter     : Filter 'jwtAuthenticationFilter' configured for use
+2025-12-15T13:08:55.709+02:00 DEBUG 19580 --- [dynamic-platform] [           main] c.p.security.ApiKeyAuthenticationFilter  : Filter 'apiKeyAuthenticationFilter' configured for use
+2025-12-15T13:09:06.020+02:00  INFO 19580 --- [dynamic-platform] [           main] c.platform.service.PlaywrightPdfService  : ✅ Playwright browser initialized - Unlimited concurrent PDF generation
+2025-12-15T13:09:07.010+02:00  WARN 19580 --- [dynamic-platform] [           main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-12-15T13:09:07.464+02:00 DEBUG 19580 --- [dynamic-platform] [           main] s.w.s.m.m.a.RequestMappingHandlerMapping : 190 mappings in 'requestMappingHandlerMapping'
+2025-12-15T13:09:07.560+02:00 DEBUG 19580 --- [dynamic-platform] [           main] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/webjars/**, /**, /swagger-ui*/*swagger-initializer.js, /swagger-ui*/**] in 'resourceHandlerMapping'
+2025-12-15T13:09:07.642+02:00  INFO 19580 --- [dynamic-platform] [           main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@10b34165, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@c8080e6, org.springframework.security.web.context.SecurityContextHolderFilter@1796b26, org.springframework.security.web.header.HeaderWriterFilter@74b3c38a, org.springframework.web.filter.CorsFilter@30315a1c, org.springframework.security.web.authentication.logout.LogoutFilter@20014987, com.platform.security.ApiKeyAuthenticationFilter@2cfde5a4, com.platform.security.JwtAuthenticationFilter@ae094e8, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@513dc9e2, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@7c05c489, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@2b065bdb, org.springframework.security.web.session.SessionManagementFilter@6e868b0d, org.springframework.security.web.access.ExceptionTranslationFilter@79641072, org.springframework.security.web.access.intercept.AuthorizationFilter@20e202db]
+2025-12-15T13:09:07.858+02:00 DEBUG 19580 --- [dynamic-platform] [           main] s.w.s.m.m.a.RequestMappingHandlerAdapter : ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2025-12-15T13:09:07.933+02:00 DEBUG 19580 --- [dynamic-platform] [           main] .m.m.a.ExceptionHandlerExceptionResolver : ControllerAdvice beans: 2 @ExceptionHandler, 1 ResponseBodyAdvice
+2025-12-15T13:09:08.019+02:00  WARN 19580 --- [dynamic-platform] [           main] ion$DefaultTemplateResolverConfiguration : Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2025-12-15T13:09:08.402+02:00 DEBUG 19580 --- [dynamic-platform] [           main] o.s.w.s.v.f.FreeMarkerConfigurer         : File system access not preferred: using SpringTemplateLoader
+2025-12-15T13:09:08.422+02:00  WARN 19580 --- [dynamic-platform] [           main] o.s.b.a.f.FreeMarkerAutoConfiguration    : Cannot find template location(s): [classpath:/templates/] (please add some templates, check your FreeMarker configuration, or set spring.freemarker.check-template-location=false)
+2025-12-15T13:09:08.612+02:00  INFO 19580 --- [dynamic-platform] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8081 (http) with context path ''
+2025-12-15T13:09:08.621+02:00  INFO 19580 --- [dynamic-platform] [           main] c.platform.DynamicPlatformApplication    : Started DynamicPlatformApplication in 21.404 seconds (process running for 22.039)
+2025-12-15T13:09:08.641+02:00  INFO 19580 --- [dynamic-platform] [           main] c.p.s.PermissionInitializationService    : Initializing permissions and roles...
+2025-12-15T13:09:08.749+02:00 DEBUG 19580 --- [dynamic-platform] [           main] org.hibernate.SQL                        : 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+2025-12-15T13:09:08.763+02:00 DEBUG 19580 --- [dynamic-platform] [           main] org.hibernate.SQL                        : 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+2025-12-15T13:09:08.763+02:00 DEBUG 19580 --- [dynamic-platform] [           main] org.hibernate.SQL                        : 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+2025-12-15T13:09:08.771+02:00 DEBUG 19580 --- [dynamic-platform] [           main] org.hibernate.SQL                        : 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+2025-12-15T13:09:08.776+02:00 DEBUG 19580 --- [dynamic-platform] [           main] org.hibernate.SQL                        : 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+2025-12-15T13:09:08.777+02:00 DEBUG 19580 --- [dynamic-platform] [           main] org.hibernate.SQL                        : 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+2025-12-15T13:09:08.780+02:00 DEBUG 19580 --- [dynamic-platform] [           main] org.hibernate.SQL                        : 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+2025-12-15T13:09:08.782+02:00 DEBUG 19580 --- [dynamic-platform] [           main] org.hibernate.SQL                        : 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+2025-12-15T13:09:08.787+02:00 DEBUG 19580 --- [dynamic-platform] [           main] org.hibernate.SQL                        : 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+2025-12-15T13:09:08.787+02:00 DEBUG 19580 --- [dynamic-platform] [           main] org.hibernate.SQL                        : 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+2025-12-15T13:09:08.792+02:00 DEBUG 19580 --- [dynamic-platform] [           main] org.hibernate.SQL                        : 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+2025-12-15T13:09:08.795+02:00 DEBUG 19580 --- [dynamic-platform] [           main] org.hibernate.SQL                        : 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+2025-12-15T13:09:08.797+02:00 DEBUG 19580 --- [dynamic-platform] [           main] org.hibernate.SQL                        : 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+2025-12-15T13:09:08.800+02:00 DEBUG 19580 --- [dynamic-platform] [           main] org.hibernate.SQL                        : 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+2025-12-15T13:09:08.802+02:00 DEBUG 19580 --- [dynamic-platform] [           main] org.hibernate.SQL                        : 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+2025-12-15T13:09:08.805+02:00 DEBUG 19580 --- [dynamic-platform] [           main] org.hibernate.SQL                        : 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+2025-12-15T13:09:08.808+02:00 DEBUG 19580 --- [dynamic-platform] [           main] org.hibernate.SQL                        : 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+2025-12-15T13:09:08.808+02:00 DEBUG 19580 --- [dynamic-platform] [           main] org.hibernate.SQL                        : 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+2025-12-15T13:09:08.814+02:00 DEBUG 19580 --- [dynamic-platform] [           main] org.hibernate.SQL                        : 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+2025-12-15T13:09:08.815+02:00 DEBUG 19580 --- [dynamic-platform] [           main] org.hibernate.SQL                        : 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+2025-12-15T13:09:08.818+02:00 DEBUG 19580 --- [dynamic-platform] [           main] org.hibernate.SQL                        : 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+2025-12-15T13:09:08.821+02:00 DEBUG 19580 --- [dynamic-platform] [           main] org.hibernate.SQL                        : 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+2025-12-15T13:09:08.823+02:00 DEBUG 19580 --- [dynamic-platform] [           main] org.hibernate.SQL                        : 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+2025-12-15T13:09:08.828+02:00 DEBUG 19580 --- [dynamic-platform] [           main] org.hibernate.SQL                        : 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+2025-12-15T13:09:08.830+02:00 DEBUG 19580 --- [dynamic-platform] [           main] org.hibernate.SQL                        : 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+2025-12-15T13:09:08.833+02:00 DEBUG 19580 --- [dynamic-platform] [           main] org.hibernate.SQL                        : 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+2025-12-15T13:09:08.835+02:00 DEBUG 19580 --- [dynamic-platform] [           main] org.hibernate.SQL                        : 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+2025-12-15T13:09:08.840+02:00 DEBUG 19580 --- [dynamic-platform] [           main] org.hibernate.SQL                        : 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+2025-12-15T13:09:08.843+02:00 DEBUG 19580 --- [dynamic-platform] [           main] org.hibernate.SQL                        : 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+2025-12-15T13:09:08.843+02:00 DEBUG 19580 --- [dynamic-platform] [           main] org.hibernate.SQL                        : 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+2025-12-15T13:09:08.849+02:00 DEBUG 19580 --- [dynamic-platform] [           main] org.hibernate.SQL                        : 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+2025-12-15T13:09:08.851+02:00 DEBUG 19580 --- [dynamic-platform] [           main] org.hibernate.SQL                        : 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+2025-12-15T13:09:08.855+02:00 DEBUG 19580 --- [dynamic-platform] [           main] org.hibernate.SQL                        : 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+2025-12-15T13:09:08.855+02:00 DEBUG 19580 --- [dynamic-platform] [           main] org.hibernate.SQL                        : 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+2025-12-15T13:09:08.860+02:00 DEBUG 19580 --- [dynamic-platform] [           main] org.hibernate.SQL                        : 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+2025-12-15T13:09:08.865+02:00 DEBUG 19580 --- [dynamic-platform] [           main] org.hibernate.SQL                        : 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+2025-12-15T13:09:08.867+02:00 DEBUG 19580 --- [dynamic-platform] [           main] org.hibernate.SQL                        : 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+2025-12-15T13:09:08.871+02:00 DEBUG 19580 --- [dynamic-platform] [           main] org.hibernate.SQL                        : 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+2025-12-15T13:09:08.874+02:00 DEBUG 19580 --- [dynamic-platform] [           main] org.hibernate.SQL                        : 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+2025-12-15T13:09:08.874+02:00 DEBUG 19580 --- [dynamic-platform] [           main] org.hibernate.SQL                        : 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+2025-12-15T13:09:08.878+02:00 DEBUG 19580 --- [dynamic-platform] [           main] org.hibernate.SQL                        : 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+2025-12-15T13:09:08.883+02:00 DEBUG 19580 --- [dynamic-platform] [           main] org.hibernate.SQL                        : 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+2025-12-15T13:09:08.887+02:00 DEBUG 19580 --- [dynamic-platform] [           main] org.hibernate.SQL                        : 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+2025-12-15T13:09:08.890+02:00 DEBUG 19580 --- [dynamic-platform] [           main] org.hibernate.SQL                        : 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+2025-12-15T13:09:08.890+02:00 DEBUG 19580 --- [dynamic-platform] [           main] org.hibernate.SQL                        : 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+2025-12-15T13:09:08.890+02:00 DEBUG 19580 --- [dynamic-platform] [           main] org.hibernate.SQL                        : 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+2025-12-15T13:09:08.898+02:00 DEBUG 19580 --- [dynamic-platform] [           main] org.hibernate.SQL                        : 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+2025-12-15T13:09:08.899+02:00 DEBUG 19580 --- [dynamic-platform] [           main] org.hibernate.SQL                        : 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        permissions p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+2025-12-15T13:09:08.901+02:00 DEBUG 19580 --- [dynamic-platform] [           main] org.hibernate.SQL                        : 
+    select
+        r1_0.id 
+    from
+        roles r1_0 
+    where
+        r1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        r1_0.id 
+    from
+        roles r1_0 
+    where
+        r1_0.name=? 
+    fetch
+        first ? rows only
+2025-12-15T13:09:08.904+02:00 DEBUG 19580 --- [dynamic-platform] [           main] org.hibernate.SQL                        : 
+    select
+        r1_0.id 
+    from
+        roles r1_0 
+    where
+        r1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        r1_0.id 
+    from
+        roles r1_0 
+    where
+        r1_0.name=? 
+    fetch
+        first ? rows only
+2025-12-15T13:09:08.910+02:00 DEBUG 19580 --- [dynamic-platform] [           main] org.hibernate.SQL                        : 
+    select
+        r1_0.id 
+    from
+        roles r1_0 
+    where
+        r1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        r1_0.id 
+    from
+        roles r1_0 
+    where
+        r1_0.name=? 
+    fetch
+        first ? rows only
+2025-12-15T13:09:08.910+02:00 DEBUG 19580 --- [dynamic-platform] [           main] org.hibernate.SQL                        : 
+    select
+        r1_0.id 
+    from
+        roles r1_0 
+    where
+        r1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        r1_0.id 
+    from
+        roles r1_0 
+    where
+        r1_0.name=? 
+    fetch
+        first ? rows only
+2025-12-15T13:09:08.914+02:00  INFO 19580 --- [dynamic-platform] [           main] c.p.s.PermissionInitializationService    : Permission and role initialization completed.
+2025-12-15T13:24:49.493+02:00  INFO 19580 --- [dynamic-platform] [ionShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-12-15T13:24:49.496+02:00  INFO 19580 --- [dynamic-platform] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-12-15T13:24:49.514+02:00  INFO 19580 --- [dynamic-platform] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  16:07 min
+[INFO] Finished at: 2025-12-15T13:24:50+02:00
+[INFO] ------------------------------------------------------------------------
+Terminate batch job (Y/N)? The process tried to write to a nonexistent pipe.
+The batch file cannot be found.

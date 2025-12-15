@@ -5,11 +5,9 @@ import com.platform.dto.RegisterRequest;
 import com.platform.dto.AuthResponse;
 import com.platform.entity.User;
 import com.platform.entity.Role;
-import com.platform.entity.Permission;
 import com.platform.enums.AuthProvider;
 import com.platform.repository.UserRepository;
 import com.platform.repository.RoleRepository;
-import com.platform.repository.PermissionRepository;
 import com.platform.repository.CorporateRepository;
 import com.platform.security.JwtTokenProvider;
 import com.platform.entity.Corporate;
@@ -20,6 +18,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+
+import java.util.Set;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -38,11 +39,11 @@ public class AuthController {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final InvitationRepository invitationRepository;
-    private final PermissionRepository permissionRepository;
     private final CorporateRepository corporateRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider tokenProvider;
     private final com.platform.service.SubscriptionService subscriptionService;
+    private final com.platform.service.PermissionService permissionService;
 
     @PostMapping("/register")
     @Operation(summary = "Register new user")
@@ -103,57 +104,32 @@ public class AuthController {
 
             userRepository.save(user);
 
-            // Assign roles
+            // Assign roles based on registration type
             if (isFirstUser) {
-                Permission manageUsers = permissionRepository.findByName("MANAGE_USERS")
-                        .orElseGet(() -> permissionRepository.save(
-                                Permission.builder()
-                                        .name("MANAGE_USERS")
-                                        .description("Manage user accounts")
-                                        .resource("users")
-                                        .action("manage")
-                                        .build()));
-
-                Role adminRole = roleRepository.findByName("ADMIN")
-                        .orElseGet(() -> {
-                            Role r = Role.builder()
-                                    .name("ADMIN")
-                                    .description("System administrator")
-                                    .build();
-                            r.getPermissions().add(manageUsers);
-                            return roleRepository.save(r);
-                        });
-
-                // Ensure permission is in role if role existed
-                if (!adminRole.getPermissions().stream().anyMatch(p -> p.getName().equals("MANAGE_USERS"))) {
-                    adminRole.getPermissions().add(manageUsers);
-                    adminRole = roleRepository.save(adminRole);
-                }
-
-                user.getRoles().add(adminRole);
+                // First user becomes SUPER_ADMIN
+                Role superAdminRole = roleRepository.findByName("SUPER_ADMIN")
+                        .orElseThrow(() -> new RuntimeException("SUPER_ADMIN role not found. Please run application initialization."));
+                user.getRoles().add(superAdminRole);
                 userRepository.save(user);
             } else if (request.getInvitationToken() == null || request.getInvitationToken().isEmpty()) {
-                // Users who self-register (no invitation) become admins of their own corporate
-                Permission manageUsers = permissionRepository.findByName("MANAGE_USERS")
-                        .orElseGet(() -> permissionRepository.save(
-                                Permission.builder()
-                                        .name("MANAGE_USERS")
-                                        .description("Manage user accounts")
-                                        .resource("users")
-                                        .action("manage")
-                                        .build()));
-
+                // Users who self-register (no invitation) become ADMIN of their own corporate
                 Role adminRole = roleRepository.findByName("ADMIN")
-                        .orElseGet(() -> {
-                            Role r = Role.builder()
-                                    .name("ADMIN")
-                                    .description("System administrator")
-                                    .build();
-                            r.getPermissions().add(manageUsers);
-                            return roleRepository.save(r);
-                        });
-
+                        .orElseThrow(() -> new RuntimeException("ADMIN role not found. Please run application initialization."));
                 user.getRoles().add(adminRole);
+                userRepository.save(user);
+            } else {
+                // Users who register via invitation get roles specified in invitation
+                Invitation invitation = invitationRepository.findByToken(request.getInvitationToken())
+                        .orElseThrow(() -> new RuntimeException("Invalid invitation token"));
+                
+                if (!invitation.getRoles().isEmpty()) {
+                    user.getRoles().addAll(invitation.getRoles());
+                } else {
+                    // Default to EDITOR role if no roles specified in invitation
+                    Role editorRole = roleRepository.findByName("EDITOR")
+                            .orElseThrow(() -> new RuntimeException("EDITOR role not found. Please run application initialization."));
+                    user.getRoles().add(editorRole);
+                }
                 userRepository.save(user);
             }
 
@@ -195,7 +171,32 @@ public class AuthController {
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
 
         String token = tokenProvider.generateToken(authentication);
-        return ResponseEntity.ok(new AuthResponse(token));
+        
+        // Get user details and permissions
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        
+        // Get user permissions using PermissionService
+        Set<String> permissions = permissionService.getUserPermissions(user);
+        
+        // Build user info
+        AuthResponse.UserInfo userInfo = AuthResponse.UserInfo.builder()
+                .id(user.getId())
+                .email(user.getEmail())
+                .name(user.getName())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .corporateId(user.getCorporate() != null ? user.getCorporate().getId() : null)
+                .corporateName(user.getCorporate() != null ? user.getCorporate().getName() : null)
+                .build();
+        
+        AuthResponse response = AuthResponse.builder()
+                .token(token)
+                .permissions(permissions)
+                .user(userInfo)
+                .build();
+        
+        return ResponseEntity.ok(response);
     }
 
     /**

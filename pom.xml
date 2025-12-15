@@ -52,6 +52,12 @@
 			<artifactId>spring-boot-starter-oauth2-client</artifactId>
 		</dependency>
 
+		<!-- AspectJ for Permission Aspects -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-aop</artifactId>
+		</dependency>
+
 		<!-- PostgreSQL -->
 		<dependency>
 			<groupId>org.postgresql</groupId>

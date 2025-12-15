@@ -5,7 +5,10 @@ import com.platform.dto.TranslationRequest;
 import com.platform.entity.Translation;
 import com.platform.entity.TranslationKey;
 import com.platform.entity.User;
+import com.platform.enums.PermissionAction;
+import com.platform.enums.PermissionResource;
 import com.platform.repository.UserRepository;
+import com.platform.security.RequirePermission;
 import com.platform.security.UserPrincipal;
 import com.platform.service.TranslationKeyService;
 import com.platform.service.TranslationService;
@@ -32,6 +35,7 @@ public class TranslationController {
     private final UserRepository userRepository;
     
     @GetMapping("/key/{keyId}")
+    @RequirePermission(resource = PermissionResource.TRANSLATIONS, action = PermissionAction.READ)
     @Operation(summary = "Get all translations for a key")
     public ResponseEntity<?> getTranslationsByKey(@PathVariable Long keyId) {
         User currentUser = getCurrentUserWithCorporate();
@@ -51,6 +55,7 @@ public class TranslationController {
     }
     
     @PostMapping
+    @RequirePermission(resource = PermissionResource.TRANSLATIONS, action = PermissionAction.CREATE)
     @Operation(summary = "Create or update translation")
     public ResponseEntity<?> createOrUpdateTranslation(@Valid @RequestBody TranslationRequest request) {
         User currentUser = getCurrentUserWithCorporate();
@@ -85,6 +90,7 @@ public class TranslationController {
     }
     
     @PutMapping("/{id}")
+    @RequirePermission(resource = PermissionResource.TRANSLATIONS, action = PermissionAction.UPDATE)
     @Operation(summary = "Update translation")
     public ResponseEntity<?> updateTranslation(@PathVariable Long id, @Valid @RequestBody TranslationRequest request) {
         User currentUser = getCurrentUserWithCorporate();
@@ -109,6 +115,7 @@ public class TranslationController {
     }
     
     @DeleteMapping("/{id}")
+    @RequirePermission(resource = PermissionResource.TRANSLATIONS, action = PermissionAction.DELETE)
     @Operation(summary = "Delete translation")
     public ResponseEntity<?> deleteTranslation(@PathVariable Long id) {
         User currentUser = getCurrentUserWithCorporate();
@@ -121,6 +128,7 @@ public class TranslationController {
     }
     
     @PostMapping("/bulk")
+    @RequirePermission(resource = PermissionResource.TRANSLATIONS, action = PermissionAction.CREATE)
     @Operation(summary = "Bulk create/update translations")
     public ResponseEntity<?> bulkCreateOrUpdate(@RequestBody BulkTranslationRequest request) {
         User currentUser = getCurrentUserWithCorporate();

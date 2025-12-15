@@ -1,0 +1,5 @@
+FROM openjdk:21-jdk
+VOLUME /tmp
+EXPOSE 8082
+COPY target/crowdfunding-0.0.1-SNAPSHOT.jar crowdfunding.jar
+ENTRYPOINT ["java","-jar","/crowdfunding.jar"]
