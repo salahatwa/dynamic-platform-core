@@ -18,8 +18,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -30,6 +32,18 @@ public class SecurityConfig {
     private final CustomUserDetailsService customUserDetailsService;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final ApiKeyAuthenticationFilter apiKeyAuthenticationFilter;
+    
+    @Value("${cors.allowed-origins:http://localhost:4200}")
+    private String allowedOrigins;
+    
+    @Value("${cors.allowed-methods:GET,POST,PUT,DELETE,PATCH,OPTIONS}")
+    private String allowedMethods;
+    
+    @Value("${cors.allowed-headers:*}")
+    private String allowedHeaders;
+    
+    @Value("${cors.allow-credentials:true}")
+    private boolean allowCredentials;
     
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -80,10 +94,24 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("*"));
-        configuration.setAllowCredentials(true);
+        
+        // Parse allowed origins from environment configuration
+        List<String> origins = Arrays.asList(allowedOrigins.split(","));
+        configuration.setAllowedOrigins(origins);
+        
+        // Parse allowed methods from environment configuration
+        List<String> methods = Arrays.asList(allowedMethods.split(","));
+        configuration.setAllowedMethods(methods);
+        
+        // Parse allowed headers from environment configuration
+        if ("*".equals(allowedHeaders)) {
+            configuration.setAllowedHeaders(Arrays.asList("*"));
+        } else {
+            List<String> headers = Arrays.asList(allowedHeaders.split(","));
+            configuration.setAllowedHeaders(headers);
+        }
+        
+        configuration.setAllowCredentials(allowCredentials);
         
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
