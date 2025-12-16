@@ -3,6 +3,8 @@ package com.platform.service;
 import com.platform.dto.ErrorCodeCategoryRequest;
 import com.platform.dto.ErrorCodeDTO;
 import com.platform.dto.ErrorCodeRequest;
+import com.platform.dto.ErrorCodeSettingsRequest;
+import com.platform.dto.ErrorCodeGenerationResponse;
 import com.platform.entity.*;
 import com.platform.repository.*;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,6 +33,7 @@ public class ErrorCodeService {
     private final ErrorCodeVersionRepository versionRepository;
     private final ErrorCodeAuditRepository auditRepository;
     private final AppRepository appRepository;
+    private final ErrorCodeSettingsRepository settingsRepository;
     private final HttpServletRequest request;
 
     // ==================== ERROR CODE CRUD ====================
@@ -207,6 +210,14 @@ public class ErrorCodeService {
     public List<String> getDistinctApps() {
         Long corporateId = getCurrentCorporateId();
         return errorCodeRepository.findDistinctAppNamesByCorporateId(corporateId);
+    }
+
+    public List<String> getDistinctModules(String appName) {
+        Long corporateId = getCurrentCorporateId();
+        if (appName != null && !appName.isBlank()) {
+            return errorCodeRepository.findDistinctModulesByAppName(appName, corporateId);
+        }
+        return new ArrayList<>();
     }
 
     // ==================== CATEGORY CRUD ====================
@@ -390,6 +401,109 @@ public class ErrorCodeService {
         dto.setTranslations(translationMap);
 
         return dto;
+    }
+
+    // ==================== ERROR CODE SETTINGS & AUTO-GENERATION ====================
+
+    public ErrorCodeSettings getErrorCodeSettings() {
+        Long corporateId = getCurrentCorporateId();
+        return settingsRepository.findByCorporateId(corporateId)
+            .orElseGet(() -> createDefaultSettings(corporateId));
+    }
+
+    @Transactional
+    public ErrorCodeSettings updateErrorCodeSettings(ErrorCodeSettingsRequest request) {
+        if (!request.isValid()) {
+            throw new RuntimeException("Invalid settings request");
+        }
+
+        Long corporateId = getCurrentCorporateId();
+        String username = getCurrentUsername();
+
+        ErrorCodeSettings settings = settingsRepository.findByCorporateId(corporateId)
+            .orElseGet(() -> createDefaultSettings(corporateId));
+
+        settings.setPrefix(request.getPrefix().trim().toUpperCase());
+        settings.setSequenceLength(request.getSequenceLength());
+        settings.setSeparator(request.getSeparator() != null ? request.getSeparator() : "");
+        settings.setIsActive(request.getIsActive() != null ? request.getIsActive() : true);
+        settings.setUpdatedBy(username);
+
+        return settingsRepository.save(settings);
+    }
+
+    @Transactional
+    public ErrorCodeGenerationResponse generateNextErrorCode() {
+        Long corporateId = getCurrentCorporateId();
+        
+        ErrorCodeSettings settings = settingsRepository.findByCorporateId(corporateId)
+            .orElseGet(() -> createDefaultSettings(corporateId));
+
+        // Increment sequence
+        settings.setCurrentSequence(settings.getCurrentSequence() + 1);
+        settings = settingsRepository.save(settings);
+
+        // Generate the code
+        String generatedCode = generateCodeString(settings);
+
+        return new ErrorCodeGenerationResponse(
+            generatedCode,
+            settings.getCurrentSequence(),
+            settings.getPrefix(),
+            settings.getSeparator(),
+            settings.getSequenceLength()
+        );
+    }
+
+    public ErrorCodeGenerationResponse previewNextErrorCode() {
+        Long corporateId = getCurrentCorporateId();
+        
+        ErrorCodeSettings settings = settingsRepository.findByCorporateId(corporateId)
+            .orElseGet(() -> createDefaultSettings(corporateId));
+
+        // Preview without incrementing
+        Long nextSequence = settings.getCurrentSequence() + 1;
+        ErrorCodeSettings previewSettings = new ErrorCodeSettings();
+        previewSettings.setPrefix(settings.getPrefix());
+        previewSettings.setSeparator(settings.getSeparator());
+        previewSettings.setSequenceLength(settings.getSequenceLength());
+        previewSettings.setCurrentSequence(nextSequence);
+
+        String previewCode = generateCodeString(previewSettings);
+
+        return new ErrorCodeGenerationResponse(
+            previewCode,
+            nextSequence,
+            settings.getPrefix(),
+            settings.getSeparator(),
+            settings.getSequenceLength()
+        );
+    }
+
+    public boolean isErrorCodeUnique(String errorCode) {
+        Long corporateId = getCurrentCorporateId();
+        return !errorCodeRepository.existsByErrorCodeAndCorporateId(errorCode, corporateId);
+    }
+
+    private ErrorCodeSettings createDefaultSettings(Long corporateId) {
+        ErrorCodeSettings settings = new ErrorCodeSettings();
+        settings.setCorporateId(corporateId);
+        settings.setPrefix("E");
+        settings.setSequenceLength(6);
+        settings.setCurrentSequence(0L);
+        settings.setSeparator("");
+        settings.setIsActive(true);
+        settings.setCreatedBy(getCurrentUsername());
+        settings.setUpdatedBy(getCurrentUsername());
+        return settingsRepository.save(settings);
+    }
+
+    private String generateCodeString(ErrorCodeSettings settings) {
+        String format = "%s%s%0" + settings.getSequenceLength() + "d";
+        return String.format(format, 
+            settings.getPrefix(), 
+            settings.getSeparator(), 
+            settings.getCurrentSequence());
     }
 
     private String getCurrentUsername() {

@@ -34,6 +34,7 @@ import com.platform.repository.UserRepository;
 import com.platform.security.UserPrincipal;
 import com.platform.service.TemplateRenderService;
 import com.platform.service.WordGenerationService;
+import com.platform.service.PdfGenerationService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -53,6 +54,7 @@ public class TemplateController {
 	private final AppRepository appRepository;
 	private final TemplateRenderService templateRenderService;
 	private final WordGenerationService wordGenerationService;
+	private final PdfGenerationService pdfGenerationService;
 
 	@GetMapping
 	@Operation(summary = "Get all templates")
@@ -375,6 +377,110 @@ public class TemplateController {
 		templateInfo.put("updatedAt", template.getUpdatedAt());
 
 		return ResponseEntity.ok(templateInfo);
+	}
+
+	@PostMapping("/{id}/preview-pdf-with-engine")
+	@Operation(summary = "Preview template as PDF using specific engine")
+	public ResponseEntity<?> previewPdfWithEngine(@PathVariable Long id, 
+			@RequestBody TemplatePreviewRequest request,
+			@RequestParam(required = false) String engine,
+			HttpServletRequest httpRequest) {
+
+		try {
+			// Validate access to template
+			User currentUser = getCurrentUserWithCorporate();
+			if (currentUser == null || currentUser.getCorporate() == null) {
+				return ResponseEntity.badRequest().body("User not associated with any organization");
+			}
+
+			Template template = templateRepository.findById(id)
+					.orElseThrow(() -> new RuntimeException("Template not found"));
+
+			// Check corporate access
+			if (!template.getCorporate().getId().equals(currentUser.getCorporate().getId())) {
+				return ResponseEntity.status(403).body("Access denied: Template belongs to another organization");
+			}
+
+			// Validate template has content
+			int pageCount = templateRenderService.getPageCount(id);
+			boolean hasTemplateContent = template.getHtmlContent() != null && !template.getHtmlContent().trim().isEmpty();
+			boolean hasPageContent = pageCount > 0;
+			
+			if (!hasTemplateContent && !hasPageContent) {
+				return ResponseEntity.badRequest().body("Template has no content to render");
+			}
+
+			// Parse engine parameter
+			PdfGenerationService.PdfEngine pdfEngine = PdfGenerationService.PdfEngine.fromCode(
+				engine != null ? engine : "auto");
+
+			// Generate PDF with specific engine
+			byte[] pdf;
+			if (pdfEngine == PdfGenerationService.PdfEngine.AUTO) {
+				pdf = pdfGenerationService.generatePdf(id, request.getParameters(), 
+					request.getPageNumber(), template.getPageOrientation());
+			} else {
+				pdf = pdfGenerationService.generatePdfWithEngine(pdfEngine, id, request.getParameters(), 
+					request.getPageNumber(), template.getPageOrientation());
+			}
+
+			if (pdf == null || pdf.length == 0) {
+				return ResponseEntity.status(500).body("Failed to generate PDF - empty result");
+			}
+
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_PDF);
+			
+			// Get page count information
+			int totalPages = templateRenderService.getPageCount(id);
+			
+			// Set filename based on template name and page number
+			String filename = template.getName().replaceAll("[^a-zA-Z0-9._-]", "_");
+			if (request.getPageNumber() != null) {
+				filename += "_page_" + request.getPageNumber();
+			}
+			filename += "_" + pdfEngine.getCode() + ".pdf";
+			
+			headers.setContentDispositionFormData("inline", filename);
+			headers.add("X-Template-Id", id.toString());
+			headers.add("X-Template-Name", template.getName());
+			headers.add("X-PDF-Size", String.valueOf(pdf.length));
+			headers.add("X-Total-Pages", String.valueOf(totalPages));
+			headers.add("X-PDF-Engine", pdfEngine.getDisplayName());
+			
+			if (request.getPageNumber() != null) {
+				headers.add("X-Page-Number", request.getPageNumber().toString());
+			} else {
+				headers.add("X-Rendered-Pages", "all");
+			}
+
+			return ResponseEntity.ok().headers(headers).body(pdf);
+
+		} catch (Exception e) {
+			// Log the error for debugging
+			log.error("Error generating PDF for template {} with engine {}: {}", id, engine, e.getMessage(), e);
+			
+			// Return appropriate error response
+			if (e.getMessage().contains("not found")) {
+				return ResponseEntity.notFound().build();
+			} else if (e.getMessage().contains("Access denied")) {
+				return ResponseEntity.status(403).body(e.getMessage());
+			} else {
+				return ResponseEntity.status(500).body("Failed to generate PDF: " + e.getMessage());
+			}
+		}
+	}
+
+	@GetMapping("/pdf-engines/status")
+	@Operation(summary = "Get PDF engines status and availability")
+	public ResponseEntity<?> getPdfEnginesStatus() {
+		try {
+			Map<String, Object> status = pdfGenerationService.getEngineStatus();
+			return ResponseEntity.ok(status);
+		} catch (Exception e) {
+			log.error("Error getting PDF engines status: {}", e.getMessage(), e);
+			return ResponseEntity.status(500).body("Failed to get PDF engines status: " + e.getMessage());
+		}
 	}
 
 	private User getCurrentUserWithCorporate() {

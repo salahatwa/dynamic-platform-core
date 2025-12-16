@@ -32,11 +32,12 @@ import org.springframework.beans.factory.annotation.Qualifier;
 @Slf4j
 public class TemplateRenderService {
 
-	private final TemplateRepository templateRepository;
+	public final TemplateRepository templateRepository;
 	private final TemplateAssetRepository templateAssetRepository;
 	private final PlaywrightPdfService playwrightPdfService;
 	private final freemarker.template.Configuration freemarkerConfig;
 	private final TemplatePageService templatePageService;
+	private PdfGenerationService pdfGenerationService; // Lazy injection to avoid circular dependency
 
 	public TemplateRenderService(
 			TemplateRepository templateRepository,
@@ -49,6 +50,11 @@ public class TemplateRenderService {
 		this.playwrightPdfService = playwrightPdfService;
 		this.templatePageService = templatePageService;
 		this.freemarkerConfig = freemarkerConfig;
+	}
+
+	// Setter for lazy injection to avoid circular dependency
+	public void setPdfGenerationService(PdfGenerationService pdfGenerationService) {
+		this.pdfGenerationService = pdfGenerationService;
 	}
 
 	public String renderHtml(Long templateId, Map<String, Object> parameters) {
@@ -69,8 +75,11 @@ public class TemplateRenderService {
 			// Prepare model
 			Map<String, Object> model = parameters != null ? parameters : new HashMap<>();
 			
-			// Render all pages and combine them
+			// Render all pages and combine them with proper page breaks
 			StringBuilder combinedHtml = new StringBuilder();
+			
+			// Start with a wrapper div for all pages
+			combinedHtml.append("<div class=\"multi-page-document\">");
 			
 			for (int i = 0; i < pages.size(); i++) {
 				TemplatePage page = pages.get(i);
@@ -79,17 +88,32 @@ public class TemplateRenderService {
 					// Render this page's content
 					String renderedPageContent = renderSingleContent(page.getContent(), page.getName(), model);
 					
+					// Wrap each page in a container with proper page break styling
+					combinedHtml.append("<div class=\"template-page template-page-").append(i + 1).append("\"");
+					
+					// Add inline styles for maximum compatibility
+					if (i > 0) {
+						combinedHtml.append(" style=\"page-break-before: always; min-height: 100vh; box-sizing: border-box;\"");
+					} else {
+						combinedHtml.append(" style=\"min-height: 100vh; box-sizing: border-box;\"");
+					}
+					combinedHtml.append(">");
+					
 					// Add page content
 					combinedHtml.append(renderedPageContent);
+					combinedHtml.append("</div>");
 					
-					// Add page break between pages (except for the last page)
+					// Add explicit page break between pages (except for the last page)
 					if (i < pages.size() - 1) {
-						combinedHtml.append("<div class=\"page-break\"></div>");
+						combinedHtml.append("<div class=\"explicit-page-break\" style=\"page-break-before: always !important; page-break-after: avoid !important; height: 0 !important; margin: 0 !important; padding: 0 !important; border: none !important; display: block !important; clear: both !important;\"></div>");
 					}
 				} else {
 					log.warn("Page {} of template {} has no content", page.getName(), templateId);
 				}
 			}
+			
+			// Close wrapper div
+			combinedHtml.append("</div>");
 
 			log.info("Rendered {} pages for template {}", pages.size(), templateId);
 			return combinedHtml.toString();
@@ -348,6 +372,18 @@ public class TemplateRenderService {
 		Template template = templateRepository.findById(templateId)
 				.orElseThrow(() -> new RuntimeException("Template not found"));
 
+		// Use new PdfGenerationService if available, otherwise fallback to legacy implementation
+		if (pdfGenerationService != null) {
+			try {
+				return pdfGenerationService.generatePdf(templateId, parameters, pageNumber, template.getPageOrientation());
+			} catch (Exception e) {
+				log.warn("PdfGenerationService failed, falling back to legacy implementation: {}", e.getMessage());
+			}
+		}
+
+		// Legacy implementation (Flying Saucer only)
+		log.info("Using legacy PDF generation (Flying Saucer only)");
+		
 		// Render HTML with parameters - either specific page or all pages
 		String processedHtml;
 		if (pageNumber != null) {
@@ -381,7 +417,7 @@ public class TemplateRenderService {
 		}
 	}
 
-	private String enhanceHtmlForPdf(String html, String css, com.platform.enums.PageOrientation orientation) {
+	public String enhanceHtmlForPdf(String html, String css, com.platform.enums.PageOrientation orientation) {
 		try {
 			// Parse HTML with JSoup for better handling
 			org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(html);
@@ -434,17 +470,74 @@ public class TemplateRenderService {
 				margin: 1cm;
 			}
 			
-			.page-break {
-				page-break-before: always;
+			/* Multi-page document container */
+			.multi-page-document {
+				width: 100%%;
 			}
 			
+			/* Individual template pages */
+			.template-page {
+				min-height: 100vh;
+				height: auto;
+				width: 100%%;
+				box-sizing: border-box;
+				page-break-inside: avoid;
+				page-break-after: auto;
+				position: relative;
+				overflow: visible;
+			}
+			
+			/* Force page breaks between template pages */
+			.template-page:not(:first-child) {
+				page-break-before: always !important;
+			}
+			
+			/* Explicit page break elements */
+			.explicit-page-break,
+			.page-break {
+				page-break-before: always !important;
+				page-break-after: avoid !important;
+				height: 0 !important;
+				margin: 0 !important;
+				padding: 0 !important;
+				border: none !important;
+				display: block !important;
+				clear: both !important;
+				visibility: hidden;
+			}
+			
+			/* Prevent page breaks inside certain elements */
 			.no-page-break {
 				page-break-inside: avoid;
 			}
 			
+			/* Print-specific styles */
 			@media print {
 				.no-print {
 					display: none !important;
+				}
+				
+				.multi-page-document {
+					width: 100%%;
+				}
+				
+				.template-page {
+					min-height: 100vh;
+					height: auto;
+					width: 100%%;
+					margin: 0;
+					padding: 0;
+				}
+				
+				.template-page:not(:first-child) {
+					page-break-before: always !important;
+				}
+				
+				.explicit-page-break,
+				.page-break {
+					page-break-before: always !important;
+					height: 0 !important;
+					visibility: hidden;
 				}
 			}
 		""", pageSize);
@@ -510,35 +603,81 @@ public class TemplateRenderService {
 	private String processCssForPdf(String css, com.platform.enums.PageOrientation orientation) {
 		String pageSize = orientation.isLandscape() ? "A4 landscape" : "A4 portrait";
 		
+		StringBuilder processed = new StringBuilder();
+		
+		// Add page configuration first
+		processed.append(String.format("@page { size: %s; margin: 1cm; }\n", pageSize));
+		
+		// Add multi-page support CSS
+		processed.append("""
+			/* Multi-page document container */
+			.multi-page-document {
+				width: 100%;
+			}
+			
+			/* Individual template pages */
+			.template-page {
+				min-height: 100vh;
+				height: auto;
+				width: 100%;
+				box-sizing: border-box;
+				page-break-inside: avoid;
+				page-break-after: auto;
+				position: relative;
+				overflow: visible;
+			}
+			
+			/* Force page breaks between template pages */
+			.template-page:not(:first-child) {
+				page-break-before: always !important;
+			}
+			
+			/* Explicit page break elements */
+			.explicit-page-break,
+			.page-break {
+				page-break-before: always !important;
+				page-break-after: avoid !important;
+				height: 0 !important;
+				margin: 0 !important;
+				padding: 0 !important;
+				border: none !important;
+				display: block !important;
+				clear: both !important;
+				visibility: hidden;
+			}
+			
+			""");
+		
 		if (css == null || css.isEmpty()) {
-			return String.format("@page { size: %s; margin: 1cm; }\n", pageSize)
-					+ "body { font-family: Arial, sans-serif; font-size: 10pt; line-height: 1.4; margin: 0; padding: 0; }\n";
+			processed.append("body { font-family: Arial, sans-serif; font-size: 10pt; line-height: 1.4; margin: 0; padding: 0; }\n");
+		} else {
+			// Process existing CSS for PDF compatibility
+			String existingCss = css;
+
+			// Replace flexbox with table-based layout for PDF compatibility
+			existingCss = existingCss.replaceAll("display:\\s*flex", "display: table");
+			existingCss = existingCss.replaceAll("display:\\s*inline-flex", "display: inline-table");
+
+			// Remove flex-specific properties that aren't supported
+			existingCss = existingCss.replaceAll("flex-wrap:\\s*[^;]+;", "");
+			existingCss = existingCss.replaceAll("flex-direction:\\s*[^;]+;", "");
+			existingCss = existingCss.replaceAll("justify-content:\\s*[^;]+;", "");
+			existingCss = existingCss.replaceAll("align-items:\\s*[^;]+;", "");
+			existingCss = existingCss.replaceAll("gap:\\s*[^;]+;", "");
+
+			// Ensure min-height is converted to height for PDF
+			existingCss = existingCss.replaceAll("min-height:\\s*100%", "height: auto");
+
+			processed.append(existingCss);
 		}
 
-		// Replace flexbox with table-based layout for PDF compatibility
-		String processed = css;
+		// Add Flying Saucer specific page break control
+		processed.append("\n* { -fs-table-paginate: paginate; }\n");
+		processed.append(".resume { page-break-inside: avoid; }\n");
 
-		// Convert display: flex to table-based layout
-		processed = processed.replaceAll("display:\\s*flex", "display: table");
-		processed = processed.replaceAll("display:\\s*inline-flex", "display: inline-table");
+		log.debug("Processed CSS for PDF compatibility with multi-page support");
 
-		// Remove flex-specific properties that aren't supported
-		processed = processed.replaceAll("flex-wrap:\\s*[^;]+;", "");
-		processed = processed.replaceAll("flex-direction:\\s*[^;]+;", "");
-		processed = processed.replaceAll("justify-content:\\s*[^;]+;", "");
-		processed = processed.replaceAll("align-items:\\s*[^;]+;", "");
-		processed = processed.replaceAll("gap:\\s*[^;]+;", "");
-
-		// Ensure min-height is converted to height for PDF
-		processed = processed.replaceAll("min-height:\\s*100%", "height: auto");
-
-		// Add page break control
-		processed = processed + "\n" + "* { -fs-table-paginate: paginate; }\n"
-				+ ".resume { page-break-inside: avoid; }\n";
-
-		log.debug("Processed CSS for PDF compatibility");
-
-		return processed;
+		return processed.toString();
 	}
 
 	private byte[] convertToPdf(String xhtml, Long templateId) throws DocumentException, IOException {

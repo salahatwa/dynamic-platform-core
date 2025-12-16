@@ -153,6 +153,13 @@
 			<version>1.40.0</version>
 		</dependency>
 
+		<!-- IronPDF for premium PDF generation -->
+		<dependency>
+			<groupId>com.ironsoftware</groupId>
+			<artifactId>ironpdf</artifactId>
+			<version>2024.11.4</version>
+		</dependency>
+
 		<!-- JSON Schema validation -->
 		<dependency>
 			<groupId>com.networknt</groupId>
