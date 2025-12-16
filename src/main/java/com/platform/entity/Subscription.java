@@ -69,28 +69,18 @@ public class Subscription {
     }
     
     public enum SubscriptionTier {
-        FREE(1, 2, 1000L),
-        PRO(10, -1, 50000L),
-        TEAM(-1, 50, 500000L),
-        ENTERPRISE(-1, -1, -1L);
+        FREE,
+        PRO,
+        TEAM,
+        ENTERPRISE;
         
-        private final int maxApps;
-        private final int maxUsers;
-        private final long maxApiRequests;
+        // Note: The actual limits are now configured via SubscriptionProperties
+        // This enum now only represents the tier names
         
-        SubscriptionTier(int maxApps, int maxUsers, long maxApiRequests) {
-            this.maxApps = maxApps;
-            this.maxUsers = maxUsers;
-            this.maxApiRequests = maxApiRequests;
+        @Override
+        public String toString() {
+            return name();
         }
-        
-        public int getMaxApps() { return maxApps; }
-        public int getMaxUsers() { return maxUsers; }
-        public long getMaxApiRequests() { return maxApiRequests; }
-        
-        public boolean isUnlimitedApps() { return maxApps == -1; }
-        public boolean isUnlimitedUsers() { return maxUsers == -1; }
-        public boolean isUnlimitedApiRequests() { return maxApiRequests == -1; }
     }
     
     public enum SubscriptionStatus {
@@ -102,17 +92,17 @@ public class Subscription {
     
     // Helper methods
     public boolean canCreateApp(int currentAppCount) {
-        if (tier.isUnlimitedApps()) return true;
+        if (maxApps == -1) return true; // Unlimited
         return currentAppCount < maxApps;
     }
     
     public boolean canAddUser(int currentUserCount) {
-        if (tier.isUnlimitedUsers()) return true;
+        if (maxUsers == -1) return true; // Unlimited
         return currentUserCount < maxUsers;
     }
     
     public boolean canMakeApiRequest(long currentMonthRequests) {
-        if (tier.isUnlimitedApiRequests()) return true;
+        if (maxApiRequestsPerMonth == -1) return true; // Unlimited
         return currentMonthRequests < maxApiRequestsPerMonth;
     }
     

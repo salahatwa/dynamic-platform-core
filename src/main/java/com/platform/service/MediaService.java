@@ -58,8 +58,11 @@ public class MediaService {
         String folderPath = folder != null ? folder.getFullPath() : null;
         log.debug("Creating file payload with folderPath: {}", folderPath);
         
+        // Use original filename for the payload - providers will generate their own keys
+        String payloadFilename = request.getFilename() != null ? request.getFilename() : file.getOriginalFilename();
+        
         FilePayload payload = FilePayload.builder()
-            .filename(request.getFilename() != null ? request.getFilename() : file.getOriginalFilename())
+            .filename(payloadFilename)
             .mimeType(file.getContentType())
             .fileSize(file.getSize())
             .multipartFile(file)
@@ -75,9 +78,59 @@ public class MediaService {
         }
 
         // Save to database
+        // Ensure filename is not too long for database (max 255 chars)
+        String displayFilename = request.getFilename() != null ? request.getFilename() : file.getOriginalFilename();
+        if (displayFilename != null && displayFilename.length() > 255) {
+            // Truncate filename while preserving extension
+            String extension = "";
+            int lastDot = displayFilename.lastIndexOf('.');
+            if (lastDot > 0) {
+                extension = displayFilename.substring(lastDot);
+                displayFilename = displayFilename.substring(0, lastDot);
+            }
+            
+            // Truncate to fit within 255 chars including extension
+            int maxLength = 255 - extension.length();
+            if (displayFilename.length() > maxLength) {
+                displayFilename = displayFilename.substring(0, maxLength);
+            }
+            displayFilename = displayFilename + extension;
+        }
+        
+        // Ensure original filename is not too long for database (max 255 chars)
+        String originalFilename = file.getOriginalFilename();
+        if (originalFilename != null && originalFilename.length() > 255) {
+            // Truncate original filename while preserving extension
+            String extension = "";
+            int lastDot = originalFilename.lastIndexOf('.');
+            if (lastDot > 0) {
+                extension = originalFilename.substring(lastDot);
+                originalFilename = originalFilename.substring(0, lastDot);
+            }
+            
+            // Truncate to fit within 255 chars including extension
+            int maxLength = 255 - extension.length();
+            if (originalFilename.length() > maxLength) {
+                originalFilename = originalFilename.substring(0, maxLength);
+            }
+            originalFilename = originalFilename + extension;
+        }
+
+        // Debug logging to identify which field is too long
+        log.debug("Field lengths before database save:");
+        log.debug("filename: {} chars", displayFilename != null ? displayFilename.length() : 0);
+        log.debug("originalFilename: {} chars", originalFilename != null ? originalFilename.length() : 0);
+        log.debug("mimeType: {} chars", file.getContentType() != null ? file.getContentType().length() : 0);
+        log.debug("providerKey: {} chars", result.getProviderKey() != null ? result.getProviderKey().length() : 0);
+        log.debug("providerUrl: {} chars", result.getPrivateUrl() != null ? result.getPrivateUrl().length() : 0);
+        log.debug("publicUrl: {} chars", result.getPublicUrl() != null ? result.getPublicUrl().length() : 0);
+        log.debug("createdBy: {} chars", username != null ? username.length() : 0);
+        log.debug("updatedBy: {} chars", username != null ? username.length() : 0);
+        log.debug("fileHash: {} chars", result.getFileHash() != null ? result.getFileHash().length() : 0);
+
         MediaFile mediaFile = MediaFile.builder()
-            .filename(payload.getFilename())
-            .originalFilename(file.getOriginalFilename())
+            .filename(displayFilename)
+            .originalFilename(originalFilename)
             .mimeType(file.getContentType())
             .fileSize(file.getSize())
             .fileHash(result.getFileHash())
@@ -288,7 +341,13 @@ public class MediaService {
         
         if (!configs.isEmpty()) {
             MediaProviderConfig config = configs.get(0);
-            return providerFactory.getProvider(config.getProviderType(), config);
+            try {
+                return providerFactory.getProvider(config.getProviderType(), config);
+            } catch (UnsupportedOperationException e) {
+                log.warn("Configured provider {} is not properly set up: {}. Falling back to default provider.", 
+                         config.getProviderType(), e.getMessage());
+                return providerFactory.getDefaultProvider();
+            }
         }
         
         return providerFactory.getDefaultProvider();
@@ -691,10 +750,55 @@ public class MediaService {
                 ));
             } else if ("GOOGLE_DRIVE".equals(providerType)) {
                 // Google Drive test - validate service account credentials
-                // TODO: Implement actual Google Drive connection test
-                result.put("success", true);
-                result.put("message", "Google Drive connection test passed");
-                result.put("details", Map.of("type", "Google Drive"));
+                try {
+                    MediaProviderConfig testConfig = new MediaProviderConfig();
+                    testConfig.setProviderType(MediaFile.MediaProviderType.GOOGLE_DRIVE);
+                    testConfig.setConfiguration(convertConfigToJson(config));
+                    
+                    GoogleDriveProvider testProvider = GoogleDriveProvider.create(testConfig);
+                    boolean isValid = testProvider.validateConfiguration();
+                    
+                    if (isValid) {
+                        result.put("success", true);
+                        result.put("message", "Google Drive connection test passed");
+                        result.put("details", Map.of(
+                            "type", "Google Drive",
+                            "folderId", config.getOrDefault("folderId", "root")
+                        ));
+                    } else {
+                        result.put("success", false);
+                        result.put("message", "Google Drive configuration is invalid. Please check your service account credentials.");
+                    }
+                } catch (Exception e) {
+                    result.put("success", false);
+                    result.put("message", "Google Drive test failed: " + e.getMessage());
+                }
+            } else if ("CLOUDFLARE_R2".equals(providerType)) {
+                // Cloudflare R2 test - validate credentials and bucket access
+                try {
+                    MediaProviderConfig testConfig = new MediaProviderConfig();
+                    testConfig.setProviderType(MediaFile.MediaProviderType.CLOUDFLARE_R2);
+                    testConfig.setConfiguration(convertConfigToJson(config));
+                    
+                    CloudflareR2Provider testProvider = CloudflareR2Provider.create(testConfig);
+                    boolean isValid = testProvider.validateConfiguration();
+                    
+                    if (isValid) {
+                        result.put("success", true);
+                        result.put("message", "Cloudflare R2 connection test passed");
+                        result.put("details", Map.of(
+                            "type", "Cloudflare R2",
+                            "bucket", config.getOrDefault("bucketName", "unknown"),
+                            "region", config.getOrDefault("region", "auto")
+                        ));
+                    } else {
+                        result.put("success", false);
+                        result.put("message", "Cloudflare R2 configuration is invalid. Please check your credentials and bucket settings.");
+                    }
+                } catch (Exception e) {
+                    result.put("success", false);
+                    result.put("message", "Cloudflare R2 test failed: " + e.getMessage());
+                }
             } else {
                 result.put("success", false);
                 result.put("message", "Unsupported provider type: " + providerType);

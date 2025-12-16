@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.Map;
+
 
 @Component
 @RequiredArgsConstructor
@@ -25,14 +25,18 @@ public class MediaProviderFactory {
             case LOCAL:
                 return localProvider;
             case CLOUDFLARE_R2:
-                // TODO: Implement CloudflareR2Provider
-                throw new UnsupportedOperationException("Cloudflare R2 provider not yet implemented");
+                if (config != null) {
+                    return CloudflareR2Provider.create(config);
+                }
+                throw new UnsupportedOperationException("Cloudflare R2 provider requires configuration. Please configure Cloudflare R2 storage provider first.");
             case AWS_S3:
                 // TODO: Implement S3Provider
                 throw new UnsupportedOperationException("AWS S3 provider not yet implemented");
             case GOOGLE_DRIVE:
-                // TODO: Implement GoogleDriveProvider
-                throw new UnsupportedOperationException("Google Drive provider not yet implemented");
+                if (config != null) {
+                    return GoogleDriveProvider.create(config);
+                }
+                throw new UnsupportedOperationException("Google Drive provider requires configuration. Please configure Google Drive storage provider first.");
             case DROPBOX:
                 // TODO: Implement DropboxProvider
                 throw new UnsupportedOperationException("Dropbox provider not yet implemented");
@@ -56,6 +60,7 @@ public class MediaProviderFactory {
             case CLOUDFLARE_R2:
             case AWS_S3:
             case GOOGLE_DRIVE:
+                return true; // Basic implementation available (returns helpful error)
             case DROPBOX:
             case AZURE_BLOB:
                 return false; // Not yet implemented
