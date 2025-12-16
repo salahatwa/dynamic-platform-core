@@ -235,18 +235,27 @@ public class MediaService {
                 .orElseThrow(() -> new RuntimeException("File not found"));
         }
 
-        // Delete from provider
+        // Delete from provider first - if this fails, don't delete from database
         try {
             MediaProvider provider = providerFactory.getProvider(file.getProviderType());
             provider.delete(file.getProviderKey());
+            log.info("File successfully deleted from storage provider: {}", file.getProviderKey());
         } catch (Exception e) {
-            log.warn("Failed to delete file from provider: {}", e.getMessage());
+            log.error("Failed to delete file from storage provider: {}", e.getMessage(), e);
+            throw new RuntimeException("Failed to delete file from storage provider: " + e.getMessage());
         }
 
-        // Delete from database
-        mediaFileRepository.delete(file);
+        // Only delete from database if provider deletion was successful
+        try {
+            mediaFileRepository.delete(file);
+            log.info("File deleted from database: {} by user: {}", file.getFilename(), username);
+        } catch (Exception e) {
+            log.error("File was deleted from storage provider but failed to delete from database: {}", e.getMessage(), e);
+            // This is a critical error - the file is gone from storage but still in database
+            throw new RuntimeException("File was deleted from storage but database deletion failed. Manual cleanup may be required.");
+        }
         
-        log.info("File deleted: {} by user: {}", file.getFilename(), username);
+        log.info("File completely deleted: {} by user: {}", file.getFilename(), username);
     }
 
     public String generateFileUrl(Long fileId, AccessType accessType, Long appId) {

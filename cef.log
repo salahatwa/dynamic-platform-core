@@ -1526,3 +1526,691 @@ Histogram: Windows.HighResolutionTimerUsage recorded 2 samples, mean = 0.0 (flag
 [1216/170208.502:WARNING:task_impl.cc(20)] No task runner for threadId 6
 [1216/170208.545:WARNING:task_impl.cc(20)] No task runner for threadId 6
 [1216/170208.630:VERBOSE1:frame_host_impl.cc(492)] frame 21474836481 [5,1] (main) detached (reason=NEW_MAIN_FRAME, is_connected=1)
+[1216/170216.569:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=75})
+[1216/170217.582:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=74})
+[1216/170219.608:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=77})
+[1216/170220.620:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=79})
+[1216/170221.633:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=77})
+[1216/170223.663:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=78})
+[1216/170224.677:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=79})
+[1216/170226.708:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=77})
+[1216/170227.723:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=79})
+[1216/170228.734:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=78})
+[1216/170230.768:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=79})
+[1216/170231.781:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=81})
+[1216/170233.812:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=82})
+[1216/170234.825:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=81})
+[1216/170235.845:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=80})
+[1216/170236.862:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=81})
+[1216/170237.877:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=82})
+[1216/170239.908:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=83})
+[1216/170242.952:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=100})
+[1216/170359.961:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=85})
+[1216/170401.985:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=88})
+[1216/170403.001:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=100})
+[1216/170432.411:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=84})
+[1216/170433.421:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=100})
+[1216/170531.263:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=84})
+[1216/170532.279:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=85})
+[1216/170533.293:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=81})
+[1216/170534.310:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=100})
+[1216/170544.427:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=82})
+[1216/170545.440:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=81})
+[1216/170546.446:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=82})
+[1216/170548.467:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=81})
+[1216/170549.475:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=79})
+[1216/170553.543:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=75})
+[1216/170554.561:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=74})
+[1216/170555.574:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=73})
+[1216/170558.610:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=100})
+[1216/171831.774:VERBOSE1:media_stream_manager.cc(1113)] video capture: VideoCaptureManager::OnScreenLocked
+[1216/171831.824:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSuspend([this=00000340000497B8])
+[1216/193720.049:VERBOSE1:logging_network_change_observer.cc(93)] Observed a change to the network IP addresses
+[1216/193720.216:VERBOSE1:logging_network_change_observer.cc(93)] Observed a change to the network IP addresses
+[1216/193720.879:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnResume([this=00000340000497B8])
+[1216/193721.231:VERBOSE1:logging_network_change_observer.cc(103)] Observed a change to network connectivity state CONNECTION_ETHERNET
+[1216/193721.940:WARNING:dns_config_service_win.cc(583)] Failed to read DnsConfig.
+[1216/193721.944:WARNING:dns_config_service_win.cc(583)] Failed to read DnsConfig.
+[1216/193722.231:VERBOSE1:configured_proxy_resolution_service.cc(1095)] Failed configuring with PAC script, falling-back to manual proxy servers.
+[1216/193722.740:VERBOSE1:logging_network_change_observer.cc(116)] Observed a network change to state CONNECTION_NONE
+[1216/193722.740:VERBOSE1:logging_network_change_observer.cc(116)] Observed a network change to state CONNECTION_ETHERNET
+[1216/193723.555:WARNING:dns_config_service_win.cc(583)] Failed to read DnsConfig.
+[1216/193723.621:WARNING:dns_config_service_win.cc(583)] Failed to read DnsConfig.
+[1216/193723.621:WARNING:dns_config_service_win.cc(583)] Failed to read DnsConfig.
+[1216/193724.342:VERBOSE1:logging_network_change_observer.cc(93)] Observed a change to the network IP addresses
+[1216/193725.286:VERBOSE1:logging_network_change_observer.cc(103)] Observed a change to network connectivity state CONNECTION_UNKNOWN
+[1216/193725.801:VERBOSE1:logging_network_change_observer.cc(116)] Observed a network change to state CONNECTION_NONE
+[1216/193725.801:VERBOSE1:logging_network_change_observer.cc(116)] Observed a network change to state CONNECTION_UNKNOWN
+[1216/193726.357:VERBOSE1:configured_proxy_resolution_service.cc(1095)] Failed configuring with PAC script, falling-back to manual proxy servers.
+[1216/193727.298:VERBOSE1:logging_network_change_observer.cc(93)] Observed a change to the network IP addresses
+[1216/193728.311:VERBOSE1:logging_network_change_observer.cc(103)] Observed a change to network connectivity state CONNECTION_UNKNOWN
+[1216/193728.815:VERBOSE1:logging_network_change_observer.cc(116)] Observed a network change to state CONNECTION_NONE
+[1216/193728.815:VERBOSE1:logging_network_change_observer.cc(116)] Observed a network change to state CONNECTION_UNKNOWN
+[1216/193729.306:VERBOSE1:configured_proxy_resolution_service.cc(1095)] Failed configuring with PAC script, falling-back to manual proxy servers.
+[1216/193730.122:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=53})
+[1216/193731.131:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=55})
+[1216/193732.144:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=58})
+[1216/193733.147:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=61})
+[1216/193734.158:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=67})
+[1216/193735.174:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=71})
+[1216/193736.183:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=72})
+[1216/193737.196:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=71})
+[1216/193740.236:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=73})
+[1216/193741.246:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=76})
+[1216/193742.258:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=77})
+[1216/193744.277:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=74})
+[1216/193745.287:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=73})
+[1216/193746.299:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=75})
+[1216/193747.307:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=76})
+[1216/193749.332:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=100})
+[1216/193759.473:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=79})
+[1216/193800.483:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=80})
+[1216/193801.497:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=81})
+[1216/193802.512:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=100})
+[1216/193812.664:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=83})
+[1216/193817.741:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=84})
+[1216/193818.759:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=85})
+[1216/193819.772:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=83})
+[1216/193820.789:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=82})
+[1216/193824.841:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=81})
+[1216/193826.868:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=80})
+[1216/193828.900:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=79})
+[1216/193829.914:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=80})
+[1216/193830.930:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=81})
+[1216/193831.943:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=82})
+[1216/193833.974:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=83})
+[1216/193834.979:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=85})
+[1216/193837.009:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=100})
+[1216/193906.453:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=83})
+[1216/193910.514:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=82})
+[1216/193912.543:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=81})
+[1216/193913.556:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=84})
+[1216/193914.568:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=83})
+[1216/193916.592:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=100})
+[1216/193935.457:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSuspend([this=00000340000497B8])
+[1216/194758.898:VERBOSE1:logging_network_change_observer.cc(93)] Observed a change to the network IP addresses
+[1216/194759.701:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnResume([this=00000340000497B8])
+[1216/194759.911:VERBOSE1:logging_network_change_observer.cc(103)] Observed a change to network connectivity state CONNECTION_ETHERNET
+[1216/194800.421:VERBOSE1:logging_network_change_observer.cc(116)] Observed a network change to state CONNECTION_NONE
+[1216/194800.421:VERBOSE1:logging_network_change_observer.cc(116)] Observed a network change to state CONNECTION_ETHERNET
+[1216/194800.571:WARNING:dns_config_service_win.cc(583)] Failed to read DnsConfig.
+[1216/194800.575:WARNING:dns_config_service_win.cc(583)] Failed to read DnsConfig.
+[1216/194800.914:VERBOSE1:configured_proxy_resolution_service.cc(1095)] Failed configuring with PAC script, falling-back to manual proxy servers.
+[1216/194805.324:VERBOSE1:logging_network_change_observer.cc(93)] Observed a change to the network IP addresses
+[1216/194805.373:VERBOSE1:media_stream_manager.cc(1113)] video capture: VideoCaptureManager::OnScreenUnlocked
+[1216/194806.289:VERBOSE1:logging_network_change_observer.cc(103)] Observed a change to network connectivity state CONNECTION_UNKNOWN
+[1216/194806.804:VERBOSE1:logging_network_change_observer.cc(116)] Observed a network change to state CONNECTION_NONE
+[1216/194806.804:VERBOSE1:logging_network_change_observer.cc(116)] Observed a network change to state CONNECTION_UNKNOWN
+[1216/194807.279:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=65})
+[1216/194807.588:VERBOSE1:configured_proxy_resolution_service.cc(1095)] Failed configuring with PAC script, falling-back to manual proxy servers.
+[1216/194808.294:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=63})
+[1216/194810.315:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=65})
+[1216/194810.792:VERBOSE1:logging_network_change_observer.cc(93)] Observed a change to the network IP addresses
+[1216/194811.329:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=63})
+[1216/194811.799:VERBOSE1:logging_network_change_observer.cc(103)] Observed a change to network connectivity state CONNECTION_UNKNOWN
+[1216/194812.314:VERBOSE1:logging_network_change_observer.cc(116)] Observed a network change to state CONNECTION_NONE
+[1216/194812.314:VERBOSE1:logging_network_change_observer.cc(116)] Observed a network change to state CONNECTION_UNKNOWN
+[1216/194812.338:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=64})
+[1216/194812.806:VERBOSE1:configured_proxy_resolution_service.cc(1095)] Failed configuring with PAC script, falling-back to manual proxy servers.
+[1216/194815.373:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=67})
+[1216/194817.394:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=66})
+[1216/194818.407:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=100})
+[1216/194831.546:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=77})
+[1216/194833.577:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=100})
+[1216/194848.732:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=65})
+[1216/194851.771:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=100})
+[1216/195236.507:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=87})
+[1216/195237.518:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=86})
+[1216/195238.531:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=85})
+[1216/195239.541:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=82})
+[1216/195240.557:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=81})
+[1216/195241.575:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=78})
+[1216/195242.588:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=76})
+[1216/195243.596:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=75})
+[1216/195245.620:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=73})
+[1216/195246.633:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=72})
+[1216/195248.663:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=74})
+[1216/195249.677:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=77})
+[1216/195250.693:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=78})
+[1216/195251.711:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=81})
+[1216/195252.720:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=83})
+[1216/195253.725:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=84})
+[1216/195255.749:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=86})
+[1216/195256.768:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=87})
+[1216/195301.831:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=100})
+[1216/195411.697:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=89})
+[1216/195412.705:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=88})
+[1216/195413.711:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=100})
+[1216/195433.946:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=79})
+[1216/195434.960:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=81})
+[1216/195435.976:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=80})
+[1216/195436.986:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=100})
+[1216/195447.100:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=77})
+[1216/195448.117:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=75})
+[1216/195449.133:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=70})
+[1216/195451.149:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=69})
+[1216/195452.171:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=70})
+[1216/195453.173:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=71})
+[1216/195455.206:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=70})
+[1216/195456.213:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=69})
+[1216/195457.226:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=100})
+[1216/195509.342:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=86})
+[1216/195510.348:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=87})
+[1216/195511.361:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=100})
+[1216/195538.669:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=85})
+[1216/195539.675:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=86})
+[1216/195542.715:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=85})
+[1216/195543.734:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=86})
+[1216/195545.767:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=85})
+[1216/195547.784:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=100})
+[1216/195610.068:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=76})
+[1216/195611.082:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=77})
+[1216/195612.086:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=78})
+[1216/195613.097:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=79})
+[1216/195614.112:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=100})
+[1216/195643.493:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=76})
+[1216/195644.508:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=74})
+[1216/195645.520:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=73})
+[1216/195646.524:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=69})
+[1216/195647.535:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=64})
+[1216/195648.547:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=60})
+[1216/195649.565:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=55})
+[1216/195650.581:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=50})
+[1216/195651.596:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=49})
+[1216/195652.610:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=51})
+[1216/195655.649:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=50})
+[1216/195656.664:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=55})
+[1216/195657.675:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=60})
+[1216/195658.689:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=65})
+[1216/195659.692:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=66})
+[1216/195700.709:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=71})
+[1216/195701.720:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=74})
+[1216/195703.737:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=76})
+[1216/195704.752:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=77})
+[1216/195706.767:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=73})
+[1216/195708.781:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=72})
+[1216/195709.787:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=76})
+[1216/195710.800:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=75})
+[1216/195711.818:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=76})
+[1216/195712.820:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=74})
+[1216/195713.833:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=75})
+[1216/195715.853:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=76})
+[1216/195716.863:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=81})
+[1216/195717.874:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=79})
+[1216/195718.888:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000340000497B8}, {new_limit=100})
+[1216/200602.899:VERBOSE1:statistics_recorder.cc(452)] Collections of all histograms
+Histogram: ChildProcess.FieldTrials.CreateFromShmemSuccess recorded 1 samples, mean = 1.0 (flags = 0x1)
+0  O                                                                         (0 = 0.0%)
+1  -O                                                                        (1 = 100.0%) {0.0%}
+2  O                                                                         (0 = 0.0%) {100.0%}
+
+Histogram: LocalStorageContext.ShutDown.MaybeDroppedChanges recorded 1 samples, mean = 0.0
+0  -O                                                                        (1 = 100.0%)
+1  ... 
+
+Histogram: Memory.PartitionAlloc.MemoryReclaim recorded 552 samples, mean = 23.7 (flags = 0x1)
+0    ... 
+9    ------O                                                                   (12 = 2.2%) {0.0%}
+12   -------------------------------------------------------------O            (124 = 22.5%) {2.2%}
+16   ------------------------------------------------------------------------O (147 = 26.6%) {24.6%}
+21   --------------------------------------------------O                       (102 = 18.5%) {51.3%}
+28   ---------------------------------------------------------------------O    (140 = 25.4%) {69.7%}
+37   ----O                                                                     (9 = 1.6%) {95.1%}
+49   ----O                                                                     (9 = 1.6%) {96.7%}
+65   -O                                                                        (3 = 0.5%) {98.4%}
+86   -O                                                                        (3 = 0.5%) {98.9%}
+113  O                                                                         (1 = 0.2%) {99.5%}
+149  O                                                                         (1 = 0.2%) {99.6%}
+196  O                                                                         (1 = 0.2%) {99.8%}
+258  ... 
+
+Histogram: Memory.PartitionAlloc.PeriodicPurge recorded 42 samples, mean = 25.8 (flags = 0x1)
+0    ... 
+5    -------O                                                                  (7 = 16.7%) {0.0%}
+7    ------O                                                                   (6 = 14.3%) {16.7%}
+9    ---------O                                                                (9 = 21.4%) {31.0%}
+12   ---------O                                                                (9 = 21.4%) {52.4%}
+16   ------O                                                                   (6 = 14.3%) {73.8%}
+21   -O                                                                        (1 = 2.4%) {88.1%}
+28   O                                                                         (0 = 0.0%) {90.5%}
+37   -O                                                                        (1 = 2.4%) {90.5%}
+49   --O                                                                       (2 = 4.8%) {92.9%}
+65   ... 
+448  -O                                                                        (1 = 2.4%) {97.6%}
+590  ... 
+
+Histogram: SessionStorageContext.CommitResult recorded 3 samples, mean = 0.0 (flags = 0x1)
+0  ---O                                                                      (3 = 100.0%)
+1  ... 
+
+Histogram: V8.Initializer.OpenV8File.Result recorded 1 samples, mean = 0.0 (flags = 0x1)
+0  -O                                                                        (1 = 100.0%)
+1  ... 
+
+Histogram: Windows.HighResolutionTimerUsage recorded 2 samples, mean = 0.0 (flags = 0x1)
+0  --O                                                                       (2 = 100.0%)
+1  ... 
+
+
+[1216/200636.352:VERBOSE1:pref_proxy_config_tracker_impl.cc(187)] 000004C8000D4600: set chrome proxy config service to 000004C8000BC380
+[1216/200636.366:VERBOSE1:webrtc_internals.cc(120)] Could not get the download directory.
+[1216/200636.366:VERBOSE1:media_stream_manager.cc(1113)] MSM::InitializeMaybeAsync([this=000004C800035680])
+[1216/200636.366:VERBOSE1:media_stream_manager.cc(1113)] MDM::MediaDevicesManager()
+[1216/200636.366:VERBOSE1:media_stream_manager.cc(1113)] MSM::MediaStreamManager([this=000004C800035680]))
+[1216/200636.379:VERBOSE1:first_party_sets_handler_impl.cc(262)] Empty path. Failed initializing First-Party Sets database.
+[1216/200636.425:ERROR:gpu_init.cc(523)] Passthrough is not supported, GL is disabled, ANGLE is 
+[1216/200636.616:VERBOSE1:configured_proxy_resolution_service.cc(1095)] Failed configuring with PAC script, falling-back to manual proxy servers.
+[1216/200638.713:VERBOSE1:pref_proxy_config_tracker_impl.cc(187)] 000004C8000D7900: set chrome proxy config service to 000004C8001D8280
+[1216/200638.817:VERBOSE1:configured_proxy_resolution_service.cc(1095)] Failed configuring with PAC script, falling-back to manual proxy servers.
+[1216/200638.841:INFO:cpu_info.cc(53)] Available number of cores: 16
+[1216/200638.862:INFO:cpu_info.cc(53)] Available number of cores: 16
+[1216/200638.942:VERBOSE1:frame_impl.cc(503)] frame 21474836481 [5,1] connection request (reason=RENDER_FRAME_CREATED)
+[1216/200638.945:VERBOSE1:media_stream_manager.cc(1113)] RFAOSF::Core() [process_id=5, frame_id=1]
+[1216/200638.945:VERBOSE1:frame_host_impl.cc(659)] frame 21474836481 [5,1] (main) connected
+[1216/200639.004:VERBOSE1:script_context.cc(206)] Created context:
+  extension id:           (none)
+  frame:                  000003810020CF90
+  URL:                    
+  context_type:           WEB_PAGE
+  effective extension id: (none)
+  effective context type: WEB_PAGE
+[1216/200639.004:VERBOSE1:script_context.cc(206)] Created context:
+  extension id:           (none)
+  frame:                  0000000000000000
+  URL:                    
+  context_type:           UNSPECIFIED
+  effective extension id: (none)
+  effective context type: UNSPECIFIED
+[1216/200639.004:VERBOSE1:dispatcher.cc(452)] Num tracked contexts: 1
+[1216/200639.033:WARNING:task_impl.cc(20)] No task runner for threadId 6
+[1216/200639.090:WARNING:task_impl.cc(20)] No task runner for threadId 6
+[1216/200639.212:VERBOSE1:frame_host_impl.cc(492)] frame 21474836481 [5,1] (main) detached (reason=NEW_MAIN_FRAME, is_connected=1)
+[1216/200646.448:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=60})
+[1216/200647.455:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=58})
+[1216/200648.463:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=59})
+[1216/200649.480:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=64})
+[1216/200650.494:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=66})
+[1216/200651.500:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=100})
+[1216/200735.070:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=85})
+[1216/200737.091:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=84})
+[1216/200738.104:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=100})
+[1216/200747.595:VERBOSE1:logging_network_change_observer.cc(93)] Observed a change to the network IP addresses
+[1216/200748.057:WARNING:dns_config_service_win.cc(583)] Failed to read DnsConfig.
+[1216/200748.065:WARNING:dns_config_service_win.cc(583)] Failed to read DnsConfig.
+[1216/200748.608:VERBOSE1:logging_network_change_observer.cc(103)] Observed a change to network connectivity state CONNECTION_ETHERNET
+[1216/200749.243:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=84})
+[1216/200749.605:VERBOSE1:configured_proxy_resolution_service.cc(1095)] Failed configuring with PAC script, falling-back to manual proxy servers.
+[1216/200750.158:VERBOSE1:logging_network_change_observer.cc(116)] Observed a network change to state CONNECTION_NONE
+[1216/200750.160:VERBOSE1:logging_network_change_observer.cc(116)] Observed a network change to state CONNECTION_ETHERNET
+[1216/200750.252:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=85})
+[1216/200751.265:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=80})
+[1216/200752.279:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=81})
+[1216/200753.377:VERBOSE1:logging_network_change_observer.cc(93)] Observed a change to the network IP addresses
+[1216/200754.308:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=80})
+[1216/200754.322:VERBOSE1:logging_network_change_observer.cc(103)] Observed a change to network connectivity state CONNECTION_UNKNOWN
+[1216/200754.825:VERBOSE1:logging_network_change_observer.cc(116)] Observed a network change to state CONNECTION_NONE
+[1216/200754.825:VERBOSE1:logging_network_change_observer.cc(116)] Observed a network change to state CONNECTION_UNKNOWN
+[1216/200756.298:VERBOSE1:configured_proxy_resolution_service.cc(1095)] Failed configuring with PAC script, falling-back to manual proxy servers.
+[1216/200759.386:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=77})
+[1216/200801.401:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=82})
+[1216/200803.433:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=100})
+[1216/200806.265:VERBOSE1:logging_network_change_observer.cc(93)] Observed a change to the network IP addresses
+[1216/200806.338:VERBOSE1:logging_network_change_observer.cc(93)] Observed a change to the network IP addresses
+[1216/200806.407:VERBOSE1:logging_network_change_observer.cc(93)] Observed a change to the network IP addresses
+[1216/200806.474:WARNING:dns_config_service_win.cc(583)] Failed to read DnsConfig.
+[1216/200806.480:WARNING:dns_config_service_win.cc(583)] Failed to read DnsConfig.
+[1216/200807.417:VERBOSE1:logging_network_change_observer.cc(103)] Observed a change to network connectivity state CONNECTION_ETHERNET
+[1216/200807.921:VERBOSE1:logging_network_change_observer.cc(116)] Observed a network change to state CONNECTION_NONE
+[1216/200807.921:VERBOSE1:logging_network_change_observer.cc(116)] Observed a network change to state CONNECTION_ETHERNET
+[1216/200808.421:VERBOSE1:configured_proxy_resolution_service.cc(1095)] Failed configuring with PAC script, falling-back to manual proxy servers.
+[1216/200811.493:WARNING:dns_config_service_win.cc(583)] Failed to read DnsConfig.
+[1216/200811.493:WARNING:dns_config_service_win.cc(583)] Failed to read DnsConfig.
+[1216/200813.546:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=83})
+[1216/200816.569:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=88})
+[1216/200817.571:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=89})
+[1216/200818.590:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=100})
+[1216/200820.528:VERBOSE1:logging_network_change_observer.cc(93)] Observed a change to the network IP addresses
+[1216/200821.501:VERBOSE1:logging_network_change_observer.cc(103)] Observed a change to network connectivity state CONNECTION_UNKNOWN
+[1216/200822.015:VERBOSE1:logging_network_change_observer.cc(116)] Observed a network change to state CONNECTION_NONE
+[1216/200822.015:VERBOSE1:logging_network_change_observer.cc(116)] Observed a network change to state CONNECTION_UNKNOWN
+[1216/200823.494:VERBOSE1:configured_proxy_resolution_service.cc(1095)] Failed configuring with PAC script, falling-back to manual proxy servers.
+[1216/200823.809:VERBOSE1:logging_network_change_observer.cc(93)] Observed a change to the network IP addresses
+[1216/200824.789:VERBOSE1:logging_network_change_observer.cc(103)] Observed a change to network connectivity state CONNECTION_UNKNOWN
+[1216/200825.291:VERBOSE1:logging_network_change_observer.cc(116)] Observed a network change to state CONNECTION_NONE
+[1216/200825.291:VERBOSE1:logging_network_change_observer.cc(116)] Observed a network change to state CONNECTION_UNKNOWN
+[1216/200825.818:VERBOSE1:configured_proxy_resolution_service.cc(1095)] Failed configuring with PAC script, falling-back to manual proxy servers.
+[1216/200826.255:VERBOSE1:logging_network_change_observer.cc(93)] Observed a change to the network IP addresses
+[1216/200827.297:VERBOSE1:logging_network_change_observer.cc(103)] Observed a change to network connectivity state CONNECTION_UNKNOWN
+[1216/200827.801:VERBOSE1:logging_network_change_observer.cc(116)] Observed a network change to state CONNECTION_NONE
+[1216/200827.801:VERBOSE1:logging_network_change_observer.cc(116)] Observed a network change to state CONNECTION_UNKNOWN
+[1216/200828.271:VERBOSE1:configured_proxy_resolution_service.cc(1095)] Failed configuring with PAC script, falling-back to manual proxy servers.
+[1216/200846.953:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=82})
+[1216/200847.961:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=83})
+[1216/200848.969:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=80})
+[1216/200849.974:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=79})
+[1216/200853.010:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=78})
+[1216/200855.026:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=77})
+[1216/200856.044:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=78})
+[1216/200857.056:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=80})
+[1216/200858.061:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=81})
+[1216/200859.074:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=84})
+[1216/200900.089:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=83})
+[1216/200902.108:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=100})
+[1216/200919.329:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=76})
+[1216/200920.338:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=80})
+[1216/200921.345:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=83})
+[1216/200922.352:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=100})
+[1216/201011.804:VERBOSE1:logging_network_change_observer.cc(93)] Observed a change to the network IP addresses
+[1216/201012.806:VERBOSE1:logging_network_change_observer.cc(103)] Observed a change to network connectivity state CONNECTION_UNKNOWN
+[1216/201013.312:VERBOSE1:logging_network_change_observer.cc(116)] Observed a network change to state CONNECTION_NONE
+[1216/201013.312:VERBOSE1:logging_network_change_observer.cc(116)] Observed a network change to state CONNECTION_UNKNOWN
+[1216/201013.819:VERBOSE1:configured_proxy_resolution_service.cc(1095)] Failed configuring with PAC script, falling-back to manual proxy servers.
+[1216/201026.181:VERBOSE1:pref_proxy_config_tracker_impl.cc(187)] 000004C8000D5500: set chrome proxy config service to 000004C8001D8EC0
+[1216/201026.275:INFO:cpu_info.cc(53)] Available number of cores: 16
+[1216/201026.278:VERBOSE1:configured_proxy_resolution_service.cc(1095)] Failed configuring with PAC script, falling-back to manual proxy servers.
+[1216/201026.287:INFO:cpu_info.cc(53)] Available number of cores: 16
+[1216/201026.369:VERBOSE1:frame_impl.cc(503)] frame 30064771073 [7,1] connection request (reason=RENDER_FRAME_CREATED)
+[1216/201026.372:VERBOSE1:media_stream_manager.cc(1113)] RFAOSF::Core() [process_id=7, frame_id=1]
+[1216/201026.372:VERBOSE1:frame_host_impl.cc(659)] frame 30064771073 [7,1] (main) connected
+[1216/201026.433:VERBOSE1:script_context.cc(206)] Created context:
+  extension id:           (none)
+  frame:                  000006470020CF90
+  URL:                    
+  context_type:           WEB_PAGE
+  effective extension id: (none)
+  effective context type: WEB_PAGE
+[1216/201026.433:VERBOSE1:script_context.cc(206)] Created context:
+  extension id:           (none)
+  frame:                  0000000000000000
+  URL:                    
+  context_type:           UNSPECIFIED
+  effective extension id: (none)
+  effective context type: UNSPECIFIED
+[1216/201026.435:VERBOSE1:dispatcher.cc(452)] Num tracked contexts: 1
+[1216/201026.443:WARNING:task_impl.cc(20)] No task runner for threadId 6
+[1216/201026.508:WARNING:task_impl.cc(20)] No task runner for threadId 6
+[1216/201026.616:VERBOSE1:frame_host_impl.cc(492)] frame 30064771073 [7,1] (main) detached (reason=NEW_MAIN_FRAME, is_connected=1)
+[1216/201034.145:VERBOSE1:logging_network_change_observer.cc(93)] Observed a change to the network IP addresses
+[1216/201034.652:WARNING:dns_config_service_win.cc(583)] Failed to read DnsConfig.
+[1216/201034.657:WARNING:dns_config_service_win.cc(583)] Failed to read DnsConfig.
+[1216/201035.157:VERBOSE1:logging_network_change_observer.cc(103)] Observed a change to network connectivity state CONNECTION_ETHERNET
+[1216/201035.666:VERBOSE1:logging_network_change_observer.cc(116)] Observed a network change to state CONNECTION_NONE
+[1216/201035.666:VERBOSE1:logging_network_change_observer.cc(116)] Observed a network change to state CONNECTION_ETHERNET
+[1216/201036.154:VERBOSE1:configured_proxy_resolution_service.cc(1095)] Failed configuring with PAC script, falling-back to manual proxy servers.
+[1216/201040.814:VERBOSE1:logging_network_change_observer.cc(93)] Observed a change to the network IP addresses
+[1216/201041.812:VERBOSE1:logging_network_change_observer.cc(103)] Observed a change to network connectivity state CONNECTION_UNKNOWN
+[1216/201042.317:VERBOSE1:logging_network_change_observer.cc(116)] Observed a network change to state CONNECTION_NONE
+[1216/201042.317:VERBOSE1:logging_network_change_observer.cc(116)] Observed a network change to state CONNECTION_UNKNOWN
+[1216/201042.828:VERBOSE1:configured_proxy_resolution_service.cc(1095)] Failed configuring with PAC script, falling-back to manual proxy servers.
+[1216/201617.258:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=83})
+[1216/201618.271:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=100})
+[1216/201745.376:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=86})
+[1216/201746.381:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=81})
+[1216/201747.391:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=100})
+[1216/201903.308:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=78})
+[1216/201905.338:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=77})
+[1216/201906.352:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=100})
+[1216/202228.859:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=78})
+[1216/202229.874:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=79})
+[1216/202230.894:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=81})
+[1216/202231.912:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=82})
+[1216/202232.928:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=84})
+[1216/202233.938:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=83})
+[1216/202235.949:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=80})
+[1216/202241.025:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=81})
+[1216/202243.049:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=80})
+[1216/202244.058:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=79})
+[1216/202245.075:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=78})
+[1216/202246.078:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=81})
+[1216/202247.094:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=79})
+[1216/202248.107:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=78})
+[1216/202249.128:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=73})
+[1216/202250.135:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=70})
+[1216/202251.141:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=69})
+[1216/202252.158:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=64})
+[1216/202255.196:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=66})
+[1216/202256.207:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=68})
+[1216/202258.226:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=69})
+[1216/202259.241:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=100})
+[1216/202328.601:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=79})
+[1216/202330.612:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=82})
+[1216/202331.623:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=85})
+[1216/202335.707:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=84})
+[1216/202336.723:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=83})
+[1216/202337.740:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=84})
+[1216/202338.757:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=85})
+[1216/202340.789:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=84})
+[1216/202342.809:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=83})
+[1216/202346.851:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=100})
+[1216/202358.993:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=86})
+[1216/202402.018:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=100})
+[1216/202426.310:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=79})
+[1216/202427.343:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=81})
+[1216/202429.363:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=80})
+[1216/202430.371:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=100})
+[1216/202502.705:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=68})
+[1216/202503.710:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=69})
+[1216/202504.728:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=71})
+[1216/202505.732:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=73})
+[1216/202506.751:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=74})
+[1216/202508.769:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=75})
+[1216/202509.773:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=76})
+[1216/202510.787:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=78})
+[1216/202511.800:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=100})
+[1216/202602.397:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=72})
+[1216/202604.426:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=75})
+[1216/202606.446:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=77})
+[1216/202607.461:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=81})
+[1216/202608.476:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=83})
+[1216/202614.548:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=82})
+[1216/202615.568:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=83})
+[1216/202616.579:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=79})
+[1216/202619.612:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=80})
+[1216/202621.650:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=79})
+[1216/202623.678:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=100})
+[1216/202721.382:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=84})
+[1216/202725.429:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=85})
+[1216/202726.440:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=83})
+[1216/202734.512:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=100})
+[1216/203007.303:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=80})
+[1216/203008.308:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=83})
+[1216/203009.321:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=84})
+[1216/203011.345:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=100})
+[1216/203052.807:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=79})
+[1216/203053.826:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=80})
+[1216/203055.852:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=82})
+[1216/203057.885:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=100})
+[1216/203219.828:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=80})
+[1216/203220.843:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=77})
+[1216/203223.875:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=100})
+[1216/203727.513:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=83})
+[1216/203728.529:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=82})
+[1216/203730.554:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=83})
+[1216/203732.563:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=100})
+[1216/203814.075:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=86})
+[1216/203815.083:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=100})
+[1216/203825.205:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=79})
+[1216/203826.221:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=78})
+[1216/203828.244:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=74})
+[1216/203830.272:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=73})
+[1216/203832.286:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=76})
+[1216/203833.300:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=78})
+[1216/203836.338:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=79})
+[1216/203838.361:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=81})
+[1216/203839.371:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=79})
+[1216/203841.396:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=78})
+[1216/203843.431:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=79})
+[1216/203844.444:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=78})
+[1216/203845.455:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=79})
+[1216/203847.468:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=81})
+[1216/203848.487:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=82})
+[1216/203849.500:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=83})
+[1216/203850.507:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=100})
+[1216/204119.336:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=84})
+[1216/204120.345:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=83})
+[1216/204124.396:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=100})
+[1216/204134.512:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=79})
+[1216/204136.541:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=81})
+[1216/204138.588:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=83})
+[1216/204139.608:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=100})
+[1216/204549.720:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=83})
+[1216/204550.725:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=100})
+[1216/204640.247:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=81})
+[1216/204641.258:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=82})
+[1216/204642.263:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=83})
+[1216/204643.268:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=82})
+[1216/204646.299:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=100})
+[1216/204758.168:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=84})
+[1216/204759.175:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=81})
+[1216/204800.187:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=79})
+[1216/204801.197:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=78})
+[1216/204802.206:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=77})
+[1216/204804.225:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=78})
+[1216/204805.231:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=77})
+[1216/204806.251:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=75})
+[1216/204808.277:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=74})
+[1216/204809.293:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=77})
+[1216/204810.313:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=79})
+[1216/204812.341:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=80})
+[1216/204813.359:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=79})
+[1216/204814.366:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=100})
+[1216/205226.371:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=83})
+[1216/205228.431:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=84})
+[1216/205229.444:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=83})
+[1216/205230.454:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=100})
+[1216/205240.578:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=77})
+[1216/205241.591:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=78})
+[1216/205242.605:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=79})
+[1216/205243.612:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=77})
+[1216/205244.627:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=78})
+[1216/205245.638:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=79})
+[1216/205247.660:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=80})
+[1216/205248.667:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=83})
+[1216/205249.689:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=84})
+[1216/205250.704:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=85})
+[1216/205251.711:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=81})
+[1216/205253.735:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=100})
+[1216/205303.861:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=83})
+[1216/205304.873:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=84})
+[1216/205305.890:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=85})
+[1216/205307.916:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=83})
+[1216/205308.929:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=100})
+[1216/205340.272:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=80})
+[1216/205341.279:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=79})
+[1216/205342.292:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=81})
+[1216/205343.302:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=78})
+[1216/205345.318:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=79})
+[1216/205347.342:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=80})
+[1216/205348.356:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=100})
+[1216/205400.497:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=84})
+[1216/205402.507:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=83})
+[1216/205406.544:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=80})
+[1216/205412.612:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=81})
+[1216/205413.621:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=82})
+[1216/205414.638:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=81})
+[1216/205416.658:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=84})
+[1216/205417.664:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=85})
+[1216/205418.667:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=82})
+[1216/205421.717:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=83})
+[1216/205423.739:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=82})
+[1216/205425.794:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=100})
+[1216/205435.887:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=86})
+[1216/205437.931:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=100})
+[1216/205507.253:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=85})
+[1216/205508.263:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=84})
+[1216/205509.270:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=83})
+[1216/205510.278:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=84})
+[1216/205511.288:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=85})
+[1216/205513.307:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=84})
+[1216/205515.335:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=82})
+[1216/205516.344:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=83})
+[1216/205518.356:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=84})
+[1216/205519.365:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=85})
+[1216/205520.371:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=84})
+[1216/205523.428:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=100})
+[1216/205535.549:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=85})
+[1216/205538.574:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=84})
+[1216/205540.588:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=83})
+[1216/205542.615:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=82})
+[1216/205544.646:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=76})
+[1216/205545.658:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=77})
+[1216/205546.663:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=76})
+[1216/205550.726:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=77})
+[1216/205554.773:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=82})
+[1216/205556.809:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=83})
+[1216/205557.822:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=84})
+[1216/205601.891:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=85})
+[1216/205604.932:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=83})
+[1216/205605.946:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=81})
+[1216/205607.963:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=80})
+[1216/205615.043:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=82})
+[1216/205616.059:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=85})
+[1216/205618.089:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=86})
+[1216/205619.101:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=84})
+[1216/205621.121:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=83})
+[1216/205623.133:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=80})
+[1216/205625.159:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=79})
+[1216/205626.166:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=76})
+[1216/205629.209:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=77})
+[1216/205630.212:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=78})
+[1216/205631.230:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=79})
+[1216/205633.258:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=80})
+[1216/205634.277:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=81})
+[1216/205636.301:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=84})
+[1216/205640.349:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=82})
+[1216/205642.366:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=81})
+[1216/205643.387:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=100})
+[1216/205653.499:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=81})
+[1216/205654.519:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=79})
+[1216/205655.527:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=76})
+[1216/205701.601:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=77})
+[1216/205702.606:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=78})
+[1216/205704.632:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=80})
+[1216/205705.641:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=83})
+[1216/205707.652:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=84})
+[1216/205709.675:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=85})
+[1216/205710.684:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=84})
+[1216/205713.723:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=83})
+[1216/205714.750:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=100})
+[1216/205807.405:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=84})
+[1216/205809.434:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=86})
+[1216/205810.443:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=100})
+[1216/205909.154:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=83})
+[1216/205911.163:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=82})
+[1216/205913.185:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=83})
+[1216/205914.192:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=84})
+[1216/205916.227:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=83})
+[1216/205917.247:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=000004C8000357B8}, {new_limit=100})
+[1216/210206.665:VERBOSE1:pref_proxy_config_tracker_impl.cc(187)] 000003CC000D4600: set chrome proxy config service to 000003CC000BC380
+[1216/210206.682:VERBOSE1:webrtc_internals.cc(120)] Could not get the download directory.
+[1216/210206.682:VERBOSE1:media_stream_manager.cc(1113)] MSM::InitializeMaybeAsync([this=000003CC00035680])
+[1216/210206.682:VERBOSE1:media_stream_manager.cc(1113)] MDM::MediaDevicesManager()
+[1216/210206.682:VERBOSE1:media_stream_manager.cc(1113)] MSM::MediaStreamManager([this=000003CC00035680]))
+[1216/210206.703:VERBOSE1:first_party_sets_handler_impl.cc(262)] Empty path. Failed initializing First-Party Sets database.
+[1216/210206.754:ERROR:gpu_init.cc(523)] Passthrough is not supported, GL is disabled, ANGLE is 
+[1216/210207.091:VERBOSE1:configured_proxy_resolution_service.cc(1095)] Failed configuring with PAC script, falling-back to manual proxy servers.
+[1216/210209.096:VERBOSE1:pref_proxy_config_tracker_impl.cc(187)] 000003CC000D5500: set chrome proxy config service to 000003CC001D8280
+[1216/210209.186:VERBOSE1:configured_proxy_resolution_service.cc(1095)] Failed configuring with PAC script, falling-back to manual proxy servers.
+[1216/210209.194:INFO:cpu_info.cc(53)] Available number of cores: 16
+[1216/210209.203:INFO:cpu_info.cc(53)] Available number of cores: 16
+[1216/210209.289:VERBOSE1:frame_impl.cc(503)] frame 21474836481 [5,1] connection request (reason=RENDER_FRAME_CREATED)
+[1216/210209.291:VERBOSE1:media_stream_manager.cc(1113)] RFAOSF::Core() [process_id=5, frame_id=1]
+[1216/210209.291:VERBOSE1:frame_host_impl.cc(659)] frame 21474836481 [5,1] (main) connected
+[1216/210209.354:VERBOSE1:script_context.cc(206)] Created context:
+  extension id:           (none)
+  frame:                  0000020B0020CF90
+  URL:                    
+  context_type:           WEB_PAGE
+  effective extension id: (none)
+  effective context type: WEB_PAGE
+[1216/210209.356:VERBOSE1:script_context.cc(206)] Created context:
+  extension id:           (none)
+  frame:                  0000000000000000
+  URL:                    
+  context_type:           UNSPECIFIED
+  effective extension id: (none)
+  effective context type: UNSPECIFIED
+[1216/210209.356:VERBOSE1:dispatcher.cc(452)] Num tracked contexts: 1
+[1216/210209.377:WARNING:task_impl.cc(20)] No task runner for threadId 6
+[1216/210209.436:WARNING:task_impl.cc(20)] No task runner for threadId 6
+[1216/210209.527:VERBOSE1:frame_host_impl.cc(492)] frame 21474836481 [5,1] (main) detached (reason=NEW_MAIN_FRAME, is_connected=1)

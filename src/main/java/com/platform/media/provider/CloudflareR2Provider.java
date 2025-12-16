@@ -141,9 +141,19 @@ public class CloudflareR2Provider implements MediaProvider {
     public void delete(String providerKey) {
         try {
             if (s3Client == null) {
-                log.warn("Cloudflare R2 service not initialized, cannot delete file: {}", providerKey);
-                return;
+                String errorMsg = "Cloudflare R2 service not initialized, cannot delete file: " + providerKey;
+                log.error(errorMsg);
+                throw new RuntimeException(errorMsg);
             }
+
+            if (providerKey == null || providerKey.trim().isEmpty()) {
+                String errorMsg = "Provider key is null or empty, cannot delete file";
+                log.error(errorMsg);
+                throw new RuntimeException(errorMsg);
+            }
+
+            log.info("Attempting to delete file from Cloudflare R2 - Bucket: {}, Key: {}", 
+                     r2Config.getBucketName(), providerKey);
 
             DeleteObjectRequest deleteRequest = DeleteObjectRequest.builder()
                 .bucket(r2Config.getBucketName())
@@ -151,11 +161,25 @@ public class CloudflareR2Provider implements MediaProvider {
                 .build();
 
             s3Client.deleteObject(deleteRequest);
-            log.info("File deleted from Cloudflare R2: {}", providerKey);
+            log.info("File successfully deleted from Cloudflare R2: {}", providerKey);
 
         } catch (Exception e) {
-            log.error("Failed to delete file from Cloudflare R2: {}", e.getMessage(), e);
-            throw new RuntimeException("Failed to delete file: " + e.getMessage());
+            String errorMsg = String.format("Failed to delete file '%s' from Cloudflare R2 bucket '%s': %s", 
+                                          providerKey, 
+                                          r2Config != null ? r2Config.getBucketName() : "unknown", 
+                                          e.getMessage());
+            log.error(errorMsg, e);
+            
+            // Provide more specific error information
+            if (e.getMessage().contains("NoSuchKey")) {
+                throw new RuntimeException("File not found in Cloudflare R2: " + providerKey);
+            } else if (e.getMessage().contains("AccessDenied")) {
+                throw new RuntimeException("Access denied when deleting file from Cloudflare R2. Check credentials and permissions.");
+            } else if (e.getMessage().contains("NoSuchBucket")) {
+                throw new RuntimeException("Bucket not found in Cloudflare R2: " + (r2Config != null ? r2Config.getBucketName() : "unknown"));
+            } else {
+                throw new RuntimeException(errorMsg);
+            }
         }
     }
 
