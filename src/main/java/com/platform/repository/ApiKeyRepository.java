@@ -38,4 +38,5 @@ public interface ApiKeyRepository extends JpaRepository<ApiKey, Long> {
     // Dashboard count methods
     long countByApp_Id(Long appId);
     long countByApp_IdAndActive(Long appId, Boolean active);
+    long countByCorporateId(Long corporateId);
 }

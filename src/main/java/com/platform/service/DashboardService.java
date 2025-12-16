@@ -4,11 +4,14 @@ import com.platform.dto.DashboardStatsDto;
 import com.platform.dto.RecentActivityDto;
 import com.platform.entity.*;
 import com.platform.repository.*;
+import com.platform.security.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -57,14 +60,41 @@ public class DashboardService {
     }
 
     /**
-     * Build global statistics (when no app is selected)
+     * Build global statistics (when no app is selected) - filtered by current user's corporate
      */
     private DashboardStatsDto.DashboardStatsDtoBuilder buildGlobalStats(DashboardStatsDto.DashboardStatsDtoBuilder builder) {
+        // Get current user's corporate ID
+        Long corporateId = getCurrentUserCorporateId();
+        
+        if (corporateId == null) {
+            log.warn("No corporate ID found for current user, returning zero stats");
+            return builder
+                    .totalApps(0L)
+                    .totalUsers(0L)
+                    .totalApiKeys(0L)
+                    // Initialize app-specific stats to zero
+                    .templates(DashboardStatsDto.TemplateStats.builder()
+                            .total(0L).active(0L).change(0.0).build())
+                    .translations(DashboardStatsDto.TranslationStats.builder()
+                            .totalKeys(0L).totalTranslations(0L).languages(0L).change(0.0).build())
+                    .lov(DashboardStatsDto.LovStats.builder()
+                            .totalLists(0L).totalValues(0L).change(0.0).build())
+                    .appConfig(DashboardStatsDto.AppConfigStats.builder()
+                            .totalConfigs(0L).totalGroups(0L).change(0.0).build())
+                    .errorCodes(DashboardStatsDto.ErrorCodeStats.builder()
+                            .total(0L).active(0L).change(0.0).build());
+        }
+        
+        // Filter stats by corporate ID
+        long totalApps = appRepository.countByCorporateId(corporateId);
+        long totalUsers = userRepository.countByCorporateId(corporateId);
+        long totalApiKeys = apiKeyRepository.countByCorporateId(corporateId);
+        
         return builder
-                .totalApps(appRepository.count())
-                .totalUsers(userRepository.count())
-                .totalApiKeys(apiKeyRepository.count())
-                // Initialize app-specific stats to zero
+                .totalApps(totalApps)
+                .totalUsers(totalUsers)
+                .totalApiKeys(totalApiKeys)
+                // Initialize app-specific stats to zero for global view
                 .templates(DashboardStatsDto.TemplateStats.builder()
                         .total(0L).active(0L).change(0.0).build())
                 .translations(DashboardStatsDto.TranslationStats.builder()
@@ -309,5 +339,20 @@ public class DashboardService {
                 .build());
 
         return activities;
+    }
+
+    /**
+     * Get current user's corporate ID from security context
+     */
+    private Long getCurrentUserCorporateId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.getPrincipal() instanceof UserPrincipal) {
+            UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+            User user = userRepository.findByIdWithCorporate(userPrincipal.getId()).orElse(null);
+            if (user != null && user.getCorporate() != null) {
+                return user.getCorporate().getId();
+            }
+        }
+        return null;
     }
 }
