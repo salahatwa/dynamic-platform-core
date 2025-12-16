@@ -5,7 +5,8 @@ dist/
 # Maven / Spring Boot
 target/
 IronPdfEngine.2024.11.4.Windows.x64/
-IronPdfEngine.2024.11.4.Windows.x64/
+IronPdfEngine.*/
+IronPdfEngine*/
 ironpdfengine.log
 
 # Env & IDE
