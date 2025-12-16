@@ -44,6 +44,8 @@ public interface ErrorCodeRepository extends JpaRepository<ErrorCode, Long> {
     
     boolean existsByErrorCodeAndCorporateId(String errorCode, Long corporateId);
     
+    boolean existsByErrorCodeAndAppId(String errorCode, Long appId);
+    
     Optional<ErrorCode> findByIdAndCorporateId(Long id, Long corporateId);
     
     @Query("SELECT DISTINCT e.app.name FROM ErrorCode e WHERE e.corporateId = :corporateId OR e.corporateId IS NULL ORDER BY e.app.name")

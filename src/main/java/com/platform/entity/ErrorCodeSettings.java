@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "error_code_settings", uniqueConstraints = {
-    @UniqueConstraint(columnNames = {"corporate_id"})
+    @UniqueConstraint(columnNames = {"app_id"})
 })
 @Data
 public class ErrorCodeSettings {
@@ -15,8 +15,9 @@ public class ErrorCodeSettings {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @Column(name = "corporate_id", nullable = false)
-    private Long corporateId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "app_id", nullable = false)
+    private App app;
     
     @Column(name = "prefix", nullable = false, length = 10)
     private String prefix = "E";

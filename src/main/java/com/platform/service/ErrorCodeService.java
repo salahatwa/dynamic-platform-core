@@ -405,23 +405,29 @@ public class ErrorCodeService {
 
     // ==================== ERROR CODE SETTINGS & AUTO-GENERATION ====================
 
-    public ErrorCodeSettings getErrorCodeSettings() {
+    public ErrorCodeSettings getErrorCodeSettings(String appName) {
         Long corporateId = getCurrentCorporateId();
-        return settingsRepository.findByCorporateId(corporateId)
-            .orElseGet(() -> createDefaultSettings(corporateId));
+        App app = appRepository.findByCorporateIdAndName(corporateId, appName)
+            .orElseThrow(() -> new RuntimeException("App not found: " + appName));
+        
+        return settingsRepository.findByAppId(app.getId())
+            .orElseGet(() -> createDefaultSettings(app));
     }
 
     @Transactional
-    public ErrorCodeSettings updateErrorCodeSettings(ErrorCodeSettingsRequest request) {
+    public ErrorCodeSettings updateErrorCodeSettings(String appName, ErrorCodeSettingsRequest request) {
         if (!request.isValid()) {
             throw new RuntimeException("Invalid settings request");
         }
 
         Long corporateId = getCurrentCorporateId();
         String username = getCurrentUsername();
+        
+        App app = appRepository.findByCorporateIdAndName(corporateId, appName)
+            .orElseThrow(() -> new RuntimeException("App not found: " + appName));
 
-        ErrorCodeSettings settings = settingsRepository.findByCorporateId(corporateId)
-            .orElseGet(() -> createDefaultSettings(corporateId));
+        ErrorCodeSettings settings = settingsRepository.findByAppId(app.getId())
+            .orElseGet(() -> createDefaultSettings(app));
 
         settings.setPrefix(request.getPrefix().trim().toUpperCase());
         settings.setSequenceLength(request.getSequenceLength());
@@ -433,11 +439,14 @@ public class ErrorCodeService {
     }
 
     @Transactional
-    public ErrorCodeGenerationResponse generateNextErrorCode() {
+    public ErrorCodeGenerationResponse generateNextErrorCode(String appName) {
         Long corporateId = getCurrentCorporateId();
         
-        ErrorCodeSettings settings = settingsRepository.findByCorporateId(corporateId)
-            .orElseGet(() -> createDefaultSettings(corporateId));
+        App app = appRepository.findByCorporateIdAndName(corporateId, appName)
+            .orElseThrow(() -> new RuntimeException("App not found: " + appName));
+        
+        ErrorCodeSettings settings = settingsRepository.findByAppId(app.getId())
+            .orElseGet(() -> createDefaultSettings(app));
 
         // Increment sequence
         settings.setCurrentSequence(settings.getCurrentSequence() + 1);
@@ -455,11 +464,14 @@ public class ErrorCodeService {
         );
     }
 
-    public ErrorCodeGenerationResponse previewNextErrorCode() {
+    public ErrorCodeGenerationResponse previewNextErrorCode(String appName) {
         Long corporateId = getCurrentCorporateId();
         
-        ErrorCodeSettings settings = settingsRepository.findByCorporateId(corporateId)
-            .orElseGet(() -> createDefaultSettings(corporateId));
+        App app = appRepository.findByCorporateIdAndName(corporateId, appName)
+            .orElseThrow(() -> new RuntimeException("App not found: " + appName));
+        
+        ErrorCodeSettings settings = settingsRepository.findByAppId(app.getId())
+            .orElseGet(() -> createDefaultSettings(app));
 
         // Preview without incrementing
         Long nextSequence = settings.getCurrentSequence() + 1;
@@ -480,14 +492,18 @@ public class ErrorCodeService {
         );
     }
 
-    public boolean isErrorCodeUnique(String errorCode) {
+    public boolean isErrorCodeUnique(String appName, String errorCode) {
         Long corporateId = getCurrentCorporateId();
-        return !errorCodeRepository.existsByErrorCodeAndCorporateId(errorCode, corporateId);
+        
+        App app = appRepository.findByCorporateIdAndName(corporateId, appName)
+            .orElseThrow(() -> new RuntimeException("App not found: " + appName));
+        
+        return !errorCodeRepository.existsByErrorCodeAndAppId(errorCode, app.getId());
     }
 
-    private ErrorCodeSettings createDefaultSettings(Long corporateId) {
+    private ErrorCodeSettings createDefaultSettings(App app) {
         ErrorCodeSettings settings = new ErrorCodeSettings();
-        settings.setCorporateId(corporateId);
+        settings.setApp(app);
         settings.setPrefix("E");
         settings.setSequenceLength(6);
         settings.setCurrentSequence(0L);

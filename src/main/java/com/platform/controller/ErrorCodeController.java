@@ -3,8 +3,6 @@ package com.platform.controller;
 import com.platform.dto.ErrorCodeCategoryRequest;
 import com.platform.dto.ErrorCodeDTO;
 import com.platform.dto.ErrorCodeRequest;
-import com.platform.dto.ErrorCodeSettingsRequest;
-import com.platform.dto.ErrorCodeGenerationResponse;
 import com.platform.entity.ErrorCode;
 import com.platform.entity.ErrorCodeAudit;
 import com.platform.entity.ErrorCodeCategory;
@@ -84,32 +82,34 @@ public class ErrorCodeController {
 
     @GetMapping("/settings")
     @RequirePermission(resource = PermissionResource.ERROR_CODES, action = PermissionAction.READ)
-    public ResponseEntity<com.platform.entity.ErrorCodeSettings> getErrorCodeSettings() {
-        return ResponseEntity.ok(errorCodeService.getErrorCodeSettings());
+    public ResponseEntity<com.platform.entity.ErrorCodeSettings> getErrorCodeSettings(@RequestParam String appName) {
+        return ResponseEntity.ok(errorCodeService.getErrorCodeSettings(appName));
     }
 
     @PutMapping("/settings")
     @RequirePermission(resource = PermissionResource.ERROR_CODES, action = PermissionAction.UPDATE)
-    public ResponseEntity<com.platform.entity.ErrorCodeSettings> updateErrorCodeSettings(@RequestBody com.platform.dto.ErrorCodeSettingsRequest request) {
-        return ResponseEntity.ok(errorCodeService.updateErrorCodeSettings(request));
+    public ResponseEntity<com.platform.entity.ErrorCodeSettings> updateErrorCodeSettings(
+            @RequestParam String appName, 
+            @RequestBody com.platform.dto.ErrorCodeSettingsRequest request) {
+        return ResponseEntity.ok(errorCodeService.updateErrorCodeSettings(appName, request));
     }
 
     @PostMapping("/generate")
     @RequirePermission(resource = PermissionResource.ERROR_CODES, action = PermissionAction.CREATE)
-    public ResponseEntity<com.platform.dto.ErrorCodeGenerationResponse> generateNextErrorCode() {
-        return ResponseEntity.ok(errorCodeService.generateNextErrorCode());
+    public ResponseEntity<com.platform.dto.ErrorCodeGenerationResponse> generateNextErrorCode(@RequestParam String appName) {
+        return ResponseEntity.ok(errorCodeService.generateNextErrorCode(appName));
     }
 
     @GetMapping("/preview")
     @RequirePermission(resource = PermissionResource.ERROR_CODES, action = PermissionAction.READ)
-    public ResponseEntity<com.platform.dto.ErrorCodeGenerationResponse> previewNextErrorCode() {
-        return ResponseEntity.ok(errorCodeService.previewNextErrorCode());
+    public ResponseEntity<com.platform.dto.ErrorCodeGenerationResponse> previewNextErrorCode(@RequestParam String appName) {
+        return ResponseEntity.ok(errorCodeService.previewNextErrorCode(appName));
     }
 
     @GetMapping("/check-unique")
     @RequirePermission(resource = PermissionResource.ERROR_CODES, action = PermissionAction.READ)
-    public ResponseEntity<Boolean> checkErrorCodeUnique(@RequestParam String errorCode) {
-        return ResponseEntity.ok(errorCodeService.isErrorCodeUnique(errorCode));
+    public ResponseEntity<Boolean> checkErrorCodeUnique(@RequestParam String appName, @RequestParam String errorCode) {
+        return ResponseEntity.ok(errorCodeService.isErrorCodeUnique(appName, errorCode));
     }
 
     // ==================== CATEGORY ENDPOINTS ====================

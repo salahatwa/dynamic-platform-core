@@ -12,12 +12,12 @@ import java.util.Optional;
 @Repository
 public interface ErrorCodeSettingsRepository extends JpaRepository<ErrorCodeSettings, Long> {
     
-    Optional<ErrorCodeSettings> findByCorporateId(Long corporateId);
+    Optional<ErrorCodeSettings> findByAppId(Long appId);
     
     @Modifying
-    @Query("UPDATE ErrorCodeSettings e SET e.currentSequence = e.currentSequence + 1 WHERE e.corporateId = :corporateId")
-    int incrementSequence(@Param("corporateId") Long corporateId);
+    @Query("UPDATE ErrorCodeSettings e SET e.currentSequence = e.currentSequence + 1 WHERE e.app.id = :appId")
+    int incrementSequence(@Param("appId") Long appId);
     
-    @Query("SELECT e.currentSequence FROM ErrorCodeSettings e WHERE e.corporateId = :corporateId")
-    Optional<Long> getCurrentSequence(@Param("corporateId") Long corporateId);
+    @Query("SELECT e.currentSequence FROM ErrorCodeSettings e WHERE e.app.id = :appId")
+    Optional<Long> getCurrentSequence(@Param("appId") Long appId);
 }
