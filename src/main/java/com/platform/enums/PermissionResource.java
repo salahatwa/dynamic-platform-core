@@ -12,7 +12,8 @@ public enum PermissionResource {
     APPS("apps", "Application Management"),
     DASHBOARD("dashboard", "Dashboard Access"),
     API_KEYS("api_keys", "API Key Management"),
-    MEDIA("media", "Media Management");
+    MEDIA("media", "Media Management"),
+    ORGANIZATION("organization", "Organization Management");
     
     private final String resource;
     private final String description;
