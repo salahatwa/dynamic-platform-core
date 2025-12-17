@@ -6,14 +6,17 @@ import com.platform.dto.InvitationValidationResponse;
 import com.platform.entity.Invitation;
 import com.platform.entity.Role;
 import com.platform.entity.User;
+import com.platform.enums.PermissionAction;
+import com.platform.enums.PermissionResource;
 import com.platform.repository.UserRepository;
+import com.platform.security.RequirePermission;
 import com.platform.security.UserPrincipal;
 import com.platform.service.InvitationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
+
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,12 +35,16 @@ public class InvitationController {
     private final UserRepository userRepository;
     
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @RequirePermission(resource = PermissionResource.INVITATIONS, action = PermissionAction.CREATE)
     public ResponseEntity<InvitationResponse> createInvitation(
             @RequestBody @Valid InvitationRequest request,
             @AuthenticationPrincipal UserPrincipal principal) {
         
         log.info("Creating invitation for email: {}", request.getEmail());
+        
+        if (principal == null) {
+            throw new RuntimeException("Authentication required");
+        }
         
         User inviter = userRepository.findByIdWithCorporate(principal.getId())
             .orElseThrow(() -> new RuntimeException("User not found"));
@@ -92,6 +99,10 @@ public class InvitationController {
         
         log.info("User accepting invitation");
         
+        if (principal == null) {
+            throw new RuntimeException("Authentication required");
+        }
+        
         User user = userRepository.findById(principal.getId())
             .orElseThrow(() -> new RuntimeException("User not found"));
         
@@ -111,13 +122,17 @@ public class InvitationController {
     }
     
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @RequirePermission(resource = PermissionResource.INVITATIONS, action = PermissionAction.READ)
     public ResponseEntity<List<InvitationResponse>> getCorporateInvitations(
             @AuthenticationPrincipal UserPrincipal principal) {
         
         log.info("=== Fetching corporate invitations ===");
         log.info("Principal: {}", principal);
         log.info("Principal ID: {}", principal != null ? principal.getId() : "NULL");
+        
+        if (principal == null) {
+            throw new RuntimeException("Authentication required");
+        }
         
         try {
             User admin = userRepository.findByIdWithCorporate(principal.getId())
@@ -147,12 +162,16 @@ public class InvitationController {
     }
     
     @PutMapping("/{id}/cancel")
-    @PreAuthorize("hasRole('ADMIN')")
+    @RequirePermission(resource = PermissionResource.INVITATIONS, action = PermissionAction.DELETE)
     public ResponseEntity<?> cancelInvitation(
             @PathVariable Long id,
             @AuthenticationPrincipal UserPrincipal principal) {
         
         log.info("Cancelling invitation ID: {}", id);
+        
+        if (principal == null) {
+            throw new RuntimeException("Authentication required");
+        }
         
         User admin = userRepository.findByIdWithCorporate(principal.getId())
             .orElseThrow(() -> new RuntimeException("User not found"));
@@ -171,12 +190,16 @@ public class InvitationController {
     }
     
     @PostMapping("/{id}/resend")
-    @PreAuthorize("hasRole('ADMIN')")
+    @RequirePermission(resource = PermissionResource.INVITATIONS, action = PermissionAction.UPDATE)
     public ResponseEntity<?> resendInvitation(
             @PathVariable Long id,
             @AuthenticationPrincipal UserPrincipal principal) {
         
         log.info("Resending invitation ID: {}", id);
+        
+        if (principal == null) {
+            throw new RuntimeException("Authentication required");
+        }
         
         User admin = userRepository.findByIdWithCorporate(principal.getId())
             .orElseThrow(() -> new RuntimeException("User not found"));
