@@ -1,4 +1,4 @@
-package com.platform.service;
+package com.platform;
 
 import com.platform.entity.Permission;
 import com.platform.entity.Role;
@@ -92,7 +92,7 @@ public class PermissionInitializationService implements CommandLineRunner {
             
             // Add all permissions except user/role management
             for (PermissionResource resource : PermissionResource.values()) {
-                if (resource != PermissionResource.USERS && resource != PermissionResource.ROLES) {
+                if (resource != PermissionResource.USERS) {
                     for (PermissionAction action : PermissionAction.values()) {
                         String permissionName = resource.getResource().toUpperCase() + "_" + action.getAction().toUpperCase();
                         permissionRepository.findByName(permissionName)
@@ -103,7 +103,8 @@ public class PermissionInitializationService implements CommandLineRunner {
             
             // Add read permissions for users and roles
             permissionRepository.findByName("USERS_READ").ifPresent(adminPermissions::add);
-            permissionRepository.findByName("ROLES_READ").ifPresent(adminPermissions::add);
+            permissionRepository.findByName("USERS_UPDATE").ifPresent(adminPermissions::add);
+            permissionRepository.findByName("USERS_DELETE").ifPresent(adminPermissions::add);
             
             Role adminRole = Role.builder()
                 .name("ADMIN")

@@ -6,6 +6,9 @@ import com.platform.dto.LovWithTranslationsDTO;
 import com.platform.entity.Lov;
 import com.platform.entity.LovAudit;
 import com.platform.entity.LovVersion;
+import com.platform.enums.PermissionAction;
+import com.platform.enums.PermissionResource;
+import com.platform.security.RequirePermission;
 import com.platform.security.UserPrincipal;
 import com.platform.service.LovService;
 
@@ -46,6 +49,7 @@ public class LovController {
     }
     
     @GetMapping
+    @RequirePermission(resource = PermissionResource.LOV, action = PermissionAction.READ)
     public ResponseEntity<List<Lov>> getAllLovs(
             @RequestParam(required = false) String lovType,
             @RequestParam(required = false) Boolean active,
@@ -56,6 +60,7 @@ public class LovController {
     }
     
     @GetMapping("/pages")
+    @RequirePermission(resource = PermissionResource.LOV, action = PermissionAction.READ)
     public ResponseEntity<List<com.platform.dto.LovPageDTO>> getAllLovPages(
             @RequestParam(required = false) Boolean active,
             @RequestParam(required = false) String appName) {
@@ -65,6 +70,7 @@ public class LovController {
     }
     
     @GetMapping("/with-translations")
+    @RequirePermission(resource = PermissionResource.LOV, action = PermissionAction.READ)
     public ResponseEntity<List<LovWithTranslationsDTO>> getAllLovsWithTranslations(
             @RequestParam(required = false) String lovType,
             @RequestParam(required = false) Boolean active,
@@ -75,20 +81,23 @@ public class LovController {
     }
     
     @GetMapping("/{id}")
-    public ResponseEntity<Lov> getLovById(@PathVariable Long id) {
+    @RequirePermission(resource = PermissionResource.LOV, action = PermissionAction.READ)
+    public ResponseEntity<Lov> getLovById(@PathVariable Long id, @RequestParam(required = false) String appName) {
         Long corporateId = getCorporateId();
         Lov lov = lovService.getLovById(id, corporateId);
         return ResponseEntity.ok(lov);
     }
     
     @GetMapping("/code/{lovCode}")
-    public ResponseEntity<Lov> getLovByCode(@PathVariable String lovCode) {
+    @RequirePermission(resource = PermissionResource.LOV, action = PermissionAction.READ)
+    public ResponseEntity<Lov> getLovByCode(@PathVariable String lovCode, @RequestParam(required = false) String appName) {
         Long corporateId = getCorporateId();
         Lov lov = lovService.getLovByCode(lovCode, corporateId);
         return ResponseEntity.ok(lov);
     }
     
     @GetMapping("/type/{lovType}")
+    @RequirePermission(resource = PermissionResource.LOV, action = PermissionAction.READ)
     public ResponseEntity<List<Lov>> getLovsByType(@PathVariable String lovType,
                                                    @RequestParam(required = false) String appName) {
         Long corporateId = getCorporateId();
@@ -97,7 +106,8 @@ public class LovController {
     }
     
     @GetMapping("/types")
-    public ResponseEntity<List<LovTypeDTO>> getAllLovTypes() {
+    @RequirePermission(resource = PermissionResource.LOV, action = PermissionAction.READ)
+    public ResponseEntity<List<LovTypeDTO>> getAllLovTypes(@RequestParam(required = false) String appName) {
         System.out.println("GET /api/lov/types called");
         Long corporateId = getCorporateId();
         System.out.println("Corporate ID: " + corporateId);
@@ -107,46 +117,54 @@ public class LovController {
     }
     
     @PostMapping
-    public ResponseEntity<Lov> createLov(@Valid @RequestBody LovRequest request) {
+    @RequirePermission(resource = PermissionResource.LOV, action = PermissionAction.CREATE)
+    public ResponseEntity<Lov> createLov(@Valid @RequestBody LovRequest request, @RequestParam(required = false) String appName) {
         Long corporateId = getCorporateId();
         Lov lov = lovService.createLov(request, corporateId);
         return ResponseEntity.status(HttpStatus.CREATED).body(lov);
     }
     
     @PutMapping("/{id}")
+    @RequirePermission(resource = PermissionResource.LOV, action = PermissionAction.UPDATE)
     public ResponseEntity<Lov> updateLov(
             @PathVariable Long id,
-            @Valid @RequestBody LovRequest request) {
+            @Valid @RequestBody LovRequest request,
+            @RequestParam(required = false) String appName) {
         Long corporateId = getCorporateId();
         Lov lov = lovService.updateLov(id, request, corporateId);
         return ResponseEntity.ok(lov);
     }
     
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteLov(@PathVariable Long id) {
+    @RequirePermission(resource = PermissionResource.LOV, action = PermissionAction.DELETE)
+    public ResponseEntity<Void> deleteLov(@PathVariable Long id, @RequestParam(required = false) String appName) {
         Long corporateId = getCorporateId();
         lovService.deleteLov(id, corporateId);
         return ResponseEntity.noContent().build();
     }
     
     @GetMapping("/{id}/versions")
-    public ResponseEntity<List<LovVersion>> getLovVersions(@PathVariable Long id) {
+    @RequirePermission(resource = PermissionResource.LOV, action = PermissionAction.READ)
+    public ResponseEntity<List<LovVersion>> getLovVersions(@PathVariable Long id, @RequestParam(required = false) String appName) {
         Long corporateId = getCorporateId();
         List<LovVersion> versions = lovService.getLovVersions(id, corporateId);
         return ResponseEntity.ok(versions);
     }
     
     @PostMapping("/{id}/versions/{versionId}/restore")
+    @RequirePermission(resource = PermissionResource.LOV, action = PermissionAction.UPDATE)
     public ResponseEntity<Lov> restoreLovVersion(
             @PathVariable Long id,
-            @PathVariable Long versionId) {
+            @PathVariable Long versionId,
+            @RequestParam(required = false) String appName) {
         Long corporateId = getCorporateId();
         Lov lov = lovService.restoreLovVersion(id, versionId, corporateId);
         return ResponseEntity.ok(lov);
     }
     
     @GetMapping("/{id}/audit")
-    public ResponseEntity<List<LovAudit>> getLovAudit(@PathVariable Long id) {
+    @RequirePermission(resource = PermissionResource.LOV, action = PermissionAction.READ)
+    public ResponseEntity<List<LovAudit>> getLovAudit(@PathVariable Long id, @RequestParam(required = false) String appName) {
         Long corporateId = getCorporateId();
         List<LovAudit> audit = lovService.getLovAudit(id, corporateId);
         return ResponseEntity.ok(audit);
@@ -154,7 +172,8 @@ public class LovController {
     
     // Bulk Operations
     @PostMapping("/bulk")
-    public ResponseEntity<List<Lov>> bulkCreateLovs(@RequestBody List<LovRequest> requests) {
+    @RequirePermission(resource = PermissionResource.LOV, action = PermissionAction.CREATE)
+    public ResponseEntity<List<Lov>> bulkCreateLovs(@RequestBody List<LovRequest> requests, @RequestParam(required = false) String appName) {
         Long corporateId = getCorporateId();
         
         System.out.println("Bulk create received " + requests.size() + " requests");
@@ -191,7 +210,8 @@ public class LovController {
     }
     
     @PutMapping("/bulk")
-    public ResponseEntity<List<Lov>> bulkUpdateLovs(@RequestBody List<BulkUpdateRequest> updates) {
+    @RequirePermission(resource = PermissionResource.LOV, action = PermissionAction.UPDATE)
+    public ResponseEntity<List<Lov>> bulkUpdateLovs(@RequestBody List<BulkUpdateRequest> updates, @RequestParam(required = false) String appName) {
         Long corporateId = getCorporateId();
         
         // Validate basic requirements
@@ -214,7 +234,8 @@ public class LovController {
     }
     
     @DeleteMapping("/bulk")
-    public ResponseEntity<Void> bulkDeleteLovs(@RequestBody List<Long> ids) {
+    @RequirePermission(resource = PermissionResource.LOV, action = PermissionAction.DELETE)
+    public ResponseEntity<Void> bulkDeleteLovs(@RequestBody List<Long> ids, @RequestParam(required = false) String appName) {
         Long corporateId = getCorporateId();
         ids.forEach(id -> lovService.deleteLov(id, corporateId));
         return ResponseEntity.noContent().build();

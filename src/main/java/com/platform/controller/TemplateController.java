@@ -27,10 +27,13 @@ import com.platform.dto.TemplatePreviewRequest;
 import com.platform.entity.App;
 import com.platform.entity.Template;
 import com.platform.entity.User;
-import com.platform.enums.PageOrientation;
+
+import com.platform.enums.PermissionAction;
+import com.platform.enums.PermissionResource;
 import com.platform.repository.AppRepository;
 import com.platform.repository.TemplateRepository;
 import com.platform.repository.UserRepository;
+import com.platform.security.RequirePermission;
 import com.platform.security.UserPrincipal;
 import com.platform.service.TemplateRenderService;
 import com.platform.service.WordGenerationService;
@@ -57,6 +60,7 @@ public class TemplateController {
 	private final PdfGenerationService pdfGenerationService;
 
 	@GetMapping
+	@RequirePermission(resource = PermissionResource.TEMPLATES, action = PermissionAction.READ)
 	@Operation(summary = "Get all templates")
 	public ResponseEntity<?> getAllTemplates(@RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "12") int size, @RequestParam(required = false) String search,
@@ -93,6 +97,7 @@ public class TemplateController {
 	}
 
 	@GetMapping("/{id}")
+	@RequirePermission(resource = PermissionResource.TEMPLATES, action = PermissionAction.READ)
 	@Operation(summary = "Get template by ID")
 	public ResponseEntity<?> getTemplate(@PathVariable Long id, @RequestParam(required = false) String appName) {
 		User currentUser = getCurrentUserWithCorporate();
@@ -119,6 +124,7 @@ public class TemplateController {
 	}
 
 	@PostMapping
+	@RequirePermission(resource = PermissionResource.TEMPLATES, action = PermissionAction.CREATE)
 	@Operation(summary = "Create template")
 	public ResponseEntity<?> createTemplate(@RequestBody Template template,
 			@RequestParam(required = false) String appName) {
@@ -142,6 +148,7 @@ public class TemplateController {
 	}
 
 	@PutMapping("/{id}")
+	@RequirePermission(resource = PermissionResource.TEMPLATES, action = PermissionAction.UPDATE)
 	@Operation(summary = "Update template")
 	public ResponseEntity<?> updateTemplate(@PathVariable Long id, @RequestBody Template templateUpdate,
 			@RequestParam(required = false) String appName) {
@@ -178,6 +185,7 @@ public class TemplateController {
 	}
 
 	@DeleteMapping("/{id}")
+	@RequirePermission(resource = PermissionResource.TEMPLATES, action = PermissionAction.DELETE)
 	@Operation(summary = "Delete template")
 	public ResponseEntity<?> deleteTemplate(@PathVariable Long id, @RequestParam(required = false) String appName) {
 		User currentUser = getCurrentUserWithCorporate();
@@ -205,6 +213,7 @@ public class TemplateController {
 	}
 
 	@PostMapping("/{id}/preview-pdf")
+	@RequirePermission(resource = PermissionResource.TEMPLATES, action = PermissionAction.READ)
 	@Operation(summary = "Preview template as PDF")
 	public ResponseEntity<?> previewPdf(@PathVariable Long id, @RequestBody TemplatePreviewRequest request,
 			HttpServletRequest httpRequest) {
@@ -283,6 +292,7 @@ public class TemplateController {
 	}
 
 	@PostMapping("/{id}/preview-word")
+	@RequirePermission(resource = PermissionResource.TEMPLATES, action = PermissionAction.READ)
 	@Operation(summary = "Preview template as Word document")
 	public ResponseEntity<byte[]> previewWord(@PathVariable Long id, @RequestBody TemplatePreviewRequest request,
 			HttpServletRequest httpRequest) throws IOException {
@@ -316,6 +326,7 @@ public class TemplateController {
 	}
 
 	@GetMapping("/{id}/info")
+	@RequirePermission(resource = PermissionResource.TEMPLATES, action = PermissionAction.READ)
 	@Operation(summary = "Get template information including page count")
 	public ResponseEntity<?> getTemplateInfo(@PathVariable Long id, @RequestParam(required = false) String appName) {
 		User currentUser = getCurrentUserWithCorporate();
@@ -380,6 +391,7 @@ public class TemplateController {
 	}
 
 	@PostMapping("/{id}/preview-pdf-with-engine")
+	@RequirePermission(resource = PermissionResource.TEMPLATES, action = PermissionAction.READ)
 	@Operation(summary = "Preview template as PDF using specific engine")
 	public ResponseEntity<?> previewPdfWithEngine(@PathVariable Long id, 
 			@RequestBody TemplatePreviewRequest request,
@@ -472,6 +484,7 @@ public class TemplateController {
 	}
 
 	@GetMapping("/pdf-engines/status")
+	@RequirePermission(resource = PermissionResource.TEMPLATES, action = PermissionAction.READ)
 	@Operation(summary = "Get PDF engines status and availability")
 	public ResponseEntity<?> getPdfEnginesStatus() {
 		try {

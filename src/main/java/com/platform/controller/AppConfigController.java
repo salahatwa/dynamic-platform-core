@@ -7,6 +7,9 @@ import com.platform.entity.AppConfig;
 import com.platform.entity.AppConfigAudit;
 import com.platform.entity.AppConfigGroup;
 import com.platform.entity.AppConfigVersion;
+import com.platform.enums.PermissionAction;
+import com.platform.enums.PermissionResource;
+import com.platform.security.RequirePermission;
 import com.platform.service.AppConfigService;
 
 import jakarta.validation.Valid;
@@ -47,6 +50,7 @@ public class AppConfigController {
     // ==================== Configuration Endpoints ====================
     
     @GetMapping
+    @RequirePermission(resource = PermissionResource.APP_CONFIG, action = PermissionAction.READ)
     public ResponseEntity<List<AppConfigDTO>> getAllConfigs(
             @RequestParam(required = false) String appName,
             @RequestParam(required = false) Long appId,
@@ -60,6 +64,7 @@ public class AppConfigController {
     }
     
     @GetMapping("/{id}")
+    @RequirePermission(resource = PermissionResource.APP_CONFIG, action = PermissionAction.READ)
     public ResponseEntity<AppConfig> getConfigById(@PathVariable Long id) {
         Long corporateId = getCorporateId();
         AppConfig config = configService.getConfigById(id, corporateId);
@@ -67,6 +72,7 @@ public class AppConfigController {
     }
     
     @GetMapping("/key/{configKey}")
+    @RequirePermission(resource = PermissionResource.APP_CONFIG, action = PermissionAction.READ)
     public ResponseEntity<AppConfig> getConfigByKey(
             @PathVariable String configKey,
             @RequestParam String appName) {
@@ -76,6 +82,7 @@ public class AppConfigController {
     }
     
     @GetMapping("/public/{appName}")
+    @RequirePermission(resource = PermissionResource.APP_CONFIG, action = PermissionAction.READ)
     public ResponseEntity<List<AppConfig>> getPublicConfigs(@PathVariable String appName) {
         Long corporateId = getCorporateId();
         List<AppConfig> configs = configService.getPublicConfigs(appName, corporateId);
@@ -83,6 +90,7 @@ public class AppConfigController {
     }
     
     @PostMapping
+    @RequirePermission(resource = PermissionResource.APP_CONFIG, action = PermissionAction.CREATE)
     public ResponseEntity<AppConfig> createConfig(@Valid @RequestBody AppConfigRequest request) {
         Long corporateId = getCorporateId();
         AppConfig config = configService.createConfig(request, corporateId);
@@ -90,6 +98,7 @@ public class AppConfigController {
     }
     
     @PutMapping("/{id}")
+    @RequirePermission(resource = PermissionResource.APP_CONFIG, action = PermissionAction.UPDATE)
     public ResponseEntity<AppConfig> updateConfig(
             @PathVariable Long id,
             @Valid @RequestBody AppConfigRequest request) {
@@ -99,6 +108,7 @@ public class AppConfigController {
     }
     
     @DeleteMapping("/{id}")
+    @RequirePermission(resource = PermissionResource.APP_CONFIG, action = PermissionAction.DELETE)
     public ResponseEntity<Void> deleteConfig(@PathVariable Long id) {
         Long corporateId = getCorporateId();
         configService.deleteConfig(id, corporateId);
@@ -108,6 +118,7 @@ public class AppConfigController {
     // ==================== Configuration Group Endpoints ====================
     
     @GetMapping("/groups")
+    @RequirePermission(resource = PermissionResource.APP_CONFIG, action = PermissionAction.READ)
     public ResponseEntity<List<AppConfigGroup>> getAllGroups(
             @RequestParam(required = false) String appName,
             @RequestParam(required = false) Long appId,
@@ -118,6 +129,7 @@ public class AppConfigController {
     }
     
     @GetMapping("/groups/{id}")
+    @RequirePermission(resource = PermissionResource.APP_CONFIG, action = PermissionAction.READ)
     public ResponseEntity<AppConfigGroup> getGroupById(@PathVariable Long id) {
         Long corporateId = getCorporateId();
         AppConfigGroup group = configService.getGroupById(id, corporateId);
@@ -125,6 +137,7 @@ public class AppConfigController {
     }
     
     @PostMapping("/groups")
+    @RequirePermission(resource = PermissionResource.APP_CONFIG, action = PermissionAction.CREATE)
     public ResponseEntity<AppConfigGroup> createGroup(@Valid @RequestBody AppConfigGroupRequest request) {
         Long corporateId = getCorporateId();
         AppConfigGroup group = configService.createGroup(request, corporateId);
@@ -132,6 +145,7 @@ public class AppConfigController {
     }
     
     @PutMapping("/groups/{id}")
+    @RequirePermission(resource = PermissionResource.APP_CONFIG, action = PermissionAction.UPDATE)
     public ResponseEntity<AppConfigGroup> updateGroup(
             @PathVariable Long id,
             @Valid @RequestBody AppConfigGroupRequest request) {
@@ -141,6 +155,7 @@ public class AppConfigController {
     }
     
     @DeleteMapping("/groups/{id}")
+    @RequirePermission(resource = PermissionResource.APP_CONFIG, action = PermissionAction.DELETE)
     public ResponseEntity<Void> deleteGroup(@PathVariable Long id) {
         Long corporateId = getCorporateId();
         configService.deleteGroup(id, corporateId);
@@ -150,6 +165,7 @@ public class AppConfigController {
     // ==================== Versioning Endpoints ====================
     
     @GetMapping("/{id}/versions")
+    @RequirePermission(resource = PermissionResource.APP_CONFIG, action = PermissionAction.READ)
     public ResponseEntity<List<AppConfigVersion>> getConfigVersions(@PathVariable Long id) {
         Long corporateId = getCorporateId();
         List<AppConfigVersion> versions = configService.getConfigVersions(id, corporateId);
@@ -157,6 +173,7 @@ public class AppConfigController {
     }
     
     @PostMapping("/{id}/versions/{versionId}/restore")
+    @RequirePermission(resource = PermissionResource.APP_CONFIG, action = PermissionAction.UPDATE)
     public ResponseEntity<AppConfig> restoreVersion(
             @PathVariable Long id,
             @PathVariable Long versionId) {
@@ -168,6 +185,7 @@ public class AppConfigController {
     // ==================== Audit Endpoints ====================
     
     @GetMapping("/{id}/audit")
+    @RequirePermission(resource = PermissionResource.APP_CONFIG, action = PermissionAction.READ)
     public ResponseEntity<List<AppConfigAudit>> getConfigAudit(@PathVariable Long id) {
         Long corporateId = getCorporateId();
         List<AppConfigAudit> audit = configService.getConfigAudit(id, corporateId);
@@ -177,6 +195,7 @@ public class AppConfigController {
     // ==================== Utility Endpoints ====================
     
     @GetMapping("/apps")
+    @RequirePermission(resource = PermissionResource.APP_CONFIG, action = PermissionAction.READ)
     public ResponseEntity<List<String>> getAppNames() {
         Long corporateId = getCorporateId();
         List<String> appNames = configService.getAppNames(corporateId);
@@ -184,6 +203,7 @@ public class AppConfigController {
     }
     
     @PostMapping("/cache/invalidate")
+    @RequirePermission(resource = PermissionResource.APP_CONFIG, action = PermissionAction.UPDATE)
     public ResponseEntity<Void> invalidateCache() {
         configService.invalidateCache();
         return ResponseEntity.ok().build();
@@ -192,6 +212,7 @@ public class AppConfigController {
     // ==================== Bulk Operations ====================
     
     @PostMapping("/bulk")
+    @RequirePermission(resource = PermissionResource.APP_CONFIG, action = PermissionAction.CREATE)
     public ResponseEntity<List<AppConfig>> bulkCreateConfigs(@RequestBody List<AppConfigRequest> requests) {
         Long corporateId = getCorporateId();
         
@@ -203,6 +224,7 @@ public class AppConfigController {
     }
     
     @DeleteMapping("/bulk")
+    @RequirePermission(resource = PermissionResource.APP_CONFIG, action = PermissionAction.DELETE)
     public ResponseEntity<Void> bulkDeleteConfigs(@RequestBody List<Long> ids) {
         Long corporateId = getCorporateId();
         ids.forEach(id -> configService.deleteConfig(id, corporateId));

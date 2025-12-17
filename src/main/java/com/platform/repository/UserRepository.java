@@ -36,4 +36,24 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Page<User> findByCorporateIdAndInvitedById(Long corporateId, Long invitedById, Pageable pageable);
     Page<User> findByCorporateIdAndInvitedByIdAndEmailContainingIgnoreCaseOrCorporateIdAndInvitedByIdAndNameContainingIgnoreCase(
             Long corporateId1, Long invitedById1, String email, Long corporateId2, Long invitedById2, String name, Pageable pageable);
+    
+    // Corporate-filtered queries excluding current user
+    Page<User> findByCorporateIdAndIdNot(Long corporateId, Long excludeUserId, Pageable pageable);
+    
+    @Query("SELECT u FROM User u WHERE u.corporate.id = :corporateId AND u.id != :excludeUserId AND " +
+           "(LOWER(u.email) LIKE LOWER(CONCAT('%', :search, '%')) OR LOWER(u.name) LIKE LOWER(CONCAT('%', :search, '%')))")
+    Page<User> findByCorporateIdAndIdNotWithSearch(@Param("corporateId") Long corporateId, 
+                                                   @Param("excludeUserId") Long excludeUserId, 
+                                                   @Param("search") String search, 
+                                                   Pageable pageable);
+    
+    Page<User> findByCorporateIdAndInvitedByIdAndIdNot(Long corporateId, Long invitedById, Long excludeUserId, Pageable pageable);
+    
+    @Query("SELECT u FROM User u WHERE u.corporate.id = :corporateId AND u.invitedBy.id = :invitedById AND u.id != :excludeUserId AND " +
+           "(LOWER(u.email) LIKE LOWER(CONCAT('%', :search, '%')) OR LOWER(u.name) LIKE LOWER(CONCAT('%', :search, '%')))")
+    Page<User> findByCorporateIdAndInvitedByIdAndIdNotWithSearch(@Param("corporateId") Long corporateId, 
+                                                                @Param("invitedById") Long invitedById,
+                                                                @Param("excludeUserId") Long excludeUserId, 
+                                                                @Param("search") String search, 
+                                                                Pageable pageable);
 }
