@@ -85,11 +85,14 @@ public class PdfTestController {
                 pdf = generatePdfDirectlyWithEngine(pdfEngine, html, pageNumber, pageOrientation);
             }
 
-            // Return PDF with appropriate headers
+            // Return PDF with appropriate headers for download
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_PDF);
-            headers.setContentDispositionFormData("inline", "test-" + engine + ".pdf");
+            headers.setContentDispositionFormData("attachment", "test-" + engine + ".pdf");
             headers.setContentLength(pdf.length);
+            headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
+            headers.add("Pragma", "no-cache");
+            headers.add("Expires", "0");
 
             log.info("✅ PDF Test Success - Engine: {}, Size: {} bytes", engine, pdf.length);
 
@@ -153,11 +156,14 @@ public class PdfTestController {
                 pdf = generatePdfDirectlyWithEngine(pdfEngine, processedHtml, request.getPageNumber(), pageOrientation);
             }
 
-            // Return PDF
+            // Return PDF with download headers
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_PDF);
-            headers.setContentDispositionFormData("inline", "template-test-" + engine + ".pdf");
+            headers.setContentDispositionFormData("attachment", "template-test-" + engine + ".pdf");
             headers.setContentLength(pdf.length);
+            headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
+            headers.add("Pragma", "no-cache");
+            headers.add("Expires", "0");
 
             log.info("✅ PDF Template Test Success - Engine: {}, Size: {} bytes", engine, pdf.length);
 
