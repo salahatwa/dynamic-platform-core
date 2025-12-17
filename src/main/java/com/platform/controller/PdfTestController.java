@@ -67,11 +67,11 @@ public class PdfTestController {
                 pageOrientation = com.platform.enums.PageOrientation.PORTRAIT;
             }
 
-            // Generate PDF using specific engine or auto selection
+            // Generate PDF directly from HTML (bypass template system)
             byte[] pdf;
             if ("auto".equalsIgnoreCase(engine)) {
                 // Use auto engine selection
-                pdf = pdfGenerationService.generatePdf(null, createTestParameters(), pageNumber, pageOrientation);
+                pdf = generatePdfDirectly(html, pageNumber, pageOrientation);
             } else {
                 // Use specific engine
                 PdfGenerationService.PdfEngine pdfEngine;
@@ -82,7 +82,7 @@ public class PdfTestController {
                         .body(("Invalid engine: " + engine + ". Supported: gotenberg, playwright, ironpdf, flyingsaucer, auto").getBytes());
                 }
                 
-                pdf = pdfGenerationService.generatePdfWithEngine(pdfEngine, null, createTestParameters(), pageNumber, pageOrientation);
+                pdf = generatePdfDirectlyWithEngine(pdfEngine, html, pageNumber, pageOrientation);
             }
 
             // Return PDF with appropriate headers
@@ -141,13 +141,16 @@ public class PdfTestController {
             Map<String, Object> parameters = new HashMap<>(request.getParameters());
             parameters.put("testHtml", request.getHtml());
 
-            // Generate PDF
+            // Process template with parameters
+            String processedHtml = processTemplate(request.getHtml(), parameters);
+
+            // Generate PDF directly from processed HTML
             byte[] pdf;
             if ("auto".equalsIgnoreCase(engine)) {
-                pdf = pdfGenerationService.generatePdf(null, parameters, request.getPageNumber(), pageOrientation);
+                pdf = generatePdfDirectly(processedHtml, request.getPageNumber(), pageOrientation);
             } else {
                 PdfGenerationService.PdfEngine pdfEngine = PdfGenerationService.PdfEngine.fromCode(engine.toLowerCase());
-                pdf = pdfGenerationService.generatePdfWithEngine(pdfEngine, null, parameters, request.getPageNumber(), pageOrientation);
+                pdf = generatePdfDirectlyWithEngine(pdfEngine, processedHtml, request.getPageNumber(), pageOrientation);
             }
 
             // Return PDF
@@ -324,6 +327,91 @@ public class PdfTestController {
         parameters.put("engine", "test");
         return parameters;
     }
+
+    /**
+     * Generate PDF directly from HTML without template system
+     */
+    private byte[] generatePdfDirectly(String html, Integer pageNumber, com.platform.enums.PageOrientation orientation) {
+        try {
+            // Create parameters with the HTML content
+            Map<String, Object> parameters = createTestParameters();
+            parameters.put("directHtml", html);
+            
+            // Use the main PDF service but with special handling for direct HTML
+            return pdfGenerationService.generatePdfFromHtml(html, pageNumber, orientation);
+            
+        } catch (Exception e) {
+            log.error("❌ Direct PDF generation failed: {}", e.getMessage(), e);
+            throw new RuntimeException("PDF generation failed: " + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Generate PDF directly with specific engine
+     */
+    private byte[] generatePdfDirectlyWithEngine(PdfGenerationService.PdfEngine engine, String html, 
+                                               Integer pageNumber, com.platform.enums.PageOrientation orientation) {
+        try {
+            // Use the main PDF service with specific engine
+            return pdfGenerationService.generatePdfFromHtmlWithEngine(engine, html, pageNumber, orientation);
+        } catch (Exception e) {
+            log.error("❌ Direct PDF generation with {} failed: {}", engine.getDisplayName(), e.getMessage(), e);
+            throw new RuntimeException("PDF generation with " + engine.getDisplayName() + " failed: " + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Process template with parameters (simple string replacement)
+     */
+    private String processTemplate(String template, Map<String, Object> parameters) {
+        String result = template;
+        for (Map.Entry<String, Object> entry : parameters.entrySet()) {
+            String placeholder = "{{" + entry.getKey() + "}}";
+            String value = entry.getValue() != null ? entry.getValue().toString() : "";
+            result = result.replace(placeholder, value);
+        }
+        return result;
+    }
+
+    /**
+     * Enhance HTML for PDF generation
+     */
+    private String enhanceHtmlForPdf(String html, com.platform.enums.PageOrientation orientation) {
+        // Add basic PDF-friendly CSS if not present
+        if (!html.toLowerCase().contains("<style>") && !html.toLowerCase().contains("stylesheet")) {
+            String pdfCss = """
+                <style>
+                    @page {
+                        size: %s;
+                        margin: 20mm;
+                    }
+                    body {
+                        font-family: Arial, sans-serif;
+                        font-size: 12pt;
+                        line-height: 1.4;
+                        color: #333;
+                    }
+                    @media print {
+                        body { margin: 0; }
+                        .no-print { display: none; }
+                    }
+                </style>
+                """.formatted(orientation.isLandscape() ? "A4 landscape" : "A4 portrait");
+            
+            // Insert CSS after <head> tag or at the beginning
+            if (html.toLowerCase().contains("<head>")) {
+                html = html.replaceFirst("(?i)<head>", "<head>" + pdfCss);
+            } else if (html.toLowerCase().contains("<html>")) {
+                html = html.replaceFirst("(?i)<html>", "<html><head>" + pdfCss + "</head>");
+            } else {
+                html = "<html><head>" + pdfCss + "</head><body>" + html + "</body></html>";
+            }
+        }
+        
+        return html;
+    }
+
+
 
     /**
      * Request DTO for PDF generation with template

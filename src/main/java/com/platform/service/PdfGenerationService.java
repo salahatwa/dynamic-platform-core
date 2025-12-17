@@ -357,4 +357,125 @@ public class PdfGenerationService {
     private Long extractTemplateIdFromContext() {
         return currentTemplateId.get();
     }
+
+    /**
+     * Generate PDF directly from HTML content (for testing purposes)
+     */
+    public byte[] generatePdfFromHtml(String html, Integer pageNumber, com.platform.enums.PageOrientation orientation) {
+        try {
+            log.info("🔄 Generating PDF directly from HTML - Page: {}, Orientation: {}", 
+                pageNumber != null ? pageNumber : "all", orientation);
+
+            // Enhance HTML for PDF generation
+            String enhancedHtml = enhanceHtmlForPdfDirect(html, orientation);
+            
+            // Determine engine order based on configuration
+            List<PdfEngine> engineOrder = determineEngineOrder();
+            
+            Exception lastException = null;
+            
+            // Try each engine in order
+            for (PdfEngine engine : engineOrder) {
+                try {
+                    byte[] pdf = generateWithEngine(engine, enhancedHtml, pageNumber, orientation);
+                    if (pdf != null && pdf.length > 0) {
+                        log.info("✅ PDF generated successfully with {} - Size: {} bytes", 
+                            engine.getDisplayName(), pdf.length);
+                        return pdf;
+                    }
+                } catch (Exception e) {
+                    lastException = e;
+                    log.warn("⚠️ {} failed: {} - Trying next engine...", engine.getDisplayName(), e.getMessage());
+                }
+            }
+
+            // All engines failed
+            String errorMsg = "All PDF engines failed. Last error: " + 
+                (lastException != null ? lastException.getMessage() : "Unknown error");
+            log.error("❌ PDF generation completely failed: {}", errorMsg);
+            throw new RuntimeException(errorMsg, lastException);
+            
+        } catch (Exception e) {
+            log.error("❌ Direct PDF generation failed: {}", e.getMessage(), e);
+            throw new RuntimeException("PDF generation failed: " + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Generate PDF directly from HTML with specific engine
+     */
+    public byte[] generatePdfFromHtmlWithEngine(PdfEngine engine, String html, Integer pageNumber, 
+                                              com.platform.enums.PageOrientation orientation) {
+        try {
+            log.info("🔄 Generating PDF directly with {} - HTML length: {}", engine.getDisplayName(), html.length());
+            
+            String enhancedHtml = enhanceHtmlForPdfDirect(html, orientation);
+            return generateWithEngine(engine, enhancedHtml, pageNumber, orientation);
+            
+        } catch (Exception e) {
+            log.error("❌ Direct PDF generation with {} failed: {}", engine.getDisplayName(), e.getMessage(), e);
+            throw new RuntimeException("PDF generation with " + engine.getDisplayName() + " failed: " + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Enhance HTML for PDF generation (direct mode - no template context)
+     */
+    private String enhanceHtmlForPdfDirect(String html, com.platform.enums.PageOrientation orientation) {
+        try {
+            // Add basic PDF-friendly CSS if not present
+            if (!html.toLowerCase().contains("<style>") && !html.toLowerCase().contains("stylesheet")) {
+                String pdfCss = """
+                    <style>
+                        @page {
+                            size: %s;
+                            margin: 20mm;
+                        }
+                        body {
+                            font-family: Arial, sans-serif;
+                            font-size: 12pt;
+                            line-height: 1.4;
+                            color: #333;
+                            margin: 0;
+                            padding: 20px;
+                        }
+                        h1, h2, h3, h4, h5, h6 {
+                            color: #333;
+                            margin-top: 0;
+                        }
+                        table {
+                            border-collapse: collapse;
+                            width: 100%%;
+                        }
+                        th, td {
+                            border: 1px solid #ddd;
+                            padding: 8px;
+                            text-align: left;
+                        }
+                        th {
+                            background-color: #f2f2f2;
+                        }
+                        @media print {
+                            body { margin: 0; }
+                            .no-print { display: none; }
+                        }
+                    </style>
+                    """.formatted(orientation.isLandscape() ? "A4 landscape" : "A4 portrait");
+                
+                // Insert CSS after <head> tag or at the beginning
+                if (html.toLowerCase().contains("<head>")) {
+                    html = html.replaceFirst("(?i)<head>", "<head>" + pdfCss);
+                } else if (html.toLowerCase().contains("<html>")) {
+                    html = html.replaceFirst("(?i)<html>", "<html><head>" + pdfCss + "</head>");
+                } else {
+                    html = "<html><head>" + pdfCss + "</head><body>" + html + "</body></html>";
+                }
+            }
+            
+            return html;
+        } catch (Exception e) {
+            log.warn("⚠️ Failed to enhance HTML for PDF, using original: {}", e.getMessage());
+            return html;
+        }
+    }
 }
