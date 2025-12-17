@@ -4,6 +4,8 @@ import com.microsoft.playwright.*;
 import com.microsoft.playwright.options.LoadState;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import jakarta.annotation.PostConstruct;
@@ -13,6 +15,8 @@ import java.util.List;
 
 @Service
 @Slf4j
+@ConditionalOnProperty(name = "playwright.enabled", havingValue = "true", matchIfMissing = false)
+@ConditionalOnClass(name = "com.microsoft.playwright.Playwright")
 public class PlaywrightPdfService {
     
     @Value("${playwright.enabled:true}")
@@ -36,6 +40,19 @@ public class PlaywrightPdfService {
     @Value("${playwright.disable-dev-shm:true}")
     private boolean disableDevShm;
     
+    // External service configuration
+    @Value("${playwright.use.external.service:false}")
+    private boolean useExternalService;
+    
+    @Value("${playwright.service.url:}")
+    private String serviceUrl;
+    
+    @Value("${playwright.service.timeout:60000}")
+    private int serviceTimeout;
+    
+    // HTTP client for external service communication
+    private org.springframework.web.client.RestTemplate restTemplate;
+    
     private Playwright playwright;
     private Browser browser;
     private boolean isAvailable = false;
@@ -48,6 +65,68 @@ public class PlaywrightPdfService {
         }
         
         try {
+            if (useExternalService && !serviceUrl.isEmpty()) {
+                // Configure external Playwright service
+                log.info("🔧 Configuring Playwright to use external service: {}", serviceUrl);
+                initializeExternalService();
+            } else {
+                // Configure embedded Playwright
+                log.info("🔧 Configuring embedded Playwright service");
+                initializeEmbeddedService();
+            }
+        } catch (Exception e) {
+            log.error("❌ Failed to initialize Playwright service: {}", e.getMessage());
+            isAvailable = false;
+        }
+    }
+    
+    private void initializeExternalService() {
+        try {
+            // Initialize REST template for external service communication
+            restTemplate = new org.springframework.web.client.RestTemplate();
+            
+            // Configure timeout for external service calls
+            org.springframework.http.client.SimpleClientHttpRequestFactory factory = 
+                new org.springframework.http.client.SimpleClientHttpRequestFactory();
+            factory.setConnectTimeout(serviceTimeout);
+            factory.setReadTimeout(serviceTimeout);
+            restTemplate.setRequestFactory(factory);
+            
+            log.info("✅ External Playwright service configured: {}", serviceUrl);
+            log.info("🚫 Local Playwright dependencies disabled - using external service only");
+            
+            // Test connectivity to external service
+            testExternalServiceConnectivity();
+            
+            isAvailable = true;
+            log.info("📡 PDF generation will use external Playwright service - no local dependencies needed");
+            
+        } catch (Exception e) {
+            log.error("❌ External Playwright service connectivity test failed: {}", e.getMessage());
+            isAvailable = false;
+        }
+    }
+    
+    private void testExternalServiceConnectivity() {
+        try {
+            // Simple health check to external Playwright service
+            String healthUrl = serviceUrl + "/health";
+            org.springframework.http.ResponseEntity<String> response = 
+                restTemplate.getForEntity(healthUrl, String.class);
+            
+            if (response.getStatusCode().is2xxSuccessful()) {
+                log.info("✅ External Playwright service health check passed");
+            } else {
+                log.warn("⚠️ External Playwright service health check returned: {}", response.getStatusCode());
+            }
+        } catch (Exception e) {
+            log.warn("⚠️ External Playwright service health check failed (service may not be ready yet): {}", e.getMessage());
+            // Don't fail initialization - service might not be ready during startup
+        }
+    }
+    
+    private void initializeEmbeddedService() {
+        try {
             // Detect platform
             String osName = System.getProperty("os.name").toLowerCase();
             String osArch = System.getProperty("os.arch").toLowerCase();
@@ -55,7 +134,7 @@ public class PlaywrightPdfService {
             boolean isWindows = osName.contains("win");
             boolean isMac = osName.contains("mac");
             
-            log.info("🔍 Initializing Playwright on {} {} (Linux: {}, Windows: {}, Mac: {})", 
+            log.info("🔍 Initializing embedded Playwright on {} {} (Linux: {}, Windows: {}, Mac: {})", 
                 osName, osArch, isLinux, isWindows, isMac);
             
             // Create Playwright instance
@@ -71,18 +150,12 @@ public class PlaywrightPdfService {
             testBrowserFunctionality();
             
             isAvailable = true;
-            log.info("✅ Playwright service initialized successfully on {} {} - Browser: Chromium", 
-                osName, osArch);
+            log.info("✅ Embedded Playwright service initialized successfully on {} {}", osName, osArch);
             
         } catch (Exception e) {
-            log.error("❌ Failed to initialize Playwright service: {}", e.getMessage());
-            
-            // Provide platform-specific troubleshooting hints
+            log.error("❌ Failed to initialize embedded Playwright service: {}", e.getMessage());
             provideTroubleshootingHints(e);
-            
             isAvailable = false;
-            
-            // Cleanup on failure
             cleanup();
         }
     }
@@ -269,11 +342,60 @@ public class PlaywrightPdfService {
             throw new RuntimeException("Playwright service is not available");
         }
         
+        if (useExternalService && !serviceUrl.isEmpty()) {
+            return generatePdfWithExternalService(html, pageNumber, orientation);
+        } else {
+            return generatePdfWithEmbeddedService(html, pageNumber, orientation);
+        }
+    }
+    
+    private byte[] generatePdfWithExternalService(String html, Integer pageNumber, com.platform.enums.PageOrientation orientation) {
+        try {
+            log.info("🔄 Generating PDF with external Playwright service - Page: {}, Orientation: {}", 
+                pageNumber != null ? pageNumber : "all", orientation);
+            
+            // Prepare request payload for external service
+            java.util.Map<String, Object> request = new java.util.HashMap<>();
+            request.put("html", html);
+            request.put("options", createPdfOptionsMap(orientation));
+            
+            // Set headers
+            org.springframework.http.HttpHeaders headers = new org.springframework.http.HttpHeaders();
+            headers.setContentType(org.springframework.http.MediaType.APPLICATION_JSON);
+            
+            // Create HTTP entity
+            org.springframework.http.HttpEntity<java.util.Map<String, Object>> entity = 
+                new org.springframework.http.HttpEntity<>(request, headers);
+            
+            // Call external Playwright service
+            String pdfUrl = serviceUrl + "/pdf";
+            org.springframework.http.ResponseEntity<byte[]> response = 
+                restTemplate.postForEntity(pdfUrl, entity, byte[].class);
+            
+            if (!response.getStatusCode().is2xxSuccessful()) {
+                throw new RuntimeException("External Playwright service returned error: " + response.getStatusCode());
+            }
+            
+            byte[] pdf = response.getBody();
+            if (pdf == null || pdf.length == 0) {
+                throw new RuntimeException("External Playwright service returned empty PDF");
+            }
+            
+            log.info("✅ External Playwright service generated PDF successfully, size: {} bytes", pdf.length);
+            return pdf;
+            
+        } catch (Exception e) {
+            log.error("❌ External Playwright PDF generation failed: {}", e.getMessage(), e);
+            throw new RuntimeException("External Playwright PDF generation failed: " + e.getMessage(), e);
+        }
+    }
+    
+    private byte[] generatePdfWithEmbeddedService(String html, Integer pageNumber, com.platform.enums.PageOrientation orientation) {
         BrowserContext context = null;
         Page page = null;
         
         try {
-            log.info("🔄 Generating PDF with Playwright - Page: {}, Orientation: {}", 
+            log.info("🔄 Generating PDF with embedded Playwright - Page: {}, Orientation: {}", 
                 pageNumber != null ? pageNumber : "all", orientation);
             
             // Create isolated browser context with optimized settings
@@ -314,14 +436,14 @@ public class PlaywrightPdfService {
                 throw new RuntimeException("PDF generation failed - empty result");
             }
             
-            log.info("✅ Playwright generated PDF successfully, size: {} bytes, pages: {}", 
+            log.info("✅ Embedded Playwright generated PDF successfully, size: {} bytes, pages: {}", 
                 pdf.length, pageNumber != null ? "page " + pageNumber : "all");
             
             return pdf;
             
         } catch (Exception e) {
-            log.error("❌ Playwright PDF generation failed: {}", e.getMessage(), e);
-            throw new RuntimeException("Playwright PDF generation failed: " + e.getMessage(), e);
+            log.error("❌ Embedded Playwright PDF generation failed: {}", e.getMessage(), e);
+            throw new RuntimeException("Embedded Playwright PDF generation failed: " + e.getMessage(), e);
         } finally {
             // Always cleanup resources
             if (page != null) {
@@ -339,6 +461,17 @@ public class PlaywrightPdfService {
                 }
             }
         }
+    }
+    
+    private java.util.Map<String, Object> createPdfOptionsMap(com.platform.enums.PageOrientation orientation) {
+        java.util.Map<String, Object> options = new java.util.HashMap<>();
+        options.put("format", "A4");
+        options.put("printBackground", true);
+        options.put("landscape", orientation.isLandscape());
+        options.put("preferCSSPageSize", true);
+        options.put("displayHeaderFooter", false);
+        options.put("scale", 1.0);
+        return options;
     }
     
     private void configurePage(Page page) {

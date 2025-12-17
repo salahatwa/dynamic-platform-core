@@ -147,17 +147,23 @@
 		</dependency>
 
 		<!-- Playwright for modern PDF generation with full CSS support -->
+		<!-- Only included when playwright profile is active or in development -->
 		<dependency>
 			<groupId>com.microsoft.playwright</groupId>
 			<artifactId>playwright</artifactId>
 			<version>1.40.0</version>
+			<scope>provided</scope>
+			<optional>true</optional>
 		</dependency>
 
 		<!-- IronPDF for premium PDF generation -->
+		<!-- Only included when ironpdf profile is active -->
 		<dependency>
 			<groupId>com.ironsoftware</groupId>
 			<artifactId>ironpdf</artifactId>
 			<version>2024.11.4</version>
+			<scope>provided</scope>
+			<optional>true</optional>
 		</dependency>
 
 		<!-- JSON Schema validation -->
@@ -234,6 +240,77 @@
 		</dependency>
 
 	</dependencies>
+
+	<profiles>
+		<!-- Development Profile - Include all PDF engines for testing -->
+		<profile>
+			<id>dev</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>com.microsoft.playwright</groupId>
+					<artifactId>playwright</artifactId>
+					<version>1.40.0</version>
+				</dependency>
+				<dependency>
+					<groupId>com.ironsoftware</groupId>
+					<artifactId>ironpdf</artifactId>
+					<version>2024.11.4</version>
+				</dependency>
+			</dependencies>
+		</profile>
+
+		<!-- Production Profile - Minimal dependencies (external services) -->
+		<profile>
+			<id>prod</id>
+			<dependencies>
+				<!-- No PDF engine dependencies - use external services -->
+			</dependencies>
+		</profile>
+
+		<!-- IronPDF Profile - Include IronPDF for embedded usage -->
+		<profile>
+			<id>ironpdf</id>
+			<dependencies>
+				<dependency>
+					<groupId>com.ironsoftware</groupId>
+					<artifactId>ironpdf</artifactId>
+					<version>2024.11.4</version>
+				</dependency>
+			</dependencies>
+		</profile>
+
+		<!-- Playwright Profile - Include Playwright for embedded usage -->
+		<profile>
+			<id>playwright</id>
+			<dependencies>
+				<dependency>
+					<groupId>com.microsoft.playwright</groupId>
+					<artifactId>playwright</artifactId>
+					<version>1.40.0</version>
+				</dependency>
+			</dependencies>
+		</profile>
+
+		<!-- Full Profile - Include all PDF engines -->
+		<profile>
+			<id>full</id>
+			<dependencies>
+				<dependency>
+					<groupId>com.microsoft.playwright</groupId>
+					<artifactId>playwright</artifactId>
+					<version>1.40.0</version>
+				</dependency>
+				<dependency>
+					<groupId>com.ironsoftware</groupId>
+					<artifactId>ironpdf</artifactId>
+					<version>2024.11.4</version>
+				</dependency>
+			</dependencies>
+		</profile>
+	</profiles>
 
 	<build>
 		<plugins>

@@ -1,12 +1,13 @@
 package com.platform.service;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Comprehensive PDF Generation Service with multiple engines and fallback logic
@@ -17,7 +18,6 @@ import java.util.List;
  * 3. Flying Saucer (Basic quality, reliable fallback, free)
  */
 @Service
-@RequiredArgsConstructor
 @Slf4j
 public class PdfGenerationService {
 
@@ -25,6 +25,34 @@ public class PdfGenerationService {
     private final PlaywrightPdfService playwrightPdfService;
     private final FlyingSaucerPdfService flyingSaucerPdfService;
     private final TemplateRenderService templateRenderService;
+
+    // Constructor with optional PDF services
+    public PdfGenerationService(
+            @Autowired(required = false) IronPdfService ironPdfService,
+            @Autowired(required = false) PlaywrightPdfService playwrightPdfService,
+            FlyingSaucerPdfService flyingSaucerPdfService,
+            TemplateRenderService templateRenderService) {
+        this.ironPdfService = ironPdfService;
+        this.playwrightPdfService = playwrightPdfService;
+        this.flyingSaucerPdfService = flyingSaucerPdfService;
+        this.templateRenderService = templateRenderService;
+        
+        // Log available services
+        StringBuilder availableServices = new StringBuilder("📊 Available PDF engines: ");
+        if (ironPdfService != null) {
+            availableServices.append("IronPDF ");
+        }
+        if (playwrightPdfService != null) {
+            availableServices.append("Playwright ");
+        }
+        availableServices.append("Flying Saucer");
+        
+        log.info(availableServices.toString());
+        
+        if (ironPdfService == null && playwrightPdfService == null) {
+            log.warn("⚠️ Only Flying Saucer PDF engine available - limited PDF quality");
+        }
+    }
 
     @Value("${pdf.engine:auto}")
     private String preferredEngine;
@@ -150,14 +178,14 @@ public class PdfGenerationService {
         java.util.Map<String, Object> status = new java.util.HashMap<>();
         
         status.put("ironpdf", java.util.Map.of(
-            "available", ironPdfService.isAvailable(),
-            "description", "Premium PDF engine with best quality",
+            "available", ironPdfService != null && ironPdfService.isAvailable(),
+            "description", ironPdfService != null ? "Premium PDF engine with best quality" : "IronPDF service disabled",
             "priority", 1
         ));
         
         status.put("playwright", java.util.Map.of(
-            "available", playwrightPdfService.isAvailable(),
-            "description", "Modern PDF engine with full CSS support",
+            "available", playwrightPdfService != null && playwrightPdfService.isAvailable(),
+            "description", playwrightPdfService != null ? "Modern PDF engine with full CSS support" : "Playwright service disabled",
             "priority", 2
         ));
         
@@ -218,22 +246,71 @@ public class PdfGenerationService {
     }
 
     private List<PdfEngine> getAutoEngineOrder() {
-        // Auto mode: Use best available engine first
-        return Arrays.asList(PdfEngine.IRON_PDF, PdfEngine.PLAYWRIGHT, PdfEngine.FLYING_SAUCER);
+        // Configurable engine priority based on PDF_ENGINE setting
+        String preferredEngineStr = preferredEngine.toLowerCase();
+        
+        switch (preferredEngineStr) {
+            case "ironpdf":
+                // IronPDF first, then Playwright, then Flying Saucer
+                return buildEngineOrder(PdfEngine.IRON_PDF, PdfEngine.PLAYWRIGHT, PdfEngine.FLYING_SAUCER);
+                
+            case "playwright":
+                // Playwright first, then IronPDF, then Flying Saucer
+                return buildEngineOrder(PdfEngine.PLAYWRIGHT, PdfEngine.IRON_PDF, PdfEngine.FLYING_SAUCER);
+                
+            case "flyingsaucer":
+                // Flying Saucer first, then others
+                return buildEngineOrder(PdfEngine.FLYING_SAUCER, PdfEngine.PLAYWRIGHT, PdfEngine.IRON_PDF);
+                
+            default: // "auto"
+                // Auto mode: Use best available engine first (IronPDF > Playwright > Flying Saucer)
+                return buildEngineOrder(PdfEngine.IRON_PDF, PdfEngine.PLAYWRIGHT, PdfEngine.FLYING_SAUCER);
+        }
+    }
+    
+    private List<PdfEngine> buildEngineOrder(PdfEngine first, PdfEngine second, PdfEngine third) {
+        List<PdfEngine> engines = new ArrayList<>();
+        
+        // Add engines only if their services are available
+        if (isEngineServiceAvailable(first)) {
+            engines.add(first);
+        }
+        if (isEngineServiceAvailable(second)) {
+            engines.add(second);
+        }
+        if (isEngineServiceAvailable(third)) {
+            engines.add(third);
+        }
+        
+        // Always include Flying Saucer as final fallback if not already included
+        if (!engines.contains(PdfEngine.FLYING_SAUCER)) {
+            engines.add(PdfEngine.FLYING_SAUCER);
+        }
+        
+        return engines;
+    }
+    
+    private boolean isEngineServiceAvailable(PdfEngine engine) {
+        return switch (engine) {
+            case IRON_PDF -> ironPdfService != null && ironPdfService.isAvailable();
+            case PLAYWRIGHT -> playwrightPdfService != null && playwrightPdfService.isAvailable();
+            case FLYING_SAUCER -> flyingSaucerPdfService != null && flyingSaucerPdfService.isAvailable();
+            default -> false;
+        };
     }
 
     private byte[] generateWithEngine(PdfEngine engine, String html, Integer pageNumber, 
                                      com.platform.enums.PageOrientation orientation) {
         return switch (engine) {
             case IRON_PDF -> {
-                if (!ironPdfService.isAvailable()) {
-                    throw new RuntimeException("IronPDF is not available");
+                if (ironPdfService == null || !ironPdfService.isAvailable()) {
+                    throw new RuntimeException("IronPDF is not available (service disabled or not initialized)");
                 }
                 yield ironPdfService.generatePdfFromHtml(html, pageNumber, orientation);
             }
             case PLAYWRIGHT -> {
-                if (!playwrightPdfService.isAvailable()) {
-                    throw new RuntimeException("Playwright is not available");
+                if (playwrightPdfService == null || !playwrightPdfService.isAvailable()) {
+                    throw new RuntimeException("Playwright is not available (service disabled or not initialized)");
                 }
                 yield playwrightPdfService.generatePdfFromHtml(html, pageNumber, orientation);
             }

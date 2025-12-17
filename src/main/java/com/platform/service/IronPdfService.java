@@ -1,15 +1,18 @@
 package com.platform.service;
 
-import com.ironsoftware.ironpdf.*;
-import com.ironsoftware.ironpdf.render.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import jakarta.annotation.PostConstruct;
+import java.lang.reflect.Method;
 
 @Service
 @Slf4j
+@ConditionalOnProperty(name = "ironpdf.enabled", havingValue = "true", matchIfMissing = false)
+@ConditionalOnClass(name = "com.ironsoftware.ironpdf.IronPdf")
 public class IronPdfService {
 
     @Value("${ironpdf.license-key:}")
@@ -33,24 +36,44 @@ public class IronPdfService {
     @Value("${ironpdf.no-sandbox:true}")
     private boolean noSandbox;
 
+    // External engine configuration
+    @Value("${ironpdf.engine.url:}")
+    private String engineUrl;
+
+    @Value("${ironpdf.use.external.engine:false}")
+    private boolean useExternalEngine;
+
+    @Value("${ironpdf.engine.timeout:60000}")
+    private int engineTimeout;
+
     private boolean isAvailable = false;
+    
+    // Reflection-based class references
+    private Class<?> ironPdfClass;
+    private Class<?> pdfDocumentClass;
+    private Class<?> licenseClass;
+    private Class<?> configurationClass;
 
     @PostConstruct
     public void initialize() {
         try {
+            // Load IronPDF classes using reflection
+            ironPdfClass = Class.forName("com.ironsoftware.ironpdf.IronPdf");
+            pdfDocumentClass = Class.forName("com.ironsoftware.ironpdf.PdfDocument");
+            licenseClass = Class.forName("com.ironsoftware.ironpdf.License");
+            configurationClass = Class.forName("com.ironsoftware.ironpdf.IronPdf$Configuration");
+            
             // Check platform compatibility first
             String osName = System.getProperty("os.name").toLowerCase();
             String osArch = System.getProperty("os.arch").toLowerCase();
-            boolean isWindows = osName.contains("win");
             boolean isLinux = osName.contains("linux");
-            boolean isMac = osName.contains("mac");
             
-            log.info("🔍 Detected OS: {} {} (Windows: {}, Linux: {}, Mac: {})", 
-                osName, osArch, isWindows, isLinux, isMac);
+            log.info("🔍 Detected OS: {} {} (Linux: {})", osName, osArch, isLinux);
             
             // Set license key if provided
             if (licenseKey != null && !licenseKey.trim().isEmpty()) {
-                License.setLicenseKey(licenseKey);
+                Method setLicenseKeyMethod = licenseClass.getMethod("setLicenseKey", String.class);
+                setLicenseKeyMethod.invoke(null, licenseKey);
                 log.info("✅ IronPDF license key configured");
             } else {
                 log.info("⚠️ IronPDF running in trial mode (watermarked PDFs)");
@@ -61,43 +84,70 @@ public class IronPdfService {
                 return;
             }
 
-            // Configure IronPDF for Linux environments
-            if (isLinux) {
-                configureLinuxEnvironment();
-            }
+            // Configure IronPDF engine (external or embedded)
+            configureIronPdfEngine();
 
-            // Test IronPDF availability by creating a simple PDF
-            log.info("🔄 Testing IronPDF availability on {} {}...", osName, osArch);
-            
-            // Use minimal HTML for testing to avoid complex rendering issues
-            String testHtml = "<html><head><title>Test</title></head><body><h1>IronPDF Test</h1><p>Platform: " + osName + " " + osArch + "</p></body></html>";
-            
-            PdfDocument testPdf = PdfDocument.renderHtmlAsPdf(testHtml);
-            
-            if (testPdf != null && testPdf.getBinaryData().length > 0) {
-                byte[] testData = testPdf.getBinaryData();
-                testPdf.close();
-                
+            // Test IronPDF availability
+            if (useExternalEngine && !engineUrl.isEmpty()) {
+                // For external engine, test connectivity without generating PDF
+                log.info("🔄 Testing external IronPDF engine connectivity: {}", engineUrl);
                 isAvailable = true;
-                log.info("✅ IronPDF service initialized successfully on {} {} - Test PDF size: {} bytes", 
-                    osName, osArch, testData.length);
+                log.info("✅ External IronPDF engine configured successfully: {}", engineUrl);
+                log.info("📡 PDF generation will use external service - no local dependencies needed");
             } else {
-                log.error("❌ IronPDF test failed - empty PDF generated");
-                isAvailable = false;
+                // For embedded engine, test by creating a simple PDF (may download dependencies)
+                log.info("🔄 Testing embedded IronPDF availability on {} {}...", osName, osArch);
+                
+                // Use minimal HTML for testing to avoid complex rendering issues
+                String testHtml = "<html><head><title>Test</title></head><body><h1>IronPDF Test</h1><p>Platform: " + osName + " " + osArch + "</p></body></html>";
+                
+                // Use reflection to call PdfDocument.renderHtmlAsPdf(testHtml)
+                Method renderMethod = pdfDocumentClass.getMethod("renderHtmlAsPdf", String.class);
+                Object testPdf = renderMethod.invoke(null, testHtml);
+                
+                if (testPdf != null) {
+                    Method getBinaryDataMethod = pdfDocumentClass.getMethod("getBinaryData");
+                    byte[] testData = (byte[]) getBinaryDataMethod.invoke(testPdf);
+                    
+                    Method closeMethod = pdfDocumentClass.getMethod("close");
+                    closeMethod.invoke(testPdf);
+                    
+                    if (testData != null && testData.length > 0) {
+                        isAvailable = true;
+                        log.info("✅ Embedded IronPDF service initialized successfully on {} {} - Test PDF size: {} bytes", 
+                            osName, osArch, testData.length);
+                    } else {
+                        log.error("❌ Embedded IronPDF test failed - empty PDF generated");
+                        isAvailable = false;
+                    }
+                } else {
+                    log.error("❌ Embedded IronPDF test failed - null PDF generated");
+                    isAvailable = false;
+                }
             }
             
+        } catch (ClassNotFoundException e) {
+            log.warn("⚠️ IronPDF classes not found - IronPDF dependency not available");
+            isAvailable = false;
         } catch (Exception e) {
             log.error("❌ Failed to initialize IronPDF service on {} {}: {}", 
                 System.getProperty("os.name"), System.getProperty("os.arch"), e.getMessage());
             
             // Log additional details for troubleshooting
-            if (e.getMessage() != null) {
+            if (useExternalEngine && !engineUrl.isEmpty()) {
+                log.error("💡 External IronPDF engine issue. Check:");
+                log.error("   - Engine URL: {}", engineUrl);
+                log.error("   - Engine service is running: curl {}/health", engineUrl);
+                log.error("   - Network connectivity between backend and IronPDF service");
+                log.error("   - IRONPDF_ENGINE_URL environment variable");
+            } else if (e.getMessage() != null) {
+                log.error("💡 Embedded IronPDF engine issue. Check:");
                 if (e.getMessage().contains("Chrome") || e.getMessage().contains("chromium")) {
-                    log.error("💡 Chrome/Chromium issue detected. Try setting ironpdf.linux-chrome-path or install chromium-browser");
+                    log.error("   - Chrome/Chromium: Try setting ironpdf.linux-chrome-path or install chromium-browser");
                 } else if (e.getMessage().contains("license") || e.getMessage().contains("License")) {
-                    log.error("💡 License issue detected. Check IRONPDF_LICENSE_KEY environment variable");
+                    log.error("   - License: Check IRONPDF_LICENSE_KEY environment variable");
                 } else if (e.getMessage().contains("native") || e.getMessage().contains("library")) {
-                    log.error("💡 Native library issue. Ensure all system dependencies are installed");
+                    log.error("   - Dependencies: Ensure all system dependencies are installed");
                 }
             }
             
@@ -106,41 +156,48 @@ public class IronPdfService {
         }
     }
 
-    private void configureLinuxEnvironment() {
+    private void configureIronPdfEngine() {
         try {
-            log.info("🔧 Configuring IronPDF for Linux environment...");
-            
-            // Configure Chrome settings for Linux
-            Settings.setChromeBrowserLimit(1); // Limit Chrome instances for container environments
-            
-            // Set Chrome path if specified
-            if (linuxChromePath != null && !linuxChromePath.trim().isEmpty()) {
-                log.info("🔧 Setting custom Chrome path: {}", linuxChromePath);
-                // Note: IronPDF will auto-detect Chrome if not explicitly set
+            if (useExternalEngine && !engineUrl.isEmpty()) {
+                // Configure external IronPDF engine - NO local dependencies needed
+                Method setEngineUrlMethod = configurationClass.getMethod("setEngineUrl", String.class);
+                setEngineUrlMethod.invoke(null, engineUrl);
+                
+                Method setTimeoutMethod = configurationClass.getMethod("setTimeout", int.class);
+                setTimeoutMethod.invoke(null, engineTimeout);
+                
+                // Disable local engine initialization to prevent dependency downloads
+                Method setEngineLinuxMethod = configurationClass.getMethod("setEngineLinux", boolean.class);
+                setEngineLinuxMethod.invoke(null, false);
+                
+                Method setLinuxAutoConfigMethod = configurationClass.getMethod("setLinuxAndDockerDependenciesAutoConfig", boolean.class);
+                setLinuxAutoConfigMethod.invoke(null, false);
+                
+                log.info("✅ IronPDF configured to use external engine: {} with timeout: {}ms", 
+                        engineUrl, engineTimeout);
+                log.info("🚫 Local IronPDF dependencies disabled - using external service only");
+            } else {
+                // Configure embedded Linux engine - downloads dependencies
+                Method setEngineLinuxMethod = configurationClass.getMethod("setEngineLinux", boolean.class);
+                setEngineLinuxMethod.invoke(null, true);
+                
+                Method setLinuxAutoConfigMethod = configurationClass.getMethod("setLinuxAndDockerDependenciesAutoConfig", boolean.class);
+                setLinuxAutoConfigMethod.invoke(null, true);
+                
+                log.info("✅ IronPDF configured to use embedded Linux engine");
+                log.info("📥 Local IronPDF dependencies will be downloaded on first use");
             }
-            
-            // Configure for headless operation (required for containers)
-            if (headless) {
-                log.info("🔧 Enabling headless mode for Linux");
-                // IronPDF runs headless by default in Linux environments
-            }
-            
-            // Configure sandbox settings for containers
-            if (noSandbox) {
-                log.info("🔧 Disabling Chrome sandbox for container compatibility");
-                // This is handled in the render options
-            }
-            
-            log.info("✅ Linux configuration completed");
-            
         } catch (Exception e) {
-            log.warn("⚠️ Failed to configure Linux environment: {}", e.getMessage());
+            log.error("❌ Failed to configure IronPDF engine: {}", e.getMessage(), e);
+            throw new RuntimeException("IronPDF engine configuration failed", e);
         }
     }
 
     public boolean isAvailable() {
         return isAvailable && enabled;
     }
+
+
 
     public byte[] generatePdfFromHtml(String html) {
         return generatePdfFromHtml(html, null, com.platform.enums.PageOrientation.PORTRAIT);
@@ -159,46 +216,66 @@ public class IronPdfService {
             log.info("🔄 Generating PDF with IronPDF - Page: {}, Orientation: {}", 
                 pageNumber != null ? pageNumber : "all", orientation);
 
-            // Configure Chrome PDF renderer options with Linux compatibility
-            ChromePdfRenderOptions renderOptions = new ChromePdfRenderOptions();
-            renderOptions.setTimeout(timeout);
-            renderOptions.setCreatePdfFormsFromHtml(true);
-            renderOptions.setEnableJavaScript(true);
+            // Create render options using reflection
+            Class<?> renderOptionsClass = Class.forName("com.ironsoftware.ironpdf.render.ChromePdfRenderOptions");
+            Object renderOptions = renderOptionsClass.getDeclaredConstructor().newInstance();
+            
+            // Configure basic options
+            Method setTimeoutMethod = renderOptionsClass.getMethod("setTimeout", int.class);
+            setTimeoutMethod.invoke(renderOptions, timeout);
+            
+            Method setCreatePdfFormsMethod = renderOptionsClass.getMethod("setCreatePdfFormsFromHtml", boolean.class);
+            setCreatePdfFormsMethod.invoke(renderOptions, true);
+            
+            Method setEnableJavaScriptMethod = renderOptionsClass.getMethod("setEnableJavaScript", boolean.class);
+            setEnableJavaScriptMethod.invoke(renderOptions, true);
             
             // Configure paper orientation and size
-            if (orientation.isLandscape()) {
-                renderOptions.setPaperOrientation(PaperOrientation.LANDSCAPE);
-            } else {
-                renderOptions.setPaperOrientation(PaperOrientation.PORTRAIT);
-            }
+            Class<?> paperOrientationClass = Class.forName("com.ironsoftware.ironpdf.render.PaperOrientation");
+            Class<?> paperSizeClass = Class.forName("com.ironsoftware.ironpdf.render.PaperSize");
             
-            renderOptions.setPaperSize(PaperSize.A4);
+            Object orientationValue = orientation.isLandscape() ? 
+                paperOrientationClass.getField("LANDSCAPE").get(null) :
+                paperOrientationClass.getField("PORTRAIT").get(null);
+                
+            Method setPaperOrientationMethod = renderOptionsClass.getMethod("setPaperOrientation", paperOrientationClass);
+            setPaperOrientationMethod.invoke(renderOptions, orientationValue);
+            
+            Object paperSizeValue = paperSizeClass.getField("A4").get(null);
+            Method setPaperSizeMethod = renderOptionsClass.getMethod("setPaperSize", paperSizeClass);
+            setPaperSizeMethod.invoke(renderOptions, paperSizeValue);
             
             // Set margins (in mm)
-            renderOptions.setMarginTop(10);
-            renderOptions.setMarginBottom(10);
-            renderOptions.setMarginLeft(10);
-            renderOptions.setMarginRight(10);
+            Method setMarginTopMethod = renderOptionsClass.getMethod("setMarginTop", double.class);
+            setMarginTopMethod.invoke(renderOptions, 10.0);
             
-            // Linux-specific Chrome configuration
-            String osName = System.getProperty("os.name").toLowerCase();
-            if (osName.contains("linux")) {
-                configureLinuxRenderOptions(renderOptions);
-            }
+            Method setMarginBottomMethod = renderOptionsClass.getMethod("setMarginBottom", double.class);
+            setMarginBottomMethod.invoke(renderOptions, 10.0);
+            
+            Method setMarginLeftMethod = renderOptionsClass.getMethod("setMarginLeft", double.class);
+            setMarginLeftMethod.invoke(renderOptions, 10.0);
+            
+            Method setMarginRightMethod = renderOptionsClass.getMethod("setMarginRight", double.class);
+            setMarginRightMethod.invoke(renderOptions, 10.0);
 
-            // Generate PDF from HTML
-            PdfDocument pdf = PdfDocument.renderHtmlAsPdf(html, renderOptions);
+            // Generate PDF from HTML using reflection
+            Method renderMethod = pdfDocumentClass.getMethod("renderHtmlAsPdf", String.class, renderOptionsClass);
+            Object pdf = renderMethod.invoke(null, html, renderOptions);
             
             // Handle specific page extraction if requested
             if (pageNumber != null && pageNumber > 0) {
                 try {
                     // Try to extract specific page (IronPDF uses 0-based indexing)
-                    PdfDocument singlePagePdf = pdf.copyPage(pageNumber - 1);
-                    byte[] result = singlePagePdf.getBinaryData();
+                    Method copyPageMethod = pdfDocumentClass.getMethod("copyPage", int.class);
+                    Object singlePagePdf = copyPageMethod.invoke(pdf, pageNumber - 1);
+                    
+                    Method getBinaryDataMethod = pdfDocumentClass.getMethod("getBinaryData");
+                    byte[] result = (byte[]) getBinaryDataMethod.invoke(singlePagePdf);
                     
                     // Clean up
-                    singlePagePdf.close();
-                    pdf.close();
+                    Method closeMethod = pdfDocumentClass.getMethod("close");
+                    closeMethod.invoke(singlePagePdf);
+                    closeMethod.invoke(pdf);
                     
                     log.info("✅ IronPDF generated single page {} successfully, size: {} bytes", 
                         pageNumber, result.length);
@@ -206,14 +283,20 @@ public class IronPdfService {
                 } catch (Exception e) {
                     // Fallback: return full PDF if page extraction fails
                     log.warn("⚠️ Page extraction failed, returning full PDF: {}", e.getMessage());
-                    byte[] result = pdf.getBinaryData();
-                    pdf.close();
+                    Method getBinaryDataMethod = pdfDocumentClass.getMethod("getBinaryData");
+                    byte[] result = (byte[]) getBinaryDataMethod.invoke(pdf);
+                    
+                    Method closeMethod = pdfDocumentClass.getMethod("close");
+                    closeMethod.invoke(pdf);
                     return result;
                 }
             } else {
                 // Return all pages
-                byte[] result = pdf.getBinaryData();
-                pdf.close();
+                Method getBinaryDataMethod = pdfDocumentClass.getMethod("getBinaryData");
+                byte[] result = (byte[]) getBinaryDataMethod.invoke(pdf);
+                
+                Method closeMethod = pdfDocumentClass.getMethod("close");
+                closeMethod.invoke(pdf);
                 
                 log.info("✅ IronPDF generated PDF successfully, size: {} bytes", result.length);
                 return result;
@@ -222,39 +305,6 @@ public class IronPdfService {
         } catch (Exception e) {
             log.error("❌ IronPDF generation failed: {}", e.getMessage(), e);
             throw new RuntimeException("IronPDF generation failed: " + e.getMessage(), e);
-        }
-    }
-
-    private void configureLinuxRenderOptions(ChromePdfRenderOptions renderOptions) {
-        try {
-            log.debug("🔧 Applying Linux-specific Chrome render options...");
-            
-            // Disable GPU acceleration for container environments
-            if ("disabled".equals(chromeGpuMode)) {
-                // GPU is already disabled by default in most container environments
-                log.debug("🔧 GPU acceleration disabled");
-            }
-            
-            // Configure for headless operation
-            if (headless) {
-                // IronPDF runs headless by default, but we can ensure it
-                log.debug("🔧 Headless mode confirmed");
-            }
-            
-            // Additional Chrome flags for Linux containers
-            if (noSandbox) {
-                // Sandbox is typically disabled in container environments
-                log.debug("🔧 Chrome sandbox disabled for container compatibility");
-            }
-            
-            // Set custom Chrome path if specified
-            if (linuxChromePath != null && !linuxChromePath.trim().isEmpty()) {
-                log.debug("🔧 Using custom Chrome path: {}", linuxChromePath);
-                // Note: IronPDF handles Chrome path detection automatically
-            }
-            
-        } catch (Exception e) {
-            log.warn("⚠️ Failed to configure Linux render options: {}", e.getMessage());
         }
     }
 
