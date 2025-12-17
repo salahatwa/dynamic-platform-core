@@ -23,6 +23,7 @@ public class PdfGenerationService {
 
     private final IronPdfService ironPdfService;
     private final PlaywrightPdfService playwrightPdfService;
+    private final GotenbergPdfService gotenbergPdfService;
     private final FlyingSaucerPdfService flyingSaucerPdfService;
     private final TemplateRenderService templateRenderService;
 
@@ -30,10 +31,12 @@ public class PdfGenerationService {
     public PdfGenerationService(
             @Autowired(required = false) IronPdfService ironPdfService,
             @Autowired(required = false) PlaywrightPdfService playwrightPdfService,
+            @Autowired(required = false) GotenbergPdfService gotenbergPdfService,
             FlyingSaucerPdfService flyingSaucerPdfService,
             TemplateRenderService templateRenderService) {
         this.ironPdfService = ironPdfService;
         this.playwrightPdfService = playwrightPdfService;
+        this.gotenbergPdfService = gotenbergPdfService;
         this.flyingSaucerPdfService = flyingSaucerPdfService;
         this.templateRenderService = templateRenderService;
         
@@ -45,11 +48,14 @@ public class PdfGenerationService {
         if (playwrightPdfService != null) {
             availableServices.append("Playwright ");
         }
+        if (gotenbergPdfService != null) {
+            availableServices.append("Gotenberg ");
+        }
         availableServices.append("Flying Saucer");
         
         log.info(availableServices.toString());
         
-        if (ironPdfService == null && playwrightPdfService == null) {
+        if (ironPdfService == null && playwrightPdfService == null && gotenbergPdfService == null) {
             log.warn("⚠️ Only Flying Saucer PDF engine available - limited PDF quality");
         }
     }
@@ -60,6 +66,7 @@ public class PdfGenerationService {
     public enum PdfEngine {
         IRON_PDF("ironpdf", "IronPDF"),
         PLAYWRIGHT("playwright", "Playwright"),
+        GOTENBERG("gotenberg", "Gotenberg"),
         FLYING_SAUCER("flyingsaucer", "Flying Saucer"),
         AUTO("auto", "Auto (Best Available)");
 
@@ -189,10 +196,16 @@ public class PdfGenerationService {
             "priority", 2
         ));
         
+        status.put("gotenberg", java.util.Map.of(
+            "available", gotenbergPdfService != null && gotenbergPdfService.isAvailable(),
+            "description", gotenbergPdfService != null ? "Free Docker-based PDF engine with high quality" : "Gotenberg service disabled",
+            "priority", 3
+        ));
+        
         status.put("flyingsaucer", java.util.Map.of(
             "available", flyingSaucerPdfService.isAvailable(),
             "description", "Reliable fallback PDF engine",
-            "priority", 3
+            "priority", 4
         ));
         
         status.put("preferredEngine", preferredEngine);
@@ -235,9 +248,10 @@ public class PdfGenerationService {
         if (preferred != PdfEngine.AUTO) {
             // Use specific engine first, then fallbacks
             return switch (preferred) {
-                case IRON_PDF -> Arrays.asList(PdfEngine.IRON_PDF, PdfEngine.PLAYWRIGHT, PdfEngine.FLYING_SAUCER);
-                case PLAYWRIGHT -> Arrays.asList(PdfEngine.PLAYWRIGHT, PdfEngine.IRON_PDF, PdfEngine.FLYING_SAUCER);
-                case FLYING_SAUCER -> Arrays.asList(PdfEngine.FLYING_SAUCER, PdfEngine.PLAYWRIGHT, PdfEngine.IRON_PDF);
+                case IRON_PDF -> Arrays.asList(PdfEngine.IRON_PDF, PdfEngine.GOTENBERG, PdfEngine.PLAYWRIGHT, PdfEngine.FLYING_SAUCER);
+                case PLAYWRIGHT -> Arrays.asList(PdfEngine.PLAYWRIGHT, PdfEngine.GOTENBERG, PdfEngine.IRON_PDF, PdfEngine.FLYING_SAUCER);
+                case GOTENBERG -> Arrays.asList(PdfEngine.GOTENBERG, PdfEngine.PLAYWRIGHT, PdfEngine.IRON_PDF, PdfEngine.FLYING_SAUCER);
+                case FLYING_SAUCER -> Arrays.asList(PdfEngine.FLYING_SAUCER, PdfEngine.GOTENBERG, PdfEngine.PLAYWRIGHT, PdfEngine.IRON_PDF);
                 default -> getAutoEngineOrder();
             };
         }
@@ -251,24 +265,28 @@ public class PdfGenerationService {
         
         switch (preferredEngineStr) {
             case "ironpdf":
-                // IronPDF first, then Playwright, then Flying Saucer
-                return buildEngineOrder(PdfEngine.IRON_PDF, PdfEngine.PLAYWRIGHT, PdfEngine.FLYING_SAUCER);
+                // IronPDF first, then Gotenberg, then Playwright, then Flying Saucer
+                return buildEngineOrder(PdfEngine.IRON_PDF, PdfEngine.GOTENBERG, PdfEngine.PLAYWRIGHT, PdfEngine.FLYING_SAUCER);
                 
             case "playwright":
-                // Playwright first, then IronPDF, then Flying Saucer
-                return buildEngineOrder(PdfEngine.PLAYWRIGHT, PdfEngine.IRON_PDF, PdfEngine.FLYING_SAUCER);
+                // Playwright first, then Gotenberg, then IronPDF, then Flying Saucer
+                return buildEngineOrder(PdfEngine.PLAYWRIGHT, PdfEngine.GOTENBERG, PdfEngine.IRON_PDF, PdfEngine.FLYING_SAUCER);
+                
+            case "gotenberg":
+                // Gotenberg first, then Playwright, then IronPDF, then Flying Saucer
+                return buildEngineOrder(PdfEngine.GOTENBERG, PdfEngine.PLAYWRIGHT, PdfEngine.IRON_PDF, PdfEngine.FLYING_SAUCER);
                 
             case "flyingsaucer":
                 // Flying Saucer first, then others
-                return buildEngineOrder(PdfEngine.FLYING_SAUCER, PdfEngine.PLAYWRIGHT, PdfEngine.IRON_PDF);
+                return buildEngineOrder(PdfEngine.FLYING_SAUCER, PdfEngine.GOTENBERG, PdfEngine.PLAYWRIGHT, PdfEngine.IRON_PDF);
                 
             default: // "auto"
-                // Auto mode: Use best available engine first (IronPDF > Playwright > Flying Saucer)
-                return buildEngineOrder(PdfEngine.IRON_PDF, PdfEngine.PLAYWRIGHT, PdfEngine.FLYING_SAUCER);
+                // Auto mode: Use best available free engine first (Gotenberg > Playwright > Flying Saucer, IronPDF if licensed)
+                return buildEngineOrder(PdfEngine.GOTENBERG, PdfEngine.PLAYWRIGHT, PdfEngine.IRON_PDF, PdfEngine.FLYING_SAUCER);
         }
     }
     
-    private List<PdfEngine> buildEngineOrder(PdfEngine first, PdfEngine second, PdfEngine third) {
+    private List<PdfEngine> buildEngineOrder(PdfEngine first, PdfEngine second, PdfEngine third, PdfEngine fourth) {
         List<PdfEngine> engines = new ArrayList<>();
         
         // Add engines only if their services are available
@@ -280,6 +298,9 @@ public class PdfGenerationService {
         }
         if (isEngineServiceAvailable(third)) {
             engines.add(third);
+        }
+        if (isEngineServiceAvailable(fourth)) {
+            engines.add(fourth);
         }
         
         // Always include Flying Saucer as final fallback if not already included
@@ -294,6 +315,7 @@ public class PdfGenerationService {
         return switch (engine) {
             case IRON_PDF -> ironPdfService != null && ironPdfService.isAvailable();
             case PLAYWRIGHT -> playwrightPdfService != null && playwrightPdfService.isAvailable();
+            case GOTENBERG -> gotenbergPdfService != null && gotenbergPdfService.isAvailable();
             case FLYING_SAUCER -> flyingSaucerPdfService != null && flyingSaucerPdfService.isAvailable();
             default -> false;
         };
@@ -313,6 +335,12 @@ public class PdfGenerationService {
                     throw new RuntimeException("Playwright is not available (service disabled or not initialized)");
                 }
                 yield playwrightPdfService.generatePdfFromHtml(html, pageNumber, orientation);
+            }
+            case GOTENBERG -> {
+                if (gotenbergPdfService == null || !gotenbergPdfService.isAvailable()) {
+                    throw new RuntimeException("Gotenberg is not available (service disabled or not initialized)");
+                }
+                yield gotenbergPdfService.generatePdfFromHtml(html, pageNumber, orientation);
             }
             case FLYING_SAUCER -> {
                 if (!flyingSaucerPdfService.isAvailable()) {
