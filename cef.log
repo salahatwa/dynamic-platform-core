@@ -3557,3 +3557,14 @@ Histogram: V8.Initializer.OpenV8File.Result recorded 1 samples, mean = 0.0 (flag
 [1217/090017.657:WARNING:task_impl.cc(20)] No task runner for threadId 6
 [1217/090017.682:WARNING:task_impl.cc(20)] No task runner for threadId 6
 [1217/090017.742:VERBOSE1:frame_host_impl.cc(492)] frame 21474836481 [5,1] (main) detached (reason=NEW_MAIN_FRAME, is_connected=1)
+[1217/090158.676:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000058000357B8}, {new_limit=78})
+[1217/090159.685:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000058000357B8}, {new_limit=80})
+[1217/090201.716:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000058000357B8}, {new_limit=100})
+[1217/090212.860:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000058000357B8}, {new_limit=79})
+[1217/090217.905:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000058000357B8}, {new_limit=80})
+[1217/090218.920:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000058000357B8}, {new_limit=81})
+[1217/090220.949:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000058000357B8}, {new_limit=80})
+[1217/090221.969:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000058000357B8}, {new_limit=83})
+[1217/090226.018:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000058000357B8}, {new_limit=82})
+[1217/090227.030:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000058000357B8}, {new_limit=79})
+[1217/090230.074:VERBOSE1:media_stream_manager.cc(1113)] MSPL::OnSpeedLimitChange({this=00000058000357B8}, {new_limit=100})
