@@ -2,6 +2,8 @@ package com.platform.security;
 
 import com.platform.service.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,6 +25,7 @@ import org.springframework.beans.factory.annotation.Value;
 import java.util.Arrays;
 import java.util.List;
 
+@Slf4j
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -96,6 +99,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         
+        log.info("⚠️ CORS ALLOWED FOR : {}",allowedOrigins);
         // Parse allowed origins from environment configuration
         List<String> origins = Arrays.asList(allowedOrigins.split(","));
         configuration.setAllowedOrigins(origins);
