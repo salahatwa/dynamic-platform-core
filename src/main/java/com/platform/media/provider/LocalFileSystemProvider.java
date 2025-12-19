@@ -21,6 +21,9 @@ public class LocalFileSystemProvider implements MediaProvider {
     @Value("${media.local.base-url:http://localhost:8080/api/media/files}")
     private String baseUrl;
 
+    @Value("${media.storage.host:http://localhost:8080}")
+    private String storageHost;
+
     @Override
     public UploadResult upload(FilePayload payload) {
         try {
@@ -78,9 +81,9 @@ public class LocalFileSystemProvider implements MediaProvider {
             String relativePath = normalizedBasePath.relativize(normalizedFilePath).toString().replace("\\", "/");
             // Clean up any remaining path traversal sequences and ensure clean URL
             relativePath = relativePath.replaceAll("\\.\\./", "").replaceAll("//+", "/");
-            String publicUrl = baseUrl + "/" + relativePath;
+            String publicUrl = storageHost + "/api/media/files/" + relativePath;
             
-            log.debug("Generated URLs - relativePath: {}, publicUrl: {}", relativePath, publicUrl);
+            log.debug("Generated URLs - relativePath: {}, publicUrl: {}, storageHost: {}", relativePath, publicUrl, storageHost);
 
             return UploadResult.builder()
                 .providerKey(relativePath)
@@ -115,7 +118,7 @@ public class LocalFileSystemProvider implements MediaProvider {
 
     @Override
     public MediaUrl generateUrl(String providerKey, AccessType accessType) {
-        String url = baseUrl + "/" + providerKey;
+        String url = storageHost + "/api/media/files/" + providerKey;
         
         return MediaUrl.builder()
             .url(url)
