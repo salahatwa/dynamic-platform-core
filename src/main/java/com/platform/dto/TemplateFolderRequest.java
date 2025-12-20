@@ -1,6 +1,7 @@
 package com.platform.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
@@ -10,4 +11,9 @@ public class TemplateFolderRequest {
     private String name;
     
     private Long parentId;
+    
+    @NotNull(message = "Application ID is required")
+    private Long applicationId;
+    
+    private Integer sortOrder;
 }

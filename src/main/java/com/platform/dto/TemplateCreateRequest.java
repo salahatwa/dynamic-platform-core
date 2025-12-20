@@ -1,9 +1,8 @@
 package com.platform.dto;
 
 import com.platform.enums.TemplateType;
+import com.platform.enums.PageOrientation;
 import lombok.Data;
-
-import java.util.Map;
 
 @Data
 public class TemplateCreateRequest {
@@ -11,8 +10,7 @@ public class TemplateCreateRequest {
     private TemplateType type;
     private String htmlContent;
     private String cssStyles;
-    private Map<String, String> customFonts;
-    private Map<String, String> parameters;
     private String subject;
-    private Long corporateId;
+    private Long folderId;
+    private PageOrientation pageOrientation;
 }

@@ -24,14 +24,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.platform.dto.TemplatePreviewRequest;
+import com.platform.dto.TemplateCreateRequest;
 import com.platform.entity.App;
 import com.platform.entity.Template;
+import com.platform.entity.TemplateFolder;
 import com.platform.entity.User;
 
 import com.platform.enums.PermissionAction;
 import com.platform.enums.PermissionResource;
 import com.platform.repository.AppRepository;
 import com.platform.repository.TemplateRepository;
+import com.platform.repository.TemplateFolderRepository;
 import com.platform.repository.UserRepository;
 import com.platform.security.RequirePermission;
 import com.platform.security.UserPrincipal;
@@ -55,6 +58,7 @@ public class TemplateController {
 	private final TemplateRepository templateRepository;
 	private final UserRepository userRepository;
 	private final AppRepository appRepository;
+	private final TemplateFolderRepository templateFolderRepository;
 	private final TemplateRenderService templateRenderService;
 	private final WordGenerationService wordGenerationService;
 	private final PdfGenerationService pdfGenerationService;
@@ -126,14 +130,23 @@ public class TemplateController {
 	@PostMapping
 	@RequirePermission(resource = PermissionResource.TEMPLATES, action = PermissionAction.CREATE)
 	@Operation(summary = "Create template")
-	public ResponseEntity<?> createTemplate(@RequestBody Template template,
+	public ResponseEntity<?> createTemplate(@RequestBody TemplateCreateRequest request,
 			@RequestParam(required = false) String appName) {
 		User currentUser = getCurrentUserWithCorporate();
 		if (currentUser == null || currentUser.getCorporate() == null) {
 			return ResponseEntity.badRequest().body("User not associated with any organization");
 		}
 
-		template.setCorporate(currentUser.getCorporate());
+		// Create template entity from request
+		Template template = Template.builder()
+				.name(request.getName())
+				.type(request.getType())
+				.htmlContent(request.getHtmlContent())
+				.cssStyles(request.getCssStyles())
+				.subject(request.getSubject())
+				.pageOrientation(request.getPageOrientation())
+				.corporate(currentUser.getCorporate())
+				.build();
 
 		// If appName is provided, find and set the app
 		if (appName != null && !appName.isEmpty()) {
@@ -142,15 +155,50 @@ public class TemplateController {
 			template.setApp(app);
 		}
 
-		Template created = templateRepository.save(template);
+		// If folderId is provided, find and set the folder
+		if (request.getFolderId() != null) {
+			log.info("Looking for folder with ID: {}", request.getFolderId());
+			
+			// Use custom method to ensure corporate and application are loaded
+			TemplateFolder folder = templateFolderRepository.findByIdWithCorporateAndApplication(request.getFolderId())
+					.orElseThrow(() -> new RuntimeException("Folder not found with ID: " + request.getFolderId()));
+			
+			log.info("Found folder: {} (ID: {})", folder.getName(), folder.getId());
+			log.info("Folder corporate ID: {}", folder.getCorporate() != null ? folder.getCorporate().getId() : "null");
+			log.info("Current user corporate ID: {}", currentUser.getCorporate().getId());
+			
+			// Verify folder belongs to the same corporate
+			if (folder.getCorporate() == null || !folder.getCorporate().getId().equals(currentUser.getCorporate().getId())) {
+				return ResponseEntity.status(403).body("Access denied: Folder belongs to another organization");
+			}
+			
+			// Additional validation: check if folder belongs to the same application
+			if (appName != null && !appName.isEmpty()) {
+				App templateApp = template.getApp();
+				if (templateApp != null && folder.getApplication() != null && 
+					!folder.getApplication().getId().equals(templateApp.getId())) {
+					return ResponseEntity.status(400).body("Folder does not belong to the specified application");
+				}
+			}
+			
+			template.setFolder(folder);
+			log.info("Successfully set folder for template");
+		}
 
-		return ResponseEntity.ok(created);
+		try {
+			Template created = templateRepository.save(template);
+			log.info("Template created successfully with ID: {}", created.getId());
+			return ResponseEntity.ok(created);
+		} catch (Exception e) {
+			log.error("Error creating template: {}", e.getMessage(), e);
+			return ResponseEntity.status(500).body("Error creating template: " + e.getMessage());
+		}
 	}
 
 	@PutMapping("/{id}")
 	@RequirePermission(resource = PermissionResource.TEMPLATES, action = PermissionAction.UPDATE)
 	@Operation(summary = "Update template")
-	public ResponseEntity<?> updateTemplate(@PathVariable Long id, @RequestBody Template templateUpdate,
+	public ResponseEntity<?> updateTemplate(@PathVariable Long id, @RequestBody TemplateCreateRequest request,
 			@RequestParam(required = false) String appName) {
 		User currentUser = getCurrentUserWithCorporate();
 		if (currentUser == null || currentUser.getCorporate() == null) {
@@ -173,12 +221,28 @@ public class TemplateController {
 		}
 
 		// Update fields
-		template.setName(templateUpdate.getName());
-		template.setType(templateUpdate.getType());
-		template.setHtmlContent(templateUpdate.getHtmlContent());
-		template.setCssStyles(templateUpdate.getCssStyles());
-		template.setSubject(templateUpdate.getSubject());
-		template.setPageOrientation(templateUpdate.getPageOrientation());
+		template.setName(request.getName());
+		template.setType(request.getType());
+		template.setHtmlContent(request.getHtmlContent());
+		template.setCssStyles(request.getCssStyles());
+		template.setSubject(request.getSubject());
+		template.setPageOrientation(request.getPageOrientation());
+
+		// Handle folder update
+		if (request.getFolderId() != null) {
+			TemplateFolder folder = templateFolderRepository.findById(request.getFolderId())
+					.orElseThrow(() -> new RuntimeException("Folder not found"));
+			
+			// Verify folder belongs to the same corporate
+			if (!folder.getCorporate().getId().equals(currentUser.getCorporate().getId())) {
+				return ResponseEntity.status(403).body("Access denied: Folder belongs to another organization");
+			}
+			
+			template.setFolder(folder);
+		} else {
+			// If folderId is null, remove folder association (move to root)
+			template.setFolder(null);
+		}
 
 		Template updated = templateRepository.save(template);
 		return ResponseEntity.ok(updated);
