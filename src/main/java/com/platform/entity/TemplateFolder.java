@@ -66,6 +66,16 @@ public class TemplateFolder extends BaseEntity {
 	@Builder.Default
 	private Integer sortOrder = 0;
 
+	@Column(nullable = false)
+	@Builder.Default
+	private Boolean active = true;
+
+	@Column(length = 1000)
+	private String description;
+
+	@Column(name = "image_url", length = 500)
+	private String imageUrl;
+
 	@OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
 	@JsonIgnore
 	@Builder.Default

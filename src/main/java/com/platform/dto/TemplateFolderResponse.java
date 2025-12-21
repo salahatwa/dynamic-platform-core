@@ -17,6 +17,9 @@ public class TemplateFolderResponse {
     private String path;
     private Integer level;
     private Integer sortOrder;
+    private Boolean active;
+    private String description;
+    private String imageUrl;
     private List<TemplateFolderResponse> children;
     private Long templatesCount;
     private Long subfoldersCount;

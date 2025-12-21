@@ -15,6 +15,10 @@ public interface TemplateFolderRepository extends JpaRepository<TemplateFolder, 
     // Application-scoped queries (new primary methods)
     List<TemplateFolder> findByApplicationIdAndParentIsNullOrderBySortOrder(Long applicationId);
     
+    List<TemplateFolder> findByApplicationIdAndParentIsNullAndActiveOrderBySortOrder(Long applicationId, Boolean active);
+    
+    List<TemplateFolder> findByApplicationIdAndActiveOrderBySortOrder(Long applicationId, Boolean active);
+    
     List<TemplateFolder> findByApplicationIdAndParentIdOrderBySortOrder(Long applicationId, Long parentId);
     
     List<TemplateFolder> findByApplicationIdOrderByPath(Long applicationId);

@@ -117,6 +117,9 @@ public class TemplateFolderApiController {
             .name(request.getName())
             .parent(parent)
             .sortOrder(request.getSortOrder() != null ? request.getSortOrder() : 0)
+            .active(request.getActive() != null ? request.getActive() : true)
+            .description(request.getDescription())
+            .imageUrl(request.getImageUrl())
             .build();
         
         TemplateFolder created = folderService.createInApplication(folder, application, currentUser.getCorporate());
@@ -157,6 +160,11 @@ public class TemplateFolderApiController {
         if (request.getSortOrder() != null) {
             folder.setSortOrder(request.getSortOrder());
         }
+        if (request.getActive() != null) {
+            folder.setActive(request.getActive());
+        }
+        folder.setDescription(request.getDescription());
+        folder.setImageUrl(request.getImageUrl());
         
         TemplateFolder updated = folderService.update(folder);
         return ResponseEntity.ok(toResponse(updated));
@@ -189,6 +197,33 @@ public class TemplateFolderApiController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Failed to move folder: " + e.getMessage());
         }
+    }
+    
+    @PutMapping("/{id}/toggle-status")
+    @Operation(summary = "Toggle folder active/inactive status")
+    public ResponseEntity<?> toggleFolderStatus(@PathVariable Long id, @RequestParam Long applicationId) {
+        User currentUser = getCurrentUserWithCorporate();
+        if (currentUser == null || currentUser.getCorporate() == null) {
+            return ResponseEntity.badRequest().body("User not associated with any organization");
+        }
+        
+        Optional<TemplateFolder> folderOpt = folderService.getByIdAndApplication(id, applicationId);
+        if (folderOpt.isEmpty()) {
+            return ResponseEntity.status(404).body("Folder not found");
+        }
+        
+        TemplateFolder folder = folderOpt.get();
+        
+        // Validate corporate access
+        if (!folder.getCorporate().getId().equals(currentUser.getCorporate().getId())) {
+            return ResponseEntity.status(403).body("Access denied");
+        }
+        
+        // Toggle the active status
+        folder.setActive(!folder.getActive());
+        
+        TemplateFolder updated = folderService.update(folder);
+        return ResponseEntity.ok(toResponse(updated));
     }
     
     @DeleteMapping("/{id}")
@@ -482,6 +517,9 @@ public class TemplateFolderApiController {
             .path(folder.getPath())
             .level(folder.getLevel())
             .sortOrder(folder.getSortOrder())
+            .active(folder.getActive())
+            .description(folder.getDescription())
+            .imageUrl(folder.getImageUrl())
             .templatesCount(folderService.countTemplatesInFolder(folder.getId()))
             .subfoldersCount(folderService.countSubfoldersInFolder(folder.getId()))
             .createdAt(folder.getCreatedAt())

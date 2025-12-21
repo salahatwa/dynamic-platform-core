@@ -16,4 +16,10 @@ public class TemplateFolderRequest {
     private Long applicationId;
     
     private Integer sortOrder;
+    
+    private Boolean active = true;
+    
+    private String description;
+    
+    private String imageUrl;
 }

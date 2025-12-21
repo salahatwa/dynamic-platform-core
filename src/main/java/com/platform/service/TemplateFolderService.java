@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -29,6 +28,16 @@ public class TemplateFolderService {
     @Transactional(readOnly = true)
     public List<TemplateFolder> getRootFoldersByApplication(Long applicationId) {
         return folderRepository.findByApplicationIdAndParentIsNullOrderBySortOrder(applicationId);
+    }
+    
+    @Transactional(readOnly = true)
+    public List<TemplateFolder> getActiveFoldersByApplication(Long applicationId) {
+        return folderRepository.findByApplicationIdAndActiveOrderBySortOrder(applicationId, true);
+    }
+    
+    @Transactional(readOnly = true)
+    public List<TemplateFolder> getActiveRootFoldersByApplication(Long applicationId) {
+        return folderRepository.findByApplicationIdAndParentIsNullAndActiveOrderBySortOrder(applicationId, true);
     }
     
     @Transactional(readOnly = true)
