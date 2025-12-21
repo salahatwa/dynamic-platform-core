@@ -105,14 +105,12 @@ public class TemplateRenderService {
 				// Render this page's content
 				String renderedPageContent = renderSingleContent(page.getContent(), page.getName(), model);
 				
-				// Wrap each page in a container with proper page break styling
+				// Wrap each page in a container with minimal styling
 				combinedHtml.append("<div class=\"template-page template-page-").append(i + 1).append("\"");
 				
-				// Add inline styles for maximum compatibility
+				// Only add page break for pages after the first one
 				if (i > 0) {
-					combinedHtml.append(" style=\"page-break-before: always; min-height: 100vh; box-sizing: border-box;\"");
-				} else {
-					combinedHtml.append(" style=\"min-height: 100vh; box-sizing: border-box;\"");
+					combinedHtml.append(" style=\"page-break-before: always;\"");
 				}
 				combinedHtml.append(">");
 				
@@ -120,10 +118,7 @@ public class TemplateRenderService {
 				combinedHtml.append(renderedPageContent);
 				combinedHtml.append("</div>");
 				
-				// Add explicit page break between pages (except for the last page)
-				if (i < nonEmptyPages.size() - 1) {
-					combinedHtml.append("<div class=\"explicit-page-break\" style=\"page-break-before: always !important; page-break-after: avoid !important; height: 0 !important; margin: 0 !important; padding: 0 !important; border: none !important; display: block !important; clear: both !important;\"></div>");
-				}
+				// No explicit page break divs - CSS handles page breaks
 			}
 			
 			// Close wrapper div
@@ -545,33 +540,17 @@ public class TemplateRenderService {
 			
 			/* Individual template pages */
 			.template-page {
-				min-height: 100vh;
-				height: auto;
 				width: 100%%;
 				box-sizing: border-box;
 				page-break-inside: avoid;
 				page-break-after: auto;
-				position: relative;
-				overflow: visible;
+				margin-bottom: 0;
+				padding-bottom: 0;
 			}
 			
 			/* Force page breaks between template pages */
 			.template-page:not(:first-child) {
 				page-break-before: always !important;
-			}
-			
-			/* Explicit page break elements */
-			.explicit-page-break,
-			.page-break {
-				page-break-before: always !important;
-				page-break-after: avoid !important;
-				height: 0 !important;
-				margin: 0 !important;
-				padding: 0 !important;
-				border: none !important;
-				display: block !important;
-				clear: both !important;
-				visibility: hidden;
 			}
 			
 			/* Prevent page breaks inside certain elements */
@@ -590,8 +569,6 @@ public class TemplateRenderService {
 				}
 				
 				.template-page {
-					min-height: 100vh;
-					height: auto;
 					width: 100%%;
 					margin: 0;
 					padding: 0;
@@ -599,13 +576,6 @@ public class TemplateRenderService {
 				
 				.template-page:not(:first-child) {
 					page-break-before: always !important;
-				}
-				
-				.explicit-page-break,
-				.page-break {
-					page-break-before: always !important;
-					height: 0 !important;
-					visibility: hidden;
 				}
 			}
 		""", pageSize);
