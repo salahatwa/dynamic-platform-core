@@ -435,6 +435,8 @@ public class TemplateRenderService {
 		Template template = templateRepository.findById(templateId)
 				.orElseThrow(() -> new RuntimeException("Template not found"));
 
+		log.info("Generating PDF for template {} with orientation: {}", templateId, template.getPageOrientation());
+
 		// Use new PdfGenerationService if available, otherwise fallback to legacy implementation
 		if (pdfGenerationService != null) {
 			try {
@@ -511,6 +513,7 @@ public class TemplateRenderService {
 			
 			// Add print-friendly CSS with orientation
 			String printCss = generatePrintFriendlyCss(orientation);
+			log.info("Adding print CSS for orientation {}: {}", orientation, printCss.substring(0, Math.min(200, printCss.length())) + "...");
 			doc.head().appendElement("style")
 				.attr("type", "text/css")
 				.attr("media", "print")
@@ -526,6 +529,8 @@ public class TemplateRenderService {
 
 	private String generatePrintFriendlyCss(com.platform.enums.PageOrientation orientation) {
 		String pageSize = orientation.isLandscape() ? "A4 landscape" : "A4 portrait";
+		
+		log.info("Generating print CSS with page size: {} for orientation: {}", pageSize, orientation);
 		
 		return String.format("""
 			@page {

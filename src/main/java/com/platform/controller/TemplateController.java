@@ -13,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -198,6 +199,7 @@ public class TemplateController {
 	@PutMapping("/{id}")
 	@RequirePermission(resource = PermissionResource.TEMPLATES, action = PermissionAction.UPDATE)
 	@Operation(summary = "Update template")
+	@Transactional
 	public ResponseEntity<?> updateTemplate(@PathVariable Long id, @RequestBody TemplateCreateRequest request,
 			@RequestParam(required = false) String appName) {
 		User currentUser = getCurrentUserWithCorporate();
@@ -227,6 +229,8 @@ public class TemplateController {
 		template.setCssStyles(request.getCssStyles());
 		template.setSubject(request.getSubject());
 		template.setPageOrientation(request.getPageOrientation());
+		
+		log.info("Updating template {} with page orientation: {}", id, request.getPageOrientation());
 
 		// Handle folder update
 		if (request.getFolderId() != null) {
@@ -245,6 +249,7 @@ public class TemplateController {
 		}
 
 		Template updated = templateRepository.save(template);
+		log.info("Template {} updated successfully with page orientation: {}", id, updated.getPageOrientation());
 		return ResponseEntity.ok(updated);
 	}
 
