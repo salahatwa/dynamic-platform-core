@@ -131,9 +131,18 @@ public class GotenbergPdfService {
             throw new RuntimeException("Gotenberg service is not available");
         }
 
+        // Optimize HTML for Gotenberg/Chromium
+        html = optimizeHtmlForGotenberg(html, orientation);
+
         try {
             log.info("🔄 Generating PDF with Gotenberg - Page: {}, Orientation: {}", 
                 pageNumber != null ? pageNumber : "all", orientation);
+            
+            // Debug: Log HTML length and check for problematic content
+            log.debug("Gotenberg HTML length: {}, contains min-height: {}, contains explicit-page-break: {}", 
+                html.length(), 
+                html.contains("min-height: 100vh"),
+                html.contains("explicit-page-break"));
 
             // Prepare multipart form data for Gotenberg
             MultiValueMap<String, Object> formData = new LinkedMultiValueMap<>();
@@ -166,6 +175,12 @@ public class GotenbergPdfService {
             formData.add("printBackground", String.valueOf(printBackground));
             formData.add("waitDelay", String.valueOf(waitDelay) + "ms");
             formData.add("preferCSSPageSize", "true");
+            
+            // Optimize for multi-page documents
+            formData.add("scale", "1.0");
+            formData.add("nativePageRanges", "");  // Generate all pages
+            formData.add("omitBackground", "false");
+            formData.add("landscape", String.valueOf(orientation.isLandscape()));
 
             // Set headers for multipart form data
             HttpHeaders headers = new HttpHeaders();
@@ -289,6 +304,88 @@ public class GotenbergPdfService {
         formData.add("waitDelay", String.valueOf(waitDelay) + "ms");
         formData.add("preferCSSPageSize", "true");
         formData.add("landscape", String.valueOf(orientation.isLandscape()));
+        
+        // Optimize for multi-page documents
+        formData.add("scale", "1.0");
+        formData.add("nativePageRanges", "");  // Generate all pages
+        formData.add("printBackground", "true");
+        formData.add("omitBackground", "false");
+    }
+
+    /**
+     * Optimize HTML specifically for Gotenberg/Chromium PDF generation
+     */
+    private String optimizeHtmlForGotenberg(String html, com.platform.enums.PageOrientation orientation) {
+        try {
+            // Parse HTML with JSoup
+            org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(html);
+            
+            // Add Gotenberg-specific CSS optimizations
+            String gotenbergCss = generateGotenbergOptimizedCss(orientation);
+            
+            // Add the optimized CSS to the document
+            doc.head().appendElement("style")
+                .attr("type", "text/css")
+                .attr("data-gotenberg-optimized", "true")
+                .text(gotenbergCss);
+            
+            log.debug("Added Gotenberg-optimized CSS for orientation: {}", orientation);
+            
+            return doc.outerHtml();
+            
+        } catch (Exception e) {
+            log.warn("Failed to optimize HTML for Gotenberg, using original: {}", e.getMessage());
+            return html;
+        }
+    }
+
+    /**
+     * Generate Gotenberg/Chromium-specific CSS optimizations
+     */
+    private String generateGotenbergOptimizedCss(com.platform.enums.PageOrientation orientation) {
+        String pageSize = orientation.isLandscape() ? "A4 landscape" : "A4 portrait";
+        
+        return String.format("""
+            /* Gotenberg/Chromium-specific optimizations */
+            @page {
+                size: %s;
+                margin: 10mm;
+            }
+            
+            /* Ensure clean page breaks for Chromium */
+            .template-page {
+                break-inside: avoid;
+                page-break-inside: avoid;
+                -webkit-break-inside: avoid;
+            }
+            
+            .template-page:not(:first-child) {
+                break-before: page;
+                page-break-before: always;
+                -webkit-break-before: page;
+            }
+            
+            /* Remove any forced heights that could cause extra pages */
+            .template-page {
+                min-height: auto !important;
+                height: auto !important;
+            }
+            
+            /* Chromium-specific print optimizations */
+            @media print {
+                .template-page {
+                    break-inside: avoid;
+                    orphans: 2;
+                    widows: 2;
+                }
+                
+                /* Ensure no extra spacing */
+                .multi-page-document {
+                    margin: 0;
+                    padding: 0;
+                }
+            }
+            """, pageSize);
     }
 
     /**
