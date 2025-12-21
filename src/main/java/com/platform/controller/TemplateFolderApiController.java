@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -289,19 +290,67 @@ public class TemplateFolderApiController {
             return ResponseEntity.status(403).body("Access denied");
         }
         
-        Sort sort = Sort.by(sortDir.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC, sortBy);
-        Pageable pageable = PageRequest.of(page, size, sort);
+        // Get subfolders (always show all subfolders first, then templates)
+        List<TemplateFolder> allSubfolders = folderService.getSubFoldersByApplication(applicationId, folderId);
         
-        Page<Template> templates;
+        // Filter subfolders by search if provided
+        List<TemplateFolder> filteredSubfolders = allSubfolders;
         if (search != null && !search.trim().isEmpty()) {
-            templates = templateRepository.findByFolderIdAndApp_IdAndNameContainingIgnoreCase(
-                folderId, applicationId, search.trim(), pageable);
-        } else {
-            templates = templateRepository.findByFolderIdAndApp_Id(folderId, applicationId, pageable);
+            filteredSubfolders = allSubfolders.stream()
+                .filter(subfolder -> subfolder.getName().toLowerCase().contains(search.trim().toLowerCase()))
+                .collect(Collectors.toList());
         }
         
-        // Get subfolders
-        List<TemplateFolder> subfolders = folderService.getSubFoldersByApplication(applicationId, folderId);
+        // Calculate pagination for combined content (subfolders + templates)
+        int totalSubfolders = filteredSubfolders.size();
+        int startIndex = page * size;
+        int endIndex = Math.min(startIndex + size, totalSubfolders);
+        
+        List<TemplateFolder> paginatedSubfolders = new ArrayList<>();
+        Page<Template> templates;
+        long totalElements = totalSubfolders;
+        
+        // Create a default pageable for empty template pages
+        Pageable defaultPageable = PageRequest.of(0, size, 
+            Sort.by(sortDir.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC, sortBy));
+        
+        if (startIndex < totalSubfolders) {
+            // We're still showing subfolders
+            paginatedSubfolders = filteredSubfolders.subList(startIndex, endIndex);
+            
+            // If we have remaining space in this page, fetch templates
+            int remainingSpace = size - paginatedSubfolders.size();
+            if (remainingSpace > 0 && endIndex >= totalSubfolders) {
+                // Calculate template pagination
+                int templatePage = 0; // Always start from first page of templates
+                Pageable templatePageable = PageRequest.of(templatePage, remainingSpace, 
+                    Sort.by(sortDir.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC, sortBy));
+                
+                if (search != null && !search.trim().isEmpty()) {
+                    templates = templateRepository.findByFolderIdAndApp_IdAndNameContainingIgnoreCase(
+                        folderId, applicationId, search.trim(), templatePageable);
+                } else {
+                    templates = templateRepository.findByFolderIdAndApp_Id(folderId, applicationId, templatePageable);
+                }
+                totalElements += templates.getTotalElements();
+            } else {
+                // Create empty page with proper pagination info
+                templates = new PageImpl<>(new ArrayList<>(), defaultPageable, 0);
+            }
+        } else {
+            // We're past all subfolders, show only templates
+            int templatePage = (startIndex - totalSubfolders) / size;
+            Pageable templatePageable = PageRequest.of(templatePage, size, 
+                Sort.by(sortDir.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC, sortBy));
+            
+            if (search != null && !search.trim().isEmpty()) {
+                templates = templateRepository.findByFolderIdAndApp_IdAndNameContainingIgnoreCase(
+                    folderId, applicationId, search.trim(), templatePageable);
+            } else {
+                templates = templateRepository.findByFolderIdAndApp_Id(folderId, applicationId, templatePageable);
+            }
+            totalElements += templates.getTotalElements();
+        }
         
         // Build breadcrumbs
         List<FolderContentResponse.BreadcrumbItem> breadcrumbs = buildBreadcrumbs(folder);
@@ -309,9 +358,9 @@ public class TemplateFolderApiController {
         FolderContentResponse response = FolderContentResponse.builder()
             .currentFolder(toResponse(folder))
             .templates(templates.map(this::toTemplateResponse))
-            .subfolders(subfolders.stream().map(this::toResponse).collect(Collectors.toList()))
+            .subfolders(paginatedSubfolders.stream().map(this::toResponse).collect(Collectors.toList()))
             .breadcrumbs(breadcrumbs)
-            .totalItems((long) (templates.getTotalElements() + subfolders.size()))
+            .totalItems(totalElements)
             .isLoading(false)
             .build();
         
@@ -339,26 +388,74 @@ public class TemplateFolderApiController {
             return ResponseEntity.status(403).body("Access denied");
         }
         
-        Sort sort = Sort.by(sortDir.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC, sortBy);
-        Pageable pageable = PageRequest.of(page, size, sort);
+        // Get root folders (always show all folders first, then templates)
+        List<TemplateFolder> allRootFolders = folderService.getRootFoldersByApplication(applicationId);
         
-        Page<Template> templates;
+        // Filter folders by search if provided
+        List<TemplateFolder> filteredFolders = allRootFolders;
         if (search != null && !search.trim().isEmpty()) {
-            templates = templateRepository.findByFolderIsNullAndApp_IdAndNameContainingIgnoreCase(
-                applicationId, search.trim(), pageable);
-        } else {
-            templates = templateRepository.findByFolderIsNullAndApp_Id(applicationId, pageable);
+            filteredFolders = allRootFolders.stream()
+                .filter(folder -> folder.getName().toLowerCase().contains(search.trim().toLowerCase()))
+                .collect(Collectors.toList());
         }
         
-        // Get root folders
-        List<TemplateFolder> rootFolders = folderService.getRootFoldersByApplication(applicationId);
+        // Calculate pagination for combined content (folders + templates)
+        int totalFolders = filteredFolders.size();
+        int startIndex = page * size;
+        int endIndex = Math.min(startIndex + size, totalFolders);
+        
+        List<TemplateFolder> paginatedFolders = new ArrayList<>();
+        Page<Template> templates;
+        long totalElements = totalFolders;
+        
+        // Create a default pageable for empty template pages
+        Pageable defaultPageable = PageRequest.of(0, size, 
+            Sort.by(sortDir.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC, sortBy));
+        
+        if (startIndex < totalFolders) {
+            // We're still showing folders
+            paginatedFolders = filteredFolders.subList(startIndex, endIndex);
+            
+            // If we have remaining space in this page, fetch templates
+            int remainingSpace = size - paginatedFolders.size();
+            if (remainingSpace > 0 && endIndex >= totalFolders) {
+                // Calculate template pagination
+                int templatePage = 0; // Always start from first page of templates
+                Pageable templatePageable = PageRequest.of(templatePage, remainingSpace, 
+                    Sort.by(sortDir.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC, sortBy));
+                
+                if (search != null && !search.trim().isEmpty()) {
+                    templates = templateRepository.findByFolderIsNullAndApp_IdAndNameContainingIgnoreCase(
+                        applicationId, search.trim(), templatePageable);
+                } else {
+                    templates = templateRepository.findByFolderIsNullAndApp_Id(applicationId, templatePageable);
+                }
+                totalElements += templates.getTotalElements();
+            } else {
+                // Create empty page with proper pagination info
+                templates = new PageImpl<>(new ArrayList<>(), defaultPageable, 0);
+            }
+        } else {
+            // We're past all folders, show only templates
+            int templatePage = (startIndex - totalFolders) / size;
+            Pageable templatePageable = PageRequest.of(templatePage, size, 
+                Sort.by(sortDir.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC, sortBy));
+            
+            if (search != null && !search.trim().isEmpty()) {
+                templates = templateRepository.findByFolderIsNullAndApp_IdAndNameContainingIgnoreCase(
+                    applicationId, search.trim(), templatePageable);
+            } else {
+                templates = templateRepository.findByFolderIsNullAndApp_Id(applicationId, templatePageable);
+            }
+            totalElements += templates.getTotalElements();
+        }
         
         FolderContentResponse response = FolderContentResponse.builder()
             .currentFolder(null) // Root level
             .templates(templates.map(this::toTemplateResponse))
-            .subfolders(rootFolders.stream().map(this::toResponse).collect(Collectors.toList()))
+            .subfolders(paginatedFolders.stream().map(this::toResponse).collect(Collectors.toList()))
             .breadcrumbs(new ArrayList<>()) // Empty breadcrumbs for root
-            .totalItems((long) (templates.getTotalElements() + rootFolders.size()))
+            .totalItems(totalElements)
             .isLoading(false)
             .build();
         
