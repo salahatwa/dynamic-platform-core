@@ -75,47 +75,62 @@ public class TemplateRenderService {
 			// Prepare model
 			Map<String, Object> model = parameters != null ? parameters : new HashMap<>();
 			
-			// Render all pages and combine them with proper page breaks
+			// Filter out empty pages before rendering
+			List<TemplatePage> nonEmptyPages = pages.stream()
+				.filter(this::hasContent)
+				.collect(java.util.stream.Collectors.toList());
+			
+			if (nonEmptyPages.isEmpty()) {
+				log.warn("All pages of template {} are empty, returning empty document", templateId);
+				return "<html><head><title>Empty Document</title></head><body><p>No content available</p></body></html>";
+			}
+			
+			// If there's only one page, return it directly without multi-page wrapper and page breaks
+			if (nonEmptyPages.size() == 1) {
+				TemplatePage singlePage = nonEmptyPages.get(0);
+				String renderedContent = renderSingleContent(singlePage.getContent(), singlePage.getName(), model);
+				log.info("Rendered single page for template {} without page breaks", templateId);
+				return renderedContent;
+			}
+			
+			// Render multiple non-empty pages and combine them with proper page breaks
 			StringBuilder combinedHtml = new StringBuilder();
 			
 			// Start with a wrapper div for all pages
 			combinedHtml.append("<div class=\"multi-page-document\">");
 			
-			for (int i = 0; i < pages.size(); i++) {
-				TemplatePage page = pages.get(i);
+			for (int i = 0; i < nonEmptyPages.size(); i++) {
+				TemplatePage page = nonEmptyPages.get(i);
 				
-				if (page.getContent() != null && !page.getContent().trim().isEmpty()) {
-					// Render this page's content
-					String renderedPageContent = renderSingleContent(page.getContent(), page.getName(), model);
-					
-					// Wrap each page in a container with proper page break styling
-					combinedHtml.append("<div class=\"template-page template-page-").append(i + 1).append("\"");
-					
-					// Add inline styles for maximum compatibility
-					if (i > 0) {
-						combinedHtml.append(" style=\"page-break-before: always; min-height: 100vh; box-sizing: border-box;\"");
-					} else {
-						combinedHtml.append(" style=\"min-height: 100vh; box-sizing: border-box;\"");
-					}
-					combinedHtml.append(">");
-					
-					// Add page content
-					combinedHtml.append(renderedPageContent);
-					combinedHtml.append("</div>");
-					
-					// Add explicit page break between pages (except for the last page)
-					if (i < pages.size() - 1) {
-						combinedHtml.append("<div class=\"explicit-page-break\" style=\"page-break-before: always !important; page-break-after: avoid !important; height: 0 !important; margin: 0 !important; padding: 0 !important; border: none !important; display: block !important; clear: both !important;\"></div>");
-					}
+				// Render this page's content
+				String renderedPageContent = renderSingleContent(page.getContent(), page.getName(), model);
+				
+				// Wrap each page in a container with proper page break styling
+				combinedHtml.append("<div class=\"template-page template-page-").append(i + 1).append("\"");
+				
+				// Add inline styles for maximum compatibility
+				if (i > 0) {
+					combinedHtml.append(" style=\"page-break-before: always; min-height: 100vh; box-sizing: border-box;\"");
 				} else {
-					log.warn("Page {} of template {} has no content", page.getName(), templateId);
+					combinedHtml.append(" style=\"min-height: 100vh; box-sizing: border-box;\"");
+				}
+				combinedHtml.append(">");
+				
+				// Add page content
+				combinedHtml.append(renderedPageContent);
+				combinedHtml.append("</div>");
+				
+				// Add explicit page break between pages (except for the last page)
+				if (i < nonEmptyPages.size() - 1) {
+					combinedHtml.append("<div class=\"explicit-page-break\" style=\"page-break-before: always !important; page-break-after: avoid !important; height: 0 !important; margin: 0 !important; padding: 0 !important; border: none !important; display: block !important; clear: both !important;\"></div>");
 				}
 			}
 			
 			// Close wrapper div
 			combinedHtml.append("</div>");
 
-			log.info("Rendered {} pages for template {}", pages.size(), templateId);
+			log.info("Rendered {} non-empty pages out of {} total pages for template {} (multi-page mode)", 
+				nonEmptyPages.size(), pages.size(), templateId);
 			return combinedHtml.toString();
 
 		} catch (Exception e) {
@@ -150,8 +165,9 @@ public class TemplateRenderService {
 			// Get the specific page (pageNumber is 1-based, list is 0-based)
 			TemplatePage page = pages.get(pageNumber - 1);
 			
-			if (page.getContent() == null || page.getContent().trim().isEmpty()) {
-				throw new RuntimeException("Page " + pageNumber + " has no content");
+			if (!hasContent(page)) {
+				log.warn("Page {} of template {} has no content, returning empty page message", pageNumber, templateId);
+				return "<html><head><title>Empty Page</title></head><body><p>Page " + pageNumber + " is empty</p></body></html>";
 			}
 
 			// Prepare model
@@ -174,7 +190,54 @@ public class TemplateRenderService {
 	 */
 	public int getPageCount(Long templateId) {
 		List<TemplatePage> pages = templatePageService.getAllByTemplate(templateId);
-		return pages.isEmpty() ? 1 : pages.size(); // Return 1 if no pages (template has its own content)
+		if (pages.isEmpty()) {
+			return 1; // Return 1 if no pages (template has its own content)
+		}
+		
+		// Count only non-empty pages
+		long nonEmptyPageCount = pages.stream()
+			.filter(page -> page.getContent() != null && !page.getContent().trim().isEmpty())
+			.count();
+		
+		return (int) Math.max(1, nonEmptyPageCount); // Return at least 1 page
+	}
+
+	/**
+	 * Get the number of non-empty pages in a template
+	 */
+	public int getNonEmptyPageCount(Long templateId) {
+		List<TemplatePage> pages = templatePageService.getAllByTemplate(templateId);
+		if (pages.isEmpty()) {
+			return 1; // Return 1 if no pages (template has its own content)
+		}
+		
+		// Count only non-empty pages
+		long nonEmptyPageCount = pages.stream()
+			.filter(page -> page.getContent() != null && !page.getContent().trim().isEmpty())
+			.count();
+		
+		return (int) nonEmptyPageCount;
+	}
+
+	/**
+	 * Check if a page has meaningful content
+	 */
+	private boolean hasContent(TemplatePage page) {
+		if (page == null || page.getContent() == null) {
+			return false;
+		}
+		
+		String content = page.getContent().trim();
+		if (content.isEmpty()) {
+			return false;
+		}
+		
+		// Check if content is just whitespace, HTML tags with no text, or common empty patterns
+		String textContent = content.replaceAll("<[^>]*>", "").trim(); // Remove HTML tags
+		textContent = textContent.replaceAll("&nbsp;", "").trim(); // Remove non-breaking spaces
+		textContent = textContent.replaceAll("\\s+", "").trim(); // Remove all whitespace
+		
+		return !textContent.isEmpty();
 	}
 
 	/**
